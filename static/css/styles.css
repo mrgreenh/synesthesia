@@ -1,0 +1,7 @@
+body { margin: 0px; }
+
+/* Startup menu styles */
+#main-menu { text-indent: 0px; margin:0px; padding:0px; position: absolute; top:0px; bottom: 0px; width:100%; }
+#main-menu li { display:block; text-align: center; font-size: 30px; box-sizing: border-box;}
+#main-menu li:nth-child(2n) {background-color: white; color: black; }
+#main-menu li:nth-child(2n+1) {background-color: black; color: white; }

@@ -1,0 +1,19 @@
+{% extends 'layout.html' %}
+{% block body %}
+<ul id="main-menu">
+    <li>Direct (1)</li>
+    <li>Stage (2)</li>
+</ul>
+<script>
+    var verticalSpace = $("#main-menu").height();
+    $("#main-menu li")
+        .height(verticalSpace / $("#main-menu li").length)
+        .css({
+            "padding-top":
+            $("#main-menu li").height()/2 - parseInt($("#main-menu li").css("font-size")),
+        });
+
+    Mousetrap.bind('1', function() { window.location = "/tracks"; });
+    Mousetrap.bind('2', function() { window.location = "/stage"; });
+</script>
+{% endblock %}
