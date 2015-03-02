@@ -8,41 +8,26 @@ var _inherits = function (subClass, superClass) { if (typeof superClass !== "fun
 
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
-var TracksView = (function (BaseObject) {
-    function TracksView() {
-        _classCallCheck(this, TracksView);
+var EditorView = (function (BaseObject) {
+    function EditorView(trackData) {
+        _classCallCheck(this, EditorView);
 
-        _get(Object.getPrototypeOf(TracksView.prototype), "constructor", this).call(this);
-        this.$el = $("#tracks-view-container");
-        this._bindDOMEvents();
+        _get(Object.getPrototypeOf(EditorView.prototype), "constructor", this).call(this);
+        this.$el = $("#editor-view-container");
+        this._trackData = trackData;
     }
 
-    _inherits(TracksView, BaseObject);
+    _inherits(EditorView, BaseObject);
 
-    _prototypeProperties(TracksView, null, {
-        _bindDOMEvents: {
-            value: function _bindDOMEvents() {
-                this.$("#tracks-list li").on("click", _.bind(this.expandTrackView, this));
-                this.$("#edit-track").on("click", _.bind(this.editTrack, this));
-            },
-            writable: true,
-            configurable: true
-        },
+    _prototypeProperties(EditorView, null, {
         render: {
-            value: function render() {},
-            writable: true,
-            configurable: true
-        },
-        expandTrackView: {
-            value: function expandTrackView(toggle) {
-                this.$el.toggleClass("exploring", toggle);
+            value: function render() {
+                React.render(React.createElement(EditorForm, { trackData: this._trackData }), this.$el[0]);
             },
             writable: true,
             configurable: true
         }
     });
 
-    return TracksView;
+    return EditorView;
 })(BaseObject);
-
-//Should render a TracksListView and a TrackView

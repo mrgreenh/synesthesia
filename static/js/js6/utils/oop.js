@@ -1,8 +1,6 @@
 class BaseObject{
     constructor(){
         this.observers = {};
-
-        this.somethingUseless = "Something useless!!!";
     }
 
     observe(observed, eventName){
@@ -17,8 +15,17 @@ class BaseObject{
 
     trigger(eventName){
         for(var observer of this.observers[eventName]){
-            _.bind(observer.onEvent(), observer);
+            _.bind(observer.events(), observer);
         }
+    }
+
+    $(selector){
+        if(this.$el)
+            return this.$el.find(selector);
+    }
+
+    events(){
+        //To be subclassed
     }
 
     /*
@@ -29,9 +36,5 @@ class BaseObject{
     onEvent(eventName){
         //To be overridden in the subclass
         console.log(eventName);
-    }
-
-    printSomethingUseless(){
-        console.log(this.somethingUseless);
     }
 }

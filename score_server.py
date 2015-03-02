@@ -2,6 +2,7 @@ from flask import Flask, render_template, session, request
 from flask.ext.socketio import SocketIO, emit, disconnect
 
 from threading import Thread
+import json
 
 import mido
 
@@ -13,6 +14,7 @@ thread = None
 rtmidi = mido.Backend('mido.backends.rtmidi')
 portname = rtmidi.get_input_names()[0]
 
+@app.route('/')
 @app.route('/index')
 def index():
     return render_template('index.html')
@@ -24,6 +26,20 @@ def tracks():
 @app.route('/stage')
 def stage():
     return render_template('stage.html')
+
+@app.route('/editor/<track_id>')
+def editor(track_id):
+    filename = 'track_'+track_id+'.json'
+    with open(filename, 'r') as file:
+        track_data = file.read()
+
+    if request.method == 'POST':
+        track_data = request.form.to_dict()
+
+        with open(filename, 'w') as file:
+            file.write(json.dumps(track_data, indent=4, separators=(',', ': ')))
+
+    return render_template('editor.html', track_data = track_data)
 
 
 #Write a template that imports layers and actors classes by reading a configuration file

@@ -9,8 +9,6 @@ var BaseObject = (function () {
         _classCallCheck(this, BaseObject);
 
         this.observers = {};
-
-        this.somethingUseless = "Something useless!!!";
     }
 
     _prototypeProperties(BaseObject, null, {
@@ -34,9 +32,23 @@ var BaseObject = (function () {
                 for (var _iterator = this.observers[eventName][Symbol.iterator](), _step; !(_step = _iterator.next()).done;) {
                     var observer = _step.value;
 
-                    _.bind(observer.onEvent(), observer);
+                    _.bind(observer.events(), observer);
                 }
             },
+            writable: true,
+            configurable: true
+        },
+        $: {
+            value: function $(selector) {
+                if (this.$el) {
+                    return this.$el.find(selector);
+                }
+            },
+            writable: true,
+            configurable: true
+        },
+        events: {
+            value: function events() {},
             writable: true,
             configurable: true
         },
@@ -54,15 +66,10 @@ var BaseObject = (function () {
             },
             writable: true,
             configurable: true
-        },
-        printSomethingUseless: {
-            value: function printSomethingUseless() {
-                console.log(this.somethingUseless);
-            },
-            writable: true,
-            configurable: true
         }
     });
 
     return BaseObject;
 })();
+
+//To be subclassed

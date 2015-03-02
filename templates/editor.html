@@ -1,0 +1,15 @@
+{% extends 'layout.html' %}
+{% block additional_js %}
+<script src="/static/js/js5/views/editor.js"></script>
+<script src="/static/js/js5/views/editorForm.js"></script>
+{% endblock %}
+{% block body %}
+<h2>Editor</h2>
+<div id="editor-view-container">
+
+</div>
+<script>
+    var trackEditor = new EditorView({{ track_data|safe }});
+    trackEditor.render();
+</script>
+{% endblock %}

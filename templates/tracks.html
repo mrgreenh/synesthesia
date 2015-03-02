@@ -3,13 +3,20 @@
 <script src="/static/js/js5/views/tracks.js"></script>
 {% endblock %}
 {% block body %}
+<!-- TODO implement the real thing -->
 <h2>Tracks</h2>
-<div id="tracks-view-container">
-
+<div id="tracks-view-container" class="exploring">
+    <div id="selected-track-view-container">
+        <a href="/editor/foo">Edit the only track in the system!</a>
+    </div>
+    <div id="tracks-list">
+        <ul>
+            <li>Only track</li>
+        </ul>
+    </div>
 </div>
 <script>
     var tracksView = new TracksView();
     tracksView.render();
-    tracksView.printSomethingUseless();
 </script>
 {% endblock %}
