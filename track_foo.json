@@ -2,6 +2,33 @@
   "title": "The first Synesthesia track",
   "description": "Forte!",
   "layersData": [
-    "ciao","buongiorno","buonanotte"
+    {
+      "name": "First Layer",
+      //Things like this will be defined in each class
+      //Loading all classes will define the "configuration" used by the editor
+      "type": "Canvas2D",
+      "actors": [
+        {
+          "name": "kick"
+        },
+        {
+          "name": "lead_synth"
+        }
+      ]
+    },
+    {
+      "name": "Second Layer",
+      //Things like this will be defined in each class
+      //Loading all classes will define the "configuration" used by the editor
+      "type": "Processing2D",
+      "actors": [
+        {
+          "name": "snare"
+        },
+        {
+          "name": "something_else"
+        }
+      ]
+    },
   ]
 }

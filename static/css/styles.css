@@ -17,3 +17,8 @@ body { margin: 0px; }
             .exploring #tracks-list ul li { top: 100px; bottom:100px; width: 70%; }
 
         #selected-track-view-container { position: absolute; top:100px; bottom:0px; width:100%; background-color: black; padding: 10px;}
+
+
+/* Editor */
+.collapsable-content {  overflow: hidden }
+.collapsable-content.collapsed { height: 0px; }

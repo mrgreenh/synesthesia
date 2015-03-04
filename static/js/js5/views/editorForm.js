@@ -11,34 +11,34 @@ var EditorForm = React.createClass({
     render: function render() {
         return React.createElement(
             "div",
-            { id: "editor-form-container" },
+            { id: "editor-form-container", className: "container" },
             React.createElement(
                 "div",
-                { className: "editorSection" },
+                { className: "editorSection row" },
                 React.createElement(
                     "div",
-                    { className: "formGroup" },
+                    { className: "form-group" },
                     React.createElement(
                         "label",
                         { htmlFor: "track-title" },
                         "Title"
                     ),
-                    React.createElement("input", { id: "track-title", valueLink: this.linkState("title") })
+                    React.createElement("input", { id: "track-title", className: "form-control", valueLink: this.linkState("title") })
                 ),
                 React.createElement(
                     "div",
-                    { className: "formGroup" },
+                    { className: "form-group" },
                     React.createElement(
                         "label",
                         { htmlFor: "track-description" },
                         "Description"
                     ),
-                    React.createElement("input", { id: "track-description", valueLink: this.linkState("description") })
+                    React.createElement("input", { id: "track-description", className: "form-control", valueLink: this.linkState("description") })
                 )
             ),
             React.createElement(
                 "div",
-                { className: "editorSection" },
+                { className: "editorSection row" },
                 React.createElement(LayersList, { layersData: this.state.layersData })
             )
         );
@@ -58,11 +58,7 @@ var LayersList = React.createClass({
 
     render: function render() {
         var layers = this.state.layersData.map(function (layer) {
-            return React.createElement(
-                "li",
-                null,
-                layer
-            ); // TODO next: this becomes a layer object -->>
+            return React.createElement(Layer, { layerData: layer });
         });
         return React.createElement(
             "div",
@@ -80,3 +76,85 @@ var LayersList = React.createClass({
         );
     }
 });
+
+var Layer = React.createClass({
+    displayName: "Layer",
+
+    getInitialState: function getInitialState() {
+        return { layerData: this.props.layerData };
+    },
+
+    render: function render() {
+        var layerData = this.state.layerData;
+        return React.createElement(
+            Collapsable,
+            { itemName: layerData.name },
+            React.createElement(
+                "div",
+                { className: "form-group" },
+                React.createElement(
+                    "p",
+                    { className: "bg-warning" },
+                    "These options are defined by loading the js classes of each layer"
+                ),
+                React.createElement(
+                    "label",
+                    { htmlFor: "layer-type" },
+                    "Layer type:"
+                ),
+                React.createElement(
+                    "select",
+                    { value: layerData.type },
+                    React.createElement(
+                        "option",
+                        { value: "Canvas2D" },
+                        "Canvas2D"
+                    ),
+                    React.createElement(
+                        "option",
+                        { value: "Processing2D" },
+                        "Processing2D"
+                    ),
+                    React.createElement(
+                        "option",
+                        { value: "Three3D" },
+                        "Three3D"
+                    )
+                )
+            )
+        );
+    }
+});
+
+var Collapsable = React.createClass({
+    displayName: "Collapsable",
+
+    getInitialState: function getInitialState() {
+        return { collapsed: false };
+    },
+
+    handleCollapseItem: function handleCollapseItem(e) {
+        this.setState({ collapsed: !this.state.collapsed });
+    },
+
+    render: function render() {
+        var additional_classes = this.state.collapsed ? " collapsed" : "";
+        var classes = "collapsable-content" + additional_classes;
+        return React.createElement(
+            "li",
+            { className: "collapsable" },
+            React.createElement(
+                "strong",
+                { onClick: this.handleCollapseItem, className: "bg-primary collapsing-switch" },
+                this.props.itemName
+            ),
+            React.createElement(
+                "div",
+                { className: classes },
+                this.props.children
+            )
+        );
+    }
+
+});
+// TODO make the above statement true -->
