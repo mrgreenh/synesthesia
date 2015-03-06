@@ -80,15 +80,16 @@ var LayersList = React.createClass({
 var Layer = React.createClass({
     displayName: "Layer",
 
+    mixins: [React.addons.LinkedStateMixin],
+
     getInitialState: function getInitialState() {
-        return { layerData: this.props.layerData };
+        return this.props.layerData;
     },
 
     render: function render() {
-        var layerData = this.state.layerData;
         return React.createElement(
             Collapsable,
-            { itemName: layerData.name },
+            { itemName: this.state.name },
             React.createElement(
                 "div",
                 { className: "form-group" },
@@ -98,13 +99,23 @@ var Layer = React.createClass({
                     "These options are defined by loading the js classes of each layer"
                 ),
                 React.createElement(
+                    "div",
+                    { className: "form-group" },
+                    React.createElement(
+                        "label",
+                        { htmlFor: "layer-name" },
+                        "Name"
+                    ),
+                    React.createElement("input", { id: "layer-name", className: "form-control", valueLink: this.linkState("name") })
+                ),
+                React.createElement(
                     "label",
                     { htmlFor: "layer-type" },
                     "Layer type:"
                 ),
                 React.createElement(
                     "select",
-                    { value: layerData.type },
+                    { value: this.linkState("type") },
                     React.createElement(
                         "option",
                         { value: "Canvas2D" },
@@ -120,17 +131,85 @@ var Layer = React.createClass({
                         { value: "Three3D" },
                         "Three3D"
                     )
-                )
+                ),
+                React.createElement(ActorsList, { actorsData: this.state.actors })
             )
         );
     }
 });
 
+var ActorsList = React.createClass({
+    displayName: "ActorsList",
+
+    getInitialState: function getInitialState() {
+        return { actorsData: this.props.actorsData };
+    },
+
+    handleNewActorClick: function handleNewActorClick(event) {
+        alert("Some more magic happens here!");
+    },
+
+    render: function render() {
+        var actors = this.state.actorsData.map(function (actor) {
+            return React.createElement(Actor, { actorData: actor });
+        });
+        return React.createElement(
+            "div",
+            { className: "actors-list" },
+            React.createElement(
+                "button",
+                { id: "new-actor-button", onClick: this.handleNewActorClick },
+                "New Actor"
+            ),
+            React.createElement(
+                "ul",
+                null,
+                actors
+            )
+        );
+    }
+});
+
+var Actor = React.createClass({
+    displayName: "Actor",
+
+    mixins: [React.addons.LinkedStateMixin],
+
+    getInitialState: function getInitialState() {
+        return this.props.actorData;
+    },
+
+    render: function render() {
+        return React.createElement(
+            Collapsable,
+            { itemName: this.state.name },
+            React.createElement(
+                "div",
+                { className: "form-group" },
+                React.createElement(
+                    "label",
+                    { htmlFor: "track-title" },
+                    "Name"
+                ),
+                React.createElement("input", { id: "actor-name", className: "form-control", valueLink: this.linkState("name"), type: "text" })
+            )
+        );
+    } });
+
 var Collapsable = React.createClass({
     displayName: "Collapsable",
 
     getInitialState: function getInitialState() {
-        return { collapsed: false };
+        return { collapsed: false,
+            backgroundColor: this._getBackgroundColor() };
+    },
+
+    _getBackgroundColor: function _getBackgroundColor() {
+        var rgb = [];
+        for (var i = 0; i < 3; i++) {
+            rgb.push(parseInt(Math.min(255, Math.random() * 255)));
+        }
+        return rgb;
     },
 
     handleCollapseItem: function handleCollapseItem(e) {
@@ -140,9 +219,11 @@ var Collapsable = React.createClass({
     render: function render() {
         var additional_classes = this.state.collapsed ? " collapsed" : "";
         var classes = "collapsable-content" + additional_classes;
+        var backgroundColor = "rgba(" + this.state.backgroundColor.join(",") + ",.1)";
+        var inlineStyles = { backgroundColor: backgroundColor };
         return React.createElement(
             "li",
-            { className: "collapsable" },
+            { className: "collapsable", style: inlineStyles },
             React.createElement(
                 "strong",
                 { onClick: this.handleCollapseItem, className: "bg-primary collapsing-switch" },

@@ -48,30 +48,91 @@ var LayersList = React.createClass({
 });
 
 var Layer = React.createClass({
+    mixins: [React.addons.LinkedStateMixin],
+
     getInitialState(){
-        return {layerData: this.props.layerData}
+        return this.props.layerData;
     },
 
     render: function(){
-        var layerData = this.state.layerData;
-        return (<Collapsable itemName={layerData.name}>
+        return (<Collapsable itemName={this.state.name}>
                 <div className="form-group">
                     <p className="bg-warning">These options are defined by loading the js classes of each layer</p>
                     <!-- TODO make the above statement true -->
+                    <div className="form-group">
+                        <label htmlFor="layer-name">Name</label>
+                        <input id="layer-name" className="form-control" valueLink={this.linkState("name")} />
+                    </div>
+
                     <label htmlFor="layer-type">Layer type:</label>
-                    <select value={layerData.type}>
+                    <select value={this.linkState("type")}>
                         <option value="Canvas2D">Canvas2D</option>
                         <option value="Processing2D">Processing2D</option>
                         <option value="Three3D">Three3D</option>
                     </select>
+                    <ActorsList actorsData={this.state.actors} />
                 </div>
             </Collapsable>);
     }
 });
 
+var ActorsList = React.createClass({
+    getInitialState: function(){
+        return {actorsData: this.props.actorsData}
+    },
+
+    handleNewActorClick: function(event){
+        alert("Some more magic happens here!");
+    },
+
+    render: function(){
+        var actors = this.state.actorsData.map(function(actor){
+           return (
+               <Actor actorData={actor} />
+           );
+        });
+        return (
+            <div className="actors-list">
+                <button id="new-actor-button" onClick={this.handleNewActorClick}>New Actor</button>
+                <ul>
+                    {actors}
+                </ul>
+            </div>
+        );
+    }
+});
+
+var Actor = React.createClass({
+    mixins: [React.addons.LinkedStateMixin],
+
+    getInitialState: function(){
+        return this.props.actorData;
+    },
+
+    render: function(){
+        return (
+            <Collapsable itemName={this.state.name}>
+                <div className="form-group">
+                    <label htmlFor="track-title">Name</label>
+                    <input id="actor-name" className="form-control" valueLink={this.linkState("name")} type="text" />
+                </div>
+            </Collapsable>
+        );
+    },
+});
+
 var Collapsable = React.createClass({
     getInitialState(){
-        return {collapsed: false};
+        return {collapsed: false,
+                backgroundColor: this._getBackgroundColor()};
+    },
+
+    _getBackgroundColor: function(){
+      var rgb = [];
+      for(var i=0; i<3; i++){
+          rgb.push(parseInt(Math.min(255, Math.random()*255)));
+      }
+      return rgb;
     },
 
     handleCollapseItem: function(e){
@@ -81,7 +142,9 @@ var Collapsable = React.createClass({
     render: function(){
         var additional_classes = this.state.collapsed ? " collapsed" : "";
         var classes = "collapsable-content"+additional_classes;
-        return (<li className="collapsable">
+        var backgroundColor = "rgba(" + this.state.backgroundColor.join(",") + ",.1)";
+        var inlineStyles = {backgroundColor: backgroundColor};
+        return (<li className="collapsable" style={inlineStyles}>
             <strong onClick={this.handleCollapseItem} className="bg-primary collapsing-switch">{this.props.itemName}</strong>
             <div className={classes}>
                 {this.props.children}
