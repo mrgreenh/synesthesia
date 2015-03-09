@@ -1,5 +1,6 @@
 from flask import Flask, render_template, session, request
 from flask.ext.socketio import SocketIO, emit, disconnect
+import synesthesia
 
 from threading import Thread
 import json
@@ -29,18 +30,16 @@ def stage():
 
 @app.route('/editor/<track_id>')
 def editor(track_id):
-    filename = 'track_'+track_id+'.json'
-    with open(filename, 'r') as file:
-        track_data = file.read()
-
-    if request.method == 'POST':
-        track_data = request.form.to_dict()
-
-        with open(filename, 'w') as file:
-            file.write(json.dumps(track_data, indent=4, separators=(',', ': ')))
+    bookshelf = synesthesia.bookshelf.BookShelf()
+    track_data = bookshelf.load_track(track_id)
 
     return render_template('editor.html', track_data = track_data)
 
+@app.route('/get_track/<track_id>')
+def get_track(track_id):
+    bookshelf = synesthesia.bookshelf.BookShelf()
+    track_data = bookshelf.load_track(track_id)
+    return flask.jsonify(**track_data)
 
 #Write a template that imports layers and actors classes by reading a configuration file
 #Starting point is a webpage with two options:

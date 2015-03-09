@@ -65,11 +65,11 @@ var Layer = React.createClass({
                     </div>
 
                     <label htmlFor="layer-type">Layer type:</label>
-                    <select value={this.linkState("type")}>
+                    <BetterSelect valueLink={this.linkState("type")}>
                         <option value="Canvas2D">Canvas2D</option>
                         <option value="Processing2D">Processing2D</option>
                         <option value="Three3D">Three3D</option>
-                    </select>
+                    </BetterSelect>
                     <ActorsList actorsData={this.state.actors} />
                 </div>
             </Collapsable>);
@@ -104,18 +104,60 @@ var ActorsList = React.createClass({
 
 var Actor = React.createClass({
     mixins: [React.addons.LinkedStateMixin],
-
+    ADSREnvelopeAttributes: ["attack", "decay", "sustain", "release"],
     getInitialState: function(){
         return this.props.actorData;
     },
 
     render: function(){
+        var ADSRForms = _(this.ADSREnvelopeAttributes).map(_.bind(function(attr){
+           var attrHtmlName = "actor-" + attr;
+            return (
+               <div className="form-group form-inline">
+                   <label htmlFor={attrHtmlName}>{attr} {this.state[attr]}</label>
+                   <input id={attrHtmlName} className="form-control" valueLink={this.linkState(attr)} type="range" min="0" max="100" />
+               </div>
+            );
+        }, this));
+
         return (
             <Collapsable itemName={this.state.name}>
-                <div className="form-group">
-                    <label htmlFor="track-title">Name</label>
-                    <input id="actor-name" className="form-control" valueLink={this.linkState("name")} type="text" />
-                </div>
+                <ul className="parameters-list">
+                    <li className="form-group">
+                        <label htmlFor="actor-title">Name</label>
+                        <input id="actor-name" className="form-control" valueLink={this.linkState("name")} type="text" />
+                    </li>
+                    <Collapsable itemName="Inputs">
+                        <!-- How many inputs and what kind is defined by the actor's class. For now only one -->
+                        <ul>
+                            <li className="form-group">
+                                <label htmlFor="input-type">Type</label>
+                                <BetterSelect valueLink={this.linkState("inputType")}>
+                                    <option value="note">Note</option>
+                                    <option value="control">Control</option>
+                                </BetterSelect>
+                            </li>
+                            <li className="form-group">
+                                <label htmlFor="input-channel">Channel</label>
+                                <input id="input-channel" className="form-control" valueLink={this.linkState("inputChannel")} type="number" min="1" />
+                            </li>
+                            <li>
+                                <label htmlFor="input-bus">Bus</label>
+                                <!-- This can be a select with options filled in by the server -->
+                                <input id="input-bus" className="form-control" valueLink={this.linkState("inputBus")} />
+                            </li>
+                            <li className="form-group form-inline">
+                                <label htmlFor="input-range-max">Range</label>
+                                <!-- Notes and controls will be enriched with a normalized version of their value, computed based on this range -->
+                                <input id="input-range-max" className="form-control" valueLink={this.linkState("inputRangeMax")} type="number" min="1" />
+                                <input id="input-range-min" className="form-control" valueLink={this.linkState("inputRangeMin")} type="number" min="1" />
+                            </li>
+                        </ul>
+                    </Collapsable>
+                    <Collapsable itemName="ADSR Envelope">
+                        {ADSRForms}
+                    </Collapsable>
+                </ul>
             </Collapsable>
         );
     },
@@ -123,7 +165,7 @@ var Actor = React.createClass({
 
 var Collapsable = React.createClass({
     getInitialState(){
-        return {collapsed: false,
+        return {collapsed: true,
                 backgroundColor: this._getBackgroundColor()};
     },
 

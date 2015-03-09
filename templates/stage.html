@@ -1,4 +1,24 @@
 {% extends 'layout.html' %}
+{% block additional_js %}
+<script src="static/js/vendor/require_2.1.16.js"></script>
+<script>
+    require.config({
+        baseUrl: "/static/js/js5",
+        paths: {
+            "vendor": "/static/vendor"
+        },
+        waitSeconds: 15
+    });
+    require( ["views/visualizer/Director.js"],
+            function(someModule,    myModule) {
+                alert("Done!");
+                var mrL = new Layer("pirla");
+            }
+    );
+</script>
+{% endblock %}
 {% block body %}
-<h2>Stage</h2>
+<div id="stage-container">
+
+</div>
 {% endblock %}
