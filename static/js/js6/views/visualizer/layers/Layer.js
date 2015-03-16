@@ -1,5 +1,6 @@
 class Layer extends Synesthesia{
-    constructor(firstArg){
+    constructor(){
+        console.log("Initializing layer");
         //This should load dependencies
     }
 }

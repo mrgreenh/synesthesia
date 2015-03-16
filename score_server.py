@@ -1,6 +1,7 @@
 from flask import Flask, render_template, session, request, jsonify
 from flask.ext.socketio import SocketIO, emit, disconnect
 from synesthesia.data_managing import Bookshelf as Bookshelf
+import synesthesia.config as config
 
 from threading import Thread
 import json
@@ -43,6 +44,10 @@ def get_current_track():
     bookshelf = Bookshelf()
     track_data = bookshelf.load_track(current_track_id)
     return jsonify(**track_data)
+
+@app.route('/get_stage_config')
+def get_stage_config():
+    return jsonify(**config.STAGE_CONFIG)
 
 #Write a template that imports layers and actors classes by reading a configuration file
 #Starting point is a webpage with two options:

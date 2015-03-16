@@ -13,8 +13,12 @@ var Director = (function (Synesthesia) {
         _classCallCheck(this, Director);
 
         this.$el = $("#stage-container");
-        this._loadNextTrackData().done(function (data) {
-            _this._trackData = data;
+        this.layers = [];
+        //Load the configuration that describes classes and track data
+        //Then start doing your thing
+        $.when(this._loadNextTrackData(), this._loadStageConfig()).then(function (trackData, configData) {
+            _this._config = configData[0];
+            _this._trackData = trackData[0];
             _this._startTrack();
         });
     }
@@ -26,15 +30,43 @@ var Director = (function (Synesthesia) {
             value: function _startTrack() {
                 var _this = this;
 
+                var layersBasePath = "views/visualizer/layers/";
+                var layersClasses = [layersBasePath + "Layer"];
                 this._trackData.layersData.forEach(function (elem) {
-                    _this._initializeLayer(elem);
+                    var layerClazz = _this._getLayerClassName(elem);
+                    var layerClassPath = layersBasePath + layerClazz;
+                    if (!_(layersClasses).contains(layerClassPath)) layersClasses.push(layerClassPath);
+                });
+                console.log(layersClasses);
+                require(layersClasses, function () {
+                    //Initialized in order so their canvases get appended in the right order
+                    _this._trackData.layersData.forEach(function (elem) {
+                        _this._initializeLayer(elem);
+                    });
                 });
             },
             writable: true,
             configurable: true
         },
+        _getLayerClassName: {
+            value: function _getLayerClassName(layerData) {
+                var layerClazz = layerData.type + "Layer";
+                return layerClazz;
+            },
+            writable: true,
+            configurable: true
+        },
         _initializeLayer: {
-            value: function _initializeLayer(layerData) {},
+            value: function _initializeLayer(layerData) {
+                var className = this._getLayerClassName(layerData);
+                try {
+                    var layer = new window[className]();
+                    this.layers.push(layer);
+                } catch (ex) {
+                    console.warn("Could not initialize layer " + className);
+                    console.log(ex);
+                }
+            },
             writable: true,
             configurable: true
         },
@@ -46,11 +78,17 @@ var Director = (function (Synesthesia) {
             },
             writable: true,
             configurable: true
+        },
+        _loadStageConfig: {
+            value: function _loadStageConfig() {
+                return $.ajax({
+                    url: "/get_stage_config"
+                });
+            },
+            writable: true,
+            configurable: true
         }
     });
 
     return Director;
 })(Synesthesia);
-
-//Get the layer's type to require() and initialize the right class
-//The layer's class might have more require() to do for the libs

@@ -5,13 +5,14 @@ var _inherits = function (subClass, superClass) { if (typeof superClass !== "fun
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
 var Layer = (function (Synesthesia) {
-    function Layer(firstArg) {
+    function Layer() {
         _classCallCheck(this, Layer);
+
+        console.log("Initializing layer");
+        //This should load dependencies
     }
 
     _inherits(Layer, Synesthesia);
 
     return Layer;
 })(Synesthesia);
-
-//This should load dependencies

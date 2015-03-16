@@ -39,26 +39,6 @@
           "inputRangeMin": "20"
         }
       ]
-    },
-    {
-      "name": "Second Layer",
-      "type": "Processing2D",
-      "actors": [
-        {
-          "name": "snare",
-          "attack": 90,
-          "decay": 35,
-          "sustain": 28,
-          "release": 4
-        },
-        {
-          "name": "something_else",
-          "attack": 100,
-          "decay": 20,
-          "sustain": 50,
-          "release": 40
-        }
-      ]
     }
   ]
 }
