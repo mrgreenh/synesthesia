@@ -19,9 +19,38 @@ var EditorForm = React.createClass({
                 </div>
                 <div className="editorSection row">
                     <LayersList layersData={this.state.layersData} />
+                    <ScenesList scenesData={this.state.scenesData} />
                 </div>
             </div>
     );
+    }
+});
+
+var ScenesList = React.createClass({
+    getInitialState(){
+        return {scenesData: this.props.scenesData};
+    },
+
+    handleNewSceneClick(){
+        alert("Cool magic stuff will start happening here.");
+    },
+
+    render: function(){
+        var scenes = this.state.scenesData.map(function(scene){
+            //return <Layer sceneData={scene} />;
+            return <li>{scene.name}</li>
+        });
+        return (<div className="scenesListContainer">
+            <h3>Scenes</h3>
+            <p className="bg-primary">
+                Here scenes can be added and configured (bg color, stage and unstage duration etc...).
+                Scenes added here will also add a new tab in the layers section. Each tab allows to overwrite each parameter by checking a checkbox next to it.
+            </p>
+            <button id="new-scene-button" onClick={this.handleNewSceneClick}>New Scene</button>
+            <ul>
+                    {scenes}
+            </ul>
+        </div>);
     }
 });
 
@@ -39,6 +68,7 @@ var LayersList = React.createClass({
            return <Layer layerData={layer} />;
         });
         return (<div className="layersListContainer">
+                <h3>Layers</h3>
                 <button id="new-layer-button" onClick={this.handleNewLayerClick}>New Layer</button>
                 <ul>
                     {layers}
@@ -137,11 +167,11 @@ var Actor = React.createClass({
                                     <option value="control">Control</option>
                                 </BetterSelect>
                             </li>
-                            <li className="form-group">
+                            <li className="form-group form-inline">
                                 <label htmlFor="input-channel">Channel</label>
                                 <input id="input-channel" className="form-control" valueLink={this.linkState("inputChannel")} type="number" min="1" />
                             </li>
-                            <li>
+                            <li className="form-group form-inline">
                                 <label htmlFor="input-bus">Bus</label>
                                 <!-- This can be a select with options filled in by the server -->
                                 <input id="input-bus" className="form-control" valueLink={this.linkState("inputBus")} />

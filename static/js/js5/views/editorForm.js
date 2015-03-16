@@ -39,7 +39,55 @@ var EditorForm = React.createClass({
             React.createElement(
                 "div",
                 { className: "editorSection row" },
-                React.createElement(LayersList, { layersData: this.state.layersData })
+                React.createElement(LayersList, { layersData: this.state.layersData }),
+                React.createElement(ScenesList, { scenesData: this.state.scenesData })
+            )
+        );
+    }
+});
+
+var ScenesList = React.createClass({
+    displayName: "ScenesList",
+
+    getInitialState: function getInitialState() {
+        return { scenesData: this.props.scenesData };
+    },
+
+    handleNewSceneClick: function handleNewSceneClick() {
+        alert("Cool magic stuff will start happening here.");
+    },
+
+    render: function render() {
+        var scenes = this.state.scenesData.map(function (scene) {
+            //return <Layer sceneData={scene} />;
+            return React.createElement(
+                "li",
+                null,
+                scene.name
+            );
+        });
+        return React.createElement(
+            "div",
+            { className: "scenesListContainer" },
+            React.createElement(
+                "h3",
+                null,
+                "Scenes"
+            ),
+            React.createElement(
+                "p",
+                { className: "bg-primary" },
+                "Here scenes can be added and configured (bg color, stage and unstage duration etc...). Scenes added here will also add a new tab in the layers section. Each tab allows to overwrite each parameter by checking a checkbox next to it."
+            ),
+            React.createElement(
+                "button",
+                { id: "new-scene-button", onClick: this.handleNewSceneClick },
+                "New Scene"
+            ),
+            React.createElement(
+                "ul",
+                null,
+                scenes
             )
         );
     }
@@ -63,6 +111,11 @@ var LayersList = React.createClass({
         return React.createElement(
             "div",
             { className: "layersListContainer" },
+            React.createElement(
+                "h3",
+                null,
+                "Layers"
+            ),
             React.createElement(
                 "button",
                 { id: "new-layer-button", onClick: this.handleNewLayerClick },
@@ -243,7 +296,7 @@ var Actor = React.createClass({
                         ),
                         React.createElement(
                             "li",
-                            { className: "form-group" },
+                            { className: "form-group form-inline" },
                             React.createElement(
                                 "label",
                                 { htmlFor: "input-channel" },
@@ -253,7 +306,7 @@ var Actor = React.createClass({
                         ),
                         React.createElement(
                             "li",
-                            null,
+                            { className: "form-group form-inline" },
                             React.createElement(
                                 "label",
                                 { htmlFor: "input-bus" },

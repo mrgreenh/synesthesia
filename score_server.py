@@ -1,6 +1,6 @@
-from flask import Flask, render_template, session, request
+from flask import Flask, render_template, session, request, jsonify
 from flask.ext.socketio import SocketIO, emit, disconnect
-import synesthesia
+from synesthesia.data_managing import Bookshelf as Bookshelf
 
 from threading import Thread
 import json
@@ -14,6 +14,8 @@ socketio = SocketIO(app)
 thread = None
 rtmidi = mido.Backend('mido.backends.rtmidi')
 portname = rtmidi.get_input_names()[0]
+
+current_track_id = "foo"
 
 @app.route('/')
 @app.route('/index')
@@ -30,16 +32,17 @@ def stage():
 
 @app.route('/editor/<track_id>')
 def editor(track_id):
-    bookshelf = synesthesia.bookshelf.BookShelf()
+    bookshelf = Bookshelf()
     track_data = bookshelf.load_track(track_id)
 
     return render_template('editor.html', track_data = track_data)
 
-@app.route('/get_track/<track_id>')
-def get_track(track_id):
-    bookshelf = synesthesia.bookshelf.BookShelf()
-    track_data = bookshelf.load_track(track_id)
-    return flask.jsonify(**track_data)
+@app.route('/get_current_track')
+def get_current_track():
+    global current_track_id
+    bookshelf = Bookshelf()
+    track_data = bookshelf.load_track(current_track_id)
+    return jsonify(**track_data)
 
 #Write a template that imports layers and actors classes by reading a configuration file
 #Starting point is a webpage with two options:

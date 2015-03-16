@@ -9,12 +9,9 @@
         },
         waitSeconds: 15
     });
-    require( ["views/visualizer/Director.js"],
-            function(someModule,    myModule) {
-                alert("Done!");
-                var mrL = new Layer("pirla");
-            }
-    );
+    require( ["utils/oop", "views/visualizer/Synesthesia", "views/visualizer/Director"], function(){
+        var director = new Director();
+    } );
 </script>
 {% endblock %}
 {% block body %}

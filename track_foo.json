@@ -1,11 +1,17 @@
 {
   "title": "The first Synesthesia track",
   "description": "Forte!",
+  "scenesData": [
+    {
+      "name": "First part"
+    },
+    {
+      "name": "Second part"
+    }
+  ],
   "layersData": [
     {
       "name": "First Layer",
-      //Things like this will be defined in each class
-      //Loading all classes will define the "configuration" used by the editor
       "type": "Canvas2D",
       "actors": [
         {
@@ -18,8 +24,7 @@
           "inputChannel": "3",
           "inputBus": "Something",
           "inputRangeMax": "34",
-          "inputRangeMin": "20",
-
+          "inputRangeMin": "20"
         },
         {
           "name": "lead_synth",
@@ -31,14 +36,12 @@
           "inputChannel": "3",
           "inputBus": "Something",
           "inputRangeMax": "34",
-          "inputRangeMin": "20",
+          "inputRangeMin": "20"
         }
       ]
     },
     {
       "name": "Second Layer",
-      //Things like this will be defined in each class
-      //Loading all classes will define the "configuration" used by the editor
       "type": "Processing2D",
       "actors": [
         {
@@ -56,6 +59,6 @@
           "release": 40
         }
       ]
-    },
+    }
   ]
 }
