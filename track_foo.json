@@ -12,7 +12,7 @@
   "layersData": [
     {
       "name": "First Layer",
-      "type": "Canvas2D",
+      "type": "Three3D",
       "actors": [
         {
           "name": "kick",

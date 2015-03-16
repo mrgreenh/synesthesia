@@ -2,6 +2,8 @@ class Director extends Synesthesia{
     constructor(){
         this.$el = $("#stage-container");
         this.layers = [];
+        this._config;
+        this._trackData;
         //Load the configuration that describes classes and track data
         //Then start doing your thing
         $.when(this._loadNextTrackData(), this._loadStageConfig()).then((trackData, configData) => {
@@ -13,21 +15,11 @@ class Director extends Synesthesia{
 
     _startTrack(){
         var layersBasePath = "views/visualizer/layers/";
-        var layersClasses = [layersBasePath + "Layer"];
-        this._trackData.layersData.forEach(elem => {
-            var layerClazz = this._getLayerClassName(elem);
-            var layerClassPath = layersBasePath + layerClazz;
-            if (!_(layersClasses).contains(layerClassPath))
-                layersClasses.push(layerClassPath);
+        var layersClasses = _(this._trackData.layersData).map(elem => {
+            return this._getLayerClassName(elem);
         });
-        console.log(layersClasses);
-        require( layersClasses, () => {
-            //Initialized in order so their canvases get appended in the right order
-            this._trackData.layersData.forEach(elem => {
-                this._initializeLayer(elem);
-            });
-        });
-
+        layersClasses.unshift("Layer");
+        this._loadDependencies(layersBasePath, layersClasses, this._initializeLayers);
     }
 
     _getLayerClassName(layerData) {
@@ -35,11 +27,23 @@ class Director extends Synesthesia{
         return layerClazz;
     }
 
+    _initializeLayers(){
+        if(!this._layersInitsPromises) this._layersInitsPromises = [];
+        this._trackData.layersData.forEach(elem => {
+            this._layersInitsPromises.push(this._initializeLayer(elem));
+        });
+        $.when.apply($, this._layersInitsPromises).done(_.bind(this._renderLayers, this));
+    }
+
     _initializeLayer(layerData){
         var className = this._getLayerClassName(layerData);
         try{
-            var layer = new window[className]();
+            var layer = new window[className](layerData, this._config);
+            //Layers instances are kept in an array, as their order affects overlapping
             this.layers.push(layer);
+            var layerInitPromise = layer.isItInitializedYet();
+            this._layersInitsPromises.push(layerInitPromise);
+            return layerInitPromise;
         }catch(ex){
             console.warn("Could not initialize layer "+className);
             console.log(ex);
@@ -55,6 +59,12 @@ class Director extends Synesthesia{
     _loadStageConfig(){
         return $.ajax({
             url: "/get_stage_config"
+        });
+    }
+
+    _renderLayers() {
+        this.layers.forEach(layer => {
+            layer.render(this.$el);
         });
     }
 }

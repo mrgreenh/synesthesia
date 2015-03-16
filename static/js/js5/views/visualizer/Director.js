@@ -14,6 +14,8 @@ var Director = (function (Synesthesia) {
 
         this.$el = $("#stage-container");
         this.layers = [];
+        this._config;
+        this._trackData;
         //Load the configuration that describes classes and track data
         //Then start doing your thing
         $.when(this._loadNextTrackData(), this._loadStageConfig()).then(function (trackData, configData) {
@@ -31,19 +33,11 @@ var Director = (function (Synesthesia) {
                 var _this = this;
 
                 var layersBasePath = "views/visualizer/layers/";
-                var layersClasses = [layersBasePath + "Layer"];
-                this._trackData.layersData.forEach(function (elem) {
-                    var layerClazz = _this._getLayerClassName(elem);
-                    var layerClassPath = layersBasePath + layerClazz;
-                    if (!_(layersClasses).contains(layerClassPath)) layersClasses.push(layerClassPath);
+                var layersClasses = _(this._trackData.layersData).map(function (elem) {
+                    return _this._getLayerClassName(elem);
                 });
-                console.log(layersClasses);
-                require(layersClasses, function () {
-                    //Initialized in order so their canvases get appended in the right order
-                    _this._trackData.layersData.forEach(function (elem) {
-                        _this._initializeLayer(elem);
-                    });
-                });
+                layersClasses.unshift("Layer");
+                this._loadDependencies(layersBasePath, layersClasses, this._initializeLayers);
             },
             writable: true,
             configurable: true
@@ -56,12 +50,29 @@ var Director = (function (Synesthesia) {
             writable: true,
             configurable: true
         },
+        _initializeLayers: {
+            value: function _initializeLayers() {
+                var _this = this;
+
+                if (!this._layersInitsPromises) this._layersInitsPromises = [];
+                this._trackData.layersData.forEach(function (elem) {
+                    _this._layersInitsPromises.push(_this._initializeLayer(elem));
+                });
+                $.when.apply($, this._layersInitsPromises).done(_.bind(this._renderLayers, this));
+            },
+            writable: true,
+            configurable: true
+        },
         _initializeLayer: {
             value: function _initializeLayer(layerData) {
                 var className = this._getLayerClassName(layerData);
                 try {
-                    var layer = new window[className]();
+                    var layer = new window[className](layerData, this._config);
+                    //Layers instances are kept in an array, as their order affects overlapping
                     this.layers.push(layer);
+                    var layerInitPromise = layer.isItInitializedYet();
+                    this._layersInitsPromises.push(layerInitPromise);
+                    return layerInitPromise;
                 } catch (ex) {
                     console.warn("Could not initialize layer " + className);
                     console.log(ex);
@@ -83,6 +94,17 @@ var Director = (function (Synesthesia) {
             value: function _loadStageConfig() {
                 return $.ajax({
                     url: "/get_stage_config"
+                });
+            },
+            writable: true,
+            configurable: true
+        },
+        _renderLayers: {
+            value: function _renderLayers() {
+                var _this = this;
+
+                this.layers.forEach(function (layer) {
+                    layer.render(_this.$el);
                 });
             },
             writable: true,

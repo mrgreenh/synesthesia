@@ -1,3 +1,13 @@
 STAGE_CONFIG = {
-    "somekey": "somevalue"
+    "layers": {
+        "Canvas2D": {
+            "dependencies": [
+            ]
+        },
+        "Three3D": {
+            "dependencies": [
+                "three.min"
+            ]
+        }
+    }
 }

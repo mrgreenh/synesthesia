@@ -22,3 +22,6 @@ body { margin: 0px; }
 /* Editor */
 .collapsable-content {  overflow: hidden }
 .collapsable-content.collapsed { height: 0px; }
+
+/* Stage */
+#stage-container { position: absolute; top:0px; bottom: 0px; right:0px; left:0px; width:100%; box-sizing: border-box; border: dashed 2px black }
