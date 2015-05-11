@@ -1,6 +1,6 @@
 {% extends 'layout.html' %}
 {% block additional_js %}
-<script src="static/js/vendor/require_2.1.16.js"></script>
+<script src="/static/js/vendor/require_2.1.16.js"></script>
 <script>
     require.config({
         baseUrl: "/static/js/js5",
@@ -9,7 +9,7 @@
         },
         waitSeconds: 15
     });
-    require( ["utils/oop", "views/visualizer/Synesthesia", "views/visualizer/Director"], function(){
+    require( ["views/visualizer/Director"], function(){
         var director = new Director();
     } );
 </script>

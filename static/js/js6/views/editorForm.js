@@ -37,7 +37,7 @@ var ScenesList = React.createClass({
 
     render: function(){
         var scenes = this.state.scenesData.map(function(scene){
-            //return <Layer sceneData={scene} />;
+            //return <LayerEditor sceneData={scene} />;
             return <li>{scene.name}</li>
         });
         return (<div className="scenesListContainer">
@@ -65,7 +65,7 @@ var LayersList = React.createClass({
 
     render: function(){
         var layers = this.state.layersData.map(function(layer){
-           return <Layer layerData={layer} />;
+           return <LayerEditor layerData={layer} />;
         });
         return (<div className="layersListContainer">
                 <h3>Layers</h3>
@@ -77,7 +77,7 @@ var LayersList = React.createClass({
     }
 });
 
-var Layer = React.createClass({
+var LayerEditor = React.createClass({
     mixins: [React.addons.LinkedStateMixin],
 
     getInitialState(){
@@ -100,7 +100,7 @@ var Layer = React.createClass({
                         <option value="Processing2D">Processing2D</option>
                         <option value="Three3D">Three3D</option>
                     </BetterSelect>
-                    <ActorsList actorsData={this.state.actors} />
+                    <ActorsList actorsData={this.state.actors} layerType={this.state.type} />
                 </div>
             </Collapsable>);
     }
@@ -116,9 +116,9 @@ var ActorsList = React.createClass({
     },
 
     render: function(){
-        var actors = this.state.actorsData.map(function(actor){
+        var actors = this.state.actorsData.map(actor => {
            return (
-               <Actor actorData={actor} />
+               <ActorEditor actorData={actor} layerType={this.props.layerType} />
            );
         });
         return (
@@ -130,73 +130,6 @@ var ActorsList = React.createClass({
             </div>
         );
     }
-});
-
-var Actor = React.createClass({
-    mixins: [React.addons.LinkedStateMixin],
-    ADSREnvelopeAttributes: ["attack", "decay", "sustain", "release"],
-    getInitialState: function(){
-        return this.props.actorData;
-    },
-
-    render: function(){
-        var ADSRForms = _(this.ADSREnvelopeAttributes).map(_.bind(function(attr){
-           var attrHtmlName = "actor-" + attr;
-            return (
-               <div className="form-group form-inline">
-                   <label htmlFor={attrHtmlName}>{attr} {this.state[attr]}</label>
-                   <input id={attrHtmlName} className="form-control" valueLink={this.linkState(attr)} type="range" min="0" max="100" />
-               </div>
-            );
-        }, this));
-
-        return (
-            <Collapsable itemName={this.state.name}>
-                <ul className="parameters-list">
-                    <li className="form-group">
-                        <label htmlFor="actor-name">Name</label>
-                        <input id="actor-name" className="form-control" valueLink={this.linkState("name")} type="text" />
-                    </li>
-                    <label htmlFor="actor-type">Actor type:</label>
-                    <BetterSelect valueLink={this.linkState("className")}>
-                        <option value="Circle3D">"Circle"</option>
-                        <option value="Pyramid3D">"Pyramid"</option>
-                        <option value="Cube3D">"Cube"</option>
-                    </BetterSelect>
-                    <Collapsable itemName="Inputs">
-                        <!-- How many inputs and what kind is defined by the actors class. For now only one -->
-                        <ul>
-                            <li className="form-group">
-                                <label htmlFor="input-type">Type</label>
-                                <BetterSelect valueLink={this.linkState("inputType")}>
-                                    <option value="note">Note</option>
-                                    <option value="control">Control</option>
-                                </BetterSelect>
-                            </li>
-                            <li className="form-group form-inline">
-                                <label htmlFor="input-channel">Channel</label>
-                                <input id="input-channel" className="form-control" valueLink={this.linkState("inputChannel")} type="number" min="1" />
-                            </li>
-                            <li className="form-group form-inline">
-                                <label htmlFor="input-bus">Bus</label>
-                                <!-- This can be a select with options filled in by the server -->
-                                <input id="input-bus" className="form-control" valueLink={this.linkState("inputBus")} />
-                            </li>
-                            <li className="form-group form-inline">
-                                <label htmlFor="input-range-max">Range</label>
-                                <!-- Notes and controls will be enriched with a normalized version of their value, computed based on this range -->
-                                <input id="input-range-max" className="form-control" valueLink={this.linkState("inputRangeMax")} type="number" min="1" />
-                                <input id="input-range-min" className="form-control" valueLink={this.linkState("inputRangeMin")} type="number" min="1" />
-                            </li>
-                        </ul>
-                    </Collapsable>
-                    <Collapsable itemName="ADSR Envelope">
-                        {ADSRForms}
-                    </Collapsable>
-                </ul>
-            </Collapsable>
-        );
-    },
 });
 
 var Collapsable = React.createClass({

@@ -8,18 +8,24 @@ var _inherits = function (subClass, superClass) { if (typeof superClass !== "fun
 
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
-var ThreeCubeActor = (function (Actor) {
+var ThreeCubeActor = (function (ThreeActor) {
     function ThreeCubeActor(actorData, threeScene) {
         _classCallCheck(this, ThreeCubeActor);
 
-        _get(Object.getPrototypeOf(ThreeCubeActor.prototype), "constructor", this).call(this, actorData);
-        this._scene = threeScene;
-        this._material = new THREE.MeshBasicMaterial({ color: 65280 });
+        _get(Object.getPrototypeOf(ThreeCubeActor.prototype), "constructor", this).call(this, actorData, threeScene);
     }
 
-    _inherits(ThreeCubeActor, Actor);
+    _inherits(ThreeCubeActor, ThreeActor);
 
-    _prototypeProperties(ThreeCubeActor, null, {
+    _prototypeProperties(ThreeCubeActor, {
+        getActorParameters: {
+            value: function getActorParameters() {
+                return _get(Object.getPrototypeOf(ThreeCubeActor), "getActorParameters", this).call(this).concat(["edge"]);
+            },
+            writable: true,
+            configurable: true
+        }
+    }, {
         renderFrame: {
             value: function renderFrame() {
                 var geometry = new THREE.BoxGeometry(1, 1, 1);
@@ -32,4 +38,4 @@ var ThreeCubeActor = (function (Actor) {
     });
 
     return ThreeCubeActor;
-})(Actor);
+})(ThreeActor);

@@ -1,4 +1,19 @@
 class Three3DLayer extends Layer{
+    static getLayerSpecificActorClass(){
+        return "ThreeActor";
+    }
+
+    static getAvailableActorsClasses(){
+        //Even if right now it's not, one day this will be async
+        //It will ask the server to check what classes are in the actors folder
+        var dfd = $.Deferred();
+        dfd.resolve([
+                "ThreeCubeActor",
+                "ThreeSphereActor"
+            ]);
+        return dfd;
+    }
+
     constructor(layerData, config){
         super(layerData, config);
     }
@@ -29,10 +44,11 @@ class Three3DLayer extends Layer{
 
     _initializeActors(){
         this._actorsInstances = this._actorsData.map(actorData => {
-            return new window[this._getActorClass(actorData.className)](
+            return new window[actorData.className](
                     actorData,
                     this._scene
                 );
         });
     }
+
 }

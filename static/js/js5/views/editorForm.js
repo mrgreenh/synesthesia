@@ -59,7 +59,7 @@ var ScenesList = React.createClass({
 
     render: function render() {
         var scenes = this.state.scenesData.map(function (scene) {
-            //return <Layer sceneData={scene} />;
+            //return <LayerEditor sceneData={scene} />;
             return React.createElement(
                 "li",
                 null,
@@ -106,7 +106,7 @@ var LayersList = React.createClass({
 
     render: function render() {
         var layers = this.state.layersData.map(function (layer) {
-            return React.createElement(Layer, { layerData: layer });
+            return React.createElement(LayerEditor, { layerData: layer });
         });
         return React.createElement(
             "div",
@@ -130,8 +130,8 @@ var LayersList = React.createClass({
     }
 });
 
-var Layer = React.createClass({
-    displayName: "Layer",
+var LayerEditor = React.createClass({
+    displayName: "LayerEditor",
 
     mixins: [React.addons.LinkedStateMixin],
 
@@ -185,7 +185,7 @@ var Layer = React.createClass({
                         "Three3D"
                     )
                 ),
-                React.createElement(ActorsList, { actorsData: this.state.actors })
+                React.createElement(ActorsList, { actorsData: this.state.actors, layerType: this.state.type })
             )
         );
     }
@@ -203,8 +203,10 @@ var ActorsList = React.createClass({
     },
 
     render: function render() {
+        var _this = this;
+
         var actors = this.state.actorsData.map(function (actor) {
-            return React.createElement(Actor, { actorData: actor });
+            return React.createElement(ActorEditor, { actorData: actor, layerType: _this.props.layerType });
         });
         return React.createElement(
             "div",
@@ -222,143 +224,6 @@ var ActorsList = React.createClass({
         );
     }
 });
-
-var Actor = React.createClass({
-    displayName: "Actor",
-
-    mixins: [React.addons.LinkedStateMixin],
-    ADSREnvelopeAttributes: ["attack", "decay", "sustain", "release"],
-    getInitialState: function getInitialState() {
-        return this.props.actorData;
-    },
-
-    render: function render() {
-        var ADSRForms = _(this.ADSREnvelopeAttributes).map(_.bind(function (attr) {
-            var attrHtmlName = "actor-" + attr;
-            return React.createElement(
-                "div",
-                { className: "form-group form-inline" },
-                React.createElement(
-                    "label",
-                    { htmlFor: attrHtmlName },
-                    attr,
-                    " ",
-                    this.state[attr]
-                ),
-                React.createElement("input", { id: attrHtmlName, className: "form-control", valueLink: this.linkState(attr), type: "range", min: "0", max: "100" })
-            );
-        }, this));
-
-        return React.createElement(
-            Collapsable,
-            { itemName: this.state.name },
-            React.createElement(
-                "ul",
-                { className: "parameters-list" },
-                React.createElement(
-                    "li",
-                    { className: "form-group" },
-                    React.createElement(
-                        "label",
-                        { htmlFor: "actor-name" },
-                        "Name"
-                    ),
-                    React.createElement("input", { id: "actor-name", className: "form-control", valueLink: this.linkState("name"), type: "text" })
-                ),
-                React.createElement(
-                    "label",
-                    { htmlFor: "actor-type" },
-                    "Actor type:"
-                ),
-                React.createElement(
-                    BetterSelect,
-                    { valueLink: this.linkState("className") },
-                    React.createElement(
-                        "option",
-                        { value: "Circle3D" },
-                        "\"Circle\""
-                    ),
-                    React.createElement(
-                        "option",
-                        { value: "Pyramid3D" },
-                        "\"Pyramid\""
-                    ),
-                    React.createElement(
-                        "option",
-                        { value: "Cube3D" },
-                        "\"Cube\""
-                    )
-                ),
-                React.createElement(
-                    Collapsable,
-                    { itemName: "Inputs" },
-                    React.createElement(
-                        "ul",
-                        null,
-                        React.createElement(
-                            "li",
-                            { className: "form-group" },
-                            React.createElement(
-                                "label",
-                                { htmlFor: "input-type" },
-                                "Type"
-                            ),
-                            React.createElement(
-                                BetterSelect,
-                                { valueLink: this.linkState("inputType") },
-                                React.createElement(
-                                    "option",
-                                    { value: "note" },
-                                    "Note"
-                                ),
-                                React.createElement(
-                                    "option",
-                                    { value: "control" },
-                                    "Control"
-                                )
-                            )
-                        ),
-                        React.createElement(
-                            "li",
-                            { className: "form-group form-inline" },
-                            React.createElement(
-                                "label",
-                                { htmlFor: "input-channel" },
-                                "Channel"
-                            ),
-                            React.createElement("input", { id: "input-channel", className: "form-control", valueLink: this.linkState("inputChannel"), type: "number", min: "1" })
-                        ),
-                        React.createElement(
-                            "li",
-                            { className: "form-group form-inline" },
-                            React.createElement(
-                                "label",
-                                { htmlFor: "input-bus" },
-                                "Bus"
-                            ),
-                            React.createElement("input", { id: "input-bus", className: "form-control", valueLink: this.linkState("inputBus") })
-                        ),
-                        React.createElement(
-                            "li",
-                            { className: "form-group form-inline" },
-                            React.createElement(
-                                "label",
-                                { htmlFor: "input-range-max" },
-                                "Range"
-                            ),
-                            React.createElement("input", { id: "input-range-max", className: "form-control", valueLink: this.linkState("inputRangeMax"), type: "number", min: "1" }),
-                            React.createElement("input", { id: "input-range-min", className: "form-control", valueLink: this.linkState("inputRangeMin"), type: "number", min: "1" })
-                        )
-                    )
-                ),
-                React.createElement(
-                    Collapsable,
-                    { itemName: "ADSR Envelope" },
-                    ADSRForms
-                )
-            )
-        );
-    } });
 
 var Collapsable = React.createClass({
     displayName: "Collapsable",
@@ -403,6 +268,3 @@ var Collapsable = React.createClass({
 
 });
 // TODO make the above statement true -->
-// How many inputs and what kind is defined by the actors class. For now only one -->
-// This can be a select with options filled in by the server -->
-// Notes and controls will be enriched with a normalized version of their value, computed based on this range -->

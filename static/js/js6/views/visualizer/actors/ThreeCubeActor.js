@@ -1,8 +1,10 @@
-class ThreeCubeActor extends Actor{
+class ThreeCubeActor extends ThreeActor{
+    static getActorParameters(){
+        return super.getActorParameters().concat(["edge"]);
+    }
+
     constructor(actorData, threeScene){
-        super(actorData);
-        this._scene = threeScene;
-        this._material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+        super(actorData, threeScene);
     }
 
     renderFrame(){

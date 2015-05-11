@@ -16,38 +16,32 @@ var Layer = (function (Synesthesia) {
 
         this._baseDependencyPath = "vendor/layers_dependencies/";
         this._dependencies = this._layerConfig.dependencies;
-        $.when(this._loadDependencies(this._baseDependencyPath, this._dependencies), this._loadActorsClasses()).then(_.bind(this.notifyInitialization, this));
+        Synesthesia.loadDependencies(this._baseDependencyPath, this._dependencies).done(_.bind(this.notifyInitialization, this));
     }
 
     _inherits(Layer, Synesthesia);
 
-    _prototypeProperties(Layer, null, {
-        _loadActorsClasses: {
-            value: function _loadActorsClasses() {
-                var baseActorDependencyPath = "views/visualizer/actors/";
-                this._actorsClasses = this._actorsData.map(function (elem) {
-                    return this._getActorClass(elem.className);
-                }, this);
-                this._actorsClasses.unshift("Actor");
+    _prototypeProperties(Layer, {
+        getLayerSpecificActorClass: {
+            value: function getLayerSpecificActorClass() {},
+            writable: true,
+            configurable: true
+        },
+        getAvailableActorsClasses: {
+            value: function getAvailableActorsClasses() {
                 var dfd = $.Deferred();
-                this._loadDependencies(baseActorDependencyPath, this._actorsClasses).done(dfd.resolve);
+                dfd.resolve([]);
                 return dfd.promise();
             },
             writable: true,
             configurable: true
-        },
+        }
+    }, {
         render: {
             value: function render($stageElement) {
                 this._initializeActors();
                 this.width = $stageElement.width();
                 this.height = $stageElement.height();
-            },
-            writable: true,
-            configurable: true
-        },
-        _getActorClass: {
-            value: function _getActorClass(className) {
-                return className + "Actor";
             },
             writable: true,
             configurable: true
@@ -71,3 +65,5 @@ var Layer = (function (Synesthesia) {
 
     return Layer;
 })(Synesthesia);
+
+//Override if necessary

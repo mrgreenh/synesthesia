@@ -1,4 +1,14 @@
 class Layer extends Synesthesia{
+    static getLayerSpecificActorClass(){
+        //Override if necessary
+    }
+
+    static getAvailableActorsClasses(){
+        var dfd = $.Deferred();
+        dfd.resolve([]);
+        return dfd.promise();
+    }
+
     constructor(layerData, config){
         this.type = layerData.type;
         this._layerConfig = config.layers[this.type];
@@ -6,22 +16,8 @@ class Layer extends Synesthesia{
         
         this._baseDependencyPath = "vendor/layers_dependencies/";
         this._dependencies = this._layerConfig.dependencies;
-        $.when(
-            this._loadDependencies(this._baseDependencyPath, this._dependencies),
-            this._loadActorsClasses()
-            ).then(_.bind(this.notifyInitialization, this));
+        Synesthesia.loadDependencies(this._baseDependencyPath, this._dependencies).done(_.bind(this.notifyInitialization, this));
 
-    }
-
-    _loadActorsClasses(){
-        var baseActorDependencyPath = "views/visualizer/actors/";
-        this._actorsClasses = this._actorsData.map(function(elem){
-            return this._getActorClass(elem.className);
-        }, this);
-        this._actorsClasses.unshift("Actor");
-        var dfd = $.Deferred();
-        this._loadDependencies(baseActorDependencyPath, this._actorsClasses).done(dfd.resolve);
-        return dfd.promise();
     }
 
     render($stageElement){
@@ -30,10 +26,6 @@ class Layer extends Synesthesia{
         this.height = $stageElement.height();
     }
     
-    _getActorClass(className){
-        return className + "Actor";
-    }
-
     isItInitializedYet(){
         if(!this._initDfd) this._initDfd = $.Deferred();
         return this._initDfd.promise();

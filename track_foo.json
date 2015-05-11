@@ -12,10 +12,10 @@
   "layersData": [
     {
       "name": "First Layer",
-      "type": "Three3D",
+      "type": "Three3DLayer",
       "actors": [
         {
-          "className": "ThreeCube",
+          "className": "ThreeCubeActor",
           "name": "kick",
           "attack": 100,
           "decay": 20,
@@ -28,7 +28,7 @@
           "inputRangeMin": "20"
         },
         {
-          "className": "ThreeCube",
+          "className": "ThreeSphereActor",
           "name": "lead_synth",
           "attack": 90,
           "decay": 35,

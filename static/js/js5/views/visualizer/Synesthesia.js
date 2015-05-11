@@ -13,9 +13,9 @@ var Synesthesia = (function (BaseObject) {
 
     _inherits(Synesthesia, BaseObject);
 
-    _prototypeProperties(Synesthesia, null, {
-        _loadDependencies: {
-            value: function _loadDependencies(basePath, dependencies, callback) {
+    _prototypeProperties(Synesthesia, {
+        loadDependencies: {
+            value: function loadDependencies(basePath, dependencies, callback) {
                 var toLoad = [];
                 var normalizedDependencies = [];
                 dependencies.forEach(function (dependency) {
@@ -28,6 +28,30 @@ var Synesthesia = (function (BaseObject) {
                 console.log(toLoad);
                 var dfd = $.Deferred();
                 require(toLoad, dfd.resolve);
+                return dfd.promise();
+            },
+            writable: true,
+            configurable: true
+        },
+        loadLayersSynesthesiaClasses: {
+            value: function loadLayersSynesthesiaClasses(layersClasses) {
+                var _this = this;
+
+                var dfd = $.Deferred();
+                var layersBasePath = "views/visualizer/layers/";
+                var actorsBasePath = "views/visualizer/actors/";
+                this.loadDependencies(layersBasePath, layersClasses).done(function () {
+                    layersClasses.forEach(function (layerClass) {
+                        var layerSpecificActorClass = window[layerClass].getLayerSpecificActorClass();
+                        window[layerClass].getAvailableActorsClasses().done(function (actorsClasses) {
+                            var dependencies = layerSpecificActorClass ? [layerSpecificActorClass].concat(actorsClasses) : actorsClasses;
+                            dependencies.unshift("Actor");
+                            _this.loadDependencies(actorsBasePath, dependencies).done(function () {
+                                dfd.resolve();
+                            });
+                        });
+                    });
+                });
                 return dfd.promise();
             },
             writable: true,

@@ -17,7 +17,26 @@ var Three3DLayer = (function (Layer) {
 
     _inherits(Three3DLayer, Layer);
 
-    _prototypeProperties(Three3DLayer, null, {
+    _prototypeProperties(Three3DLayer, {
+        getLayerSpecificActorClass: {
+            value: function getLayerSpecificActorClass() {
+                return "ThreeActor";
+            },
+            writable: true,
+            configurable: true
+        },
+        getAvailableActorsClasses: {
+            value: function getAvailableActorsClasses() {
+                //Even if right now it's not, one day this will be async
+                //It will ask the server to check what classes are in the actors folder
+                var dfd = $.Deferred();
+                dfd.resolve(["ThreeCubeActor", "ThreeSphereActor"]);
+                return dfd;
+            },
+            writable: true,
+            configurable: true
+        }
+    }, {
         render: {
             value: function render($stageElement) {
                 this._scene = new THREE.Scene();
@@ -53,7 +72,7 @@ var Three3DLayer = (function (Layer) {
                 var _this = this;
 
                 this._actorsInstances = this._actorsData.map(function (actorData) {
-                    return new (window[_this._getActorClass(actorData.className)])(actorData, _this._scene);
+                    return new window[actorData.className](actorData, _this._scene);
                 });
             },
             writable: true,

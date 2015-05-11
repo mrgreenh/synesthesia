@@ -14,17 +14,11 @@ class Director extends Synesthesia{
     }
 
     _startTrack(){
-        var layersBasePath = "views/visualizer/layers/";
         var layersClasses = _(this._trackData.layersData).map(elem => {
-            return this._getLayerClassName(elem);
+            return elem.type;
         });
         layersClasses.unshift("Layer");
-        this._loadDependencies(layersBasePath, layersClasses).done(this._initializeLayers.bind(this));
-    }
-
-    _getLayerClassName(layerData) {
-        var layerClazz = layerData.type + "Layer";
-        return layerClazz;
+        Synesthesia.loadLayersSynesthesiaClasses(layersClasses).done(this._initializeLayers.bind(this));
     }
 
     _initializeLayers(){
@@ -36,7 +30,7 @@ class Director extends Synesthesia{
     }
 
     _initializeLayer(layerData){
-        var className = this._getLayerClassName(layerData);
+        var className = layerData.type;
         try{
             var layer = new window[className](layerData, this._config);
             //Layers instances are kept in an array, as their order affects overlapping
