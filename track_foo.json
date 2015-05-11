@@ -15,6 +15,7 @@
       "type": "Three3D",
       "actors": [
         {
+          "className": "ThreeCube",
           "name": "kick",
           "attack": 100,
           "decay": 20,
@@ -27,6 +28,7 @@
           "inputRangeMin": "20"
         },
         {
+          "className": "ThreeCube",
           "name": "lead_synth",
           "attack": 90,
           "decay": 35,

@@ -37,7 +37,7 @@ var Director = (function (Synesthesia) {
                     return _this._getLayerClassName(elem);
                 });
                 layersClasses.unshift("Layer");
-                this._loadDependencies(layersBasePath, layersClasses, this._initializeLayers);
+                this._loadDependencies(layersBasePath, layersClasses).done(this._initializeLayers.bind(this));
             },
             writable: true,
             configurable: true
@@ -75,6 +75,7 @@ var Director = (function (Synesthesia) {
                     return layerInitPromise;
                 } catch (ex) {
                     console.warn("Could not initialize layer " + className);
+                    console.log(ex.stack);
                     console.log(ex);
                 }
             },

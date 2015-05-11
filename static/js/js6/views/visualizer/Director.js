@@ -19,7 +19,7 @@ class Director extends Synesthesia{
             return this._getLayerClassName(elem);
         });
         layersClasses.unshift("Layer");
-        this._loadDependencies(layersBasePath, layersClasses, this._initializeLayers);
+        this._loadDependencies(layersBasePath, layersClasses).done(this._initializeLayers.bind(this));
     }
 
     _getLayerClassName(layerData) {
@@ -46,6 +46,7 @@ class Director extends Synesthesia{
             return layerInitPromise;
         }catch(ex){
             console.warn("Could not initialize layer "+className);
+            console.log(ex.stack);
             console.log(ex);
         }
     }

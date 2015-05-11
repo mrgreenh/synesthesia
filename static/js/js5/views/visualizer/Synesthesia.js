@@ -26,7 +26,9 @@ var Synesthesia = (function (BaseObject) {
                     }
                 });
                 console.log(toLoad);
-                require(toLoad, _.bind(callback, this));
+                var dfd = $.Deferred();
+                require(toLoad, dfd.resolve);
+                return dfd.promise();
             },
             writable: true,
             configurable: true

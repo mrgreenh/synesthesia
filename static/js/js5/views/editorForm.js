@@ -260,10 +260,34 @@ var Actor = React.createClass({
                     { className: "form-group" },
                     React.createElement(
                         "label",
-                        { htmlFor: "actor-title" },
+                        { htmlFor: "actor-name" },
                         "Name"
                     ),
                     React.createElement("input", { id: "actor-name", className: "form-control", valueLink: this.linkState("name"), type: "text" })
+                ),
+                React.createElement(
+                    "label",
+                    { htmlFor: "actor-type" },
+                    "Actor type:"
+                ),
+                React.createElement(
+                    BetterSelect,
+                    { valueLink: this.linkState("className") },
+                    React.createElement(
+                        "option",
+                        { value: "Circle3D" },
+                        "\"Circle\""
+                    ),
+                    React.createElement(
+                        "option",
+                        { value: "Pyramid3D" },
+                        "\"Pyramid\""
+                    ),
+                    React.createElement(
+                        "option",
+                        { value: "Cube3D" },
+                        "\"Cube\""
+                    )
                 ),
                 React.createElement(
                     Collapsable,
@@ -379,6 +403,6 @@ var Collapsable = React.createClass({
 
 });
 // TODO make the above statement true -->
-// How many inputs and what kind is defined by the actor's class. For now only one -->
+// How many inputs and what kind is defined by the actors class. For now only one -->
 // This can be a select with options filled in by the server -->
 // Notes and controls will be enriched with a normalized version of their value, computed based on this range -->

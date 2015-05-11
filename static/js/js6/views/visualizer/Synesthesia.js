@@ -14,6 +14,8 @@ class Synesthesia extends BaseObject{
             }
         });
         console.log(toLoad);
-        require( toLoad, _.bind(callback, this));
+        var dfd = $.Deferred();
+        require( toLoad, dfd.resolve);
+        return dfd.promise();
     }
 }

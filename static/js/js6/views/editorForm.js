@@ -154,11 +154,17 @@ var Actor = React.createClass({
             <Collapsable itemName={this.state.name}>
                 <ul className="parameters-list">
                     <li className="form-group">
-                        <label htmlFor="actor-title">Name</label>
+                        <label htmlFor="actor-name">Name</label>
                         <input id="actor-name" className="form-control" valueLink={this.linkState("name")} type="text" />
                     </li>
+                    <label htmlFor="actor-type">Actor type:</label>
+                    <BetterSelect valueLink={this.linkState("className")}>
+                        <option value="Circle3D">"Circle"</option>
+                        <option value="Pyramid3D">"Pyramid"</option>
+                        <option value="Cube3D">"Cube"</option>
+                    </BetterSelect>
                     <Collapsable itemName="Inputs">
-                        <!-- How many inputs and what kind is defined by the actor's class. For now only one -->
+                        <!-- How many inputs and what kind is defined by the actors class. For now only one -->
                         <ul>
                             <li className="form-group">
                                 <label htmlFor="input-type">Type</label>
