@@ -1,17 +1,14 @@
 {% extends 'layout.html' %}
 {% block additional_js %}
-<script src="/static/js/vendor/require_2.1.16.js"></script>
 <script>
-    require.config({
-        baseUrl: "/static/js/js5",
-        paths: {
-            "vendor": "/static/js/vendor"
-        },
-        waitSeconds: 15
+    require([
+        "vendor/mousetrap",
+        "vendor/jquery-2.1.3",
+        "vendor/underscore-1.8.2",
+        "views/visualizer/Director"
+        ], function(mousetrap, jquery, underscore, Director){
+            var director = new Director();
     });
-    require( ["views/visualizer/Director"], function(){
-        var director = new Director();
-    } );
 </script>
 {% endblock %}
 {% block body %}

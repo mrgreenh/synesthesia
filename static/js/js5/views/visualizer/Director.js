@@ -6,101 +6,104 @@ var _inherits = function (subClass, superClass) { if (typeof superClass !== "fun
 
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
-var Director = (function (Synesthesia) {
-    function Director() {
-        var _this = this;
+define(["utils/oop", "views/visualizer/Synesthesia", "views/visualizer/actors/Actor", "views/visualizer/layers/Layer"], function (BaseObject, Synesthesia, Actor, Layer) {
+    var Director = (function (Synesthesia) {
+        function Director() {
+            var _this = this;
 
-        _classCallCheck(this, Director);
+            _classCallCheck(this, Director);
 
-        this.$el = $("#stage-container");
-        this.layers = [];
-        this._config;
-        this._trackData;
-        //Load the configuration that describes classes and track data
-        //Then start doing your thing
-        $.when(this._loadNextTrackData(), this._loadStageConfig()).then(function (trackData, configData) {
-            _this._config = configData[0];
-            _this._trackData = trackData[0];
-            _this._startTrack();
-        });
-    }
-
-    _inherits(Director, Synesthesia);
-
-    _prototypeProperties(Director, null, {
-        _startTrack: {
-            value: function _startTrack() {
-                var layersClasses = _(this._trackData.layersData).map(function (elem) {
-                    return elem.type;
-                });
-                layersClasses.unshift("Layer");
-                Synesthesia.loadLayersSynesthesiaClasses(layersClasses).done(this._initializeLayers.bind(this));
-            },
-            writable: true,
-            configurable: true
-        },
-        _initializeLayers: {
-            value: function _initializeLayers() {
-                var _this = this;
-
-                if (!this._layersInitsPromises) this._layersInitsPromises = [];
-                this._trackData.layersData.forEach(function (elem) {
-                    _this._layersInitsPromises.push(_this._initializeLayer(elem));
-                });
-                $.when.apply($, this._layersInitsPromises).done(_.bind(this._renderLayers, this));
-            },
-            writable: true,
-            configurable: true
-        },
-        _initializeLayer: {
-            value: function _initializeLayer(layerData) {
-                var className = layerData.type;
-                try {
-                    var layer = new window[className](layerData, this._config);
-                    //Layers instances are kept in an array, as their order affects overlapping
-                    this.layers.push(layer);
-                    var layerInitPromise = layer.isItInitializedYet();
-                    this._layersInitsPromises.push(layerInitPromise);
-                    return layerInitPromise;
-                } catch (ex) {
-                    console.warn("Could not initialize layer " + className);
-                    console.log(ex.stack);
-                    console.log(ex);
-                }
-            },
-            writable: true,
-            configurable: true
-        },
-        _loadNextTrackData: {
-            value: function _loadNextTrackData() {
-                return $.ajax({
-                    url: "/get_current_track"
-                });
-            },
-            writable: true,
-            configurable: true
-        },
-        _loadStageConfig: {
-            value: function _loadStageConfig() {
-                return $.ajax({
-                    url: "/get_stage_config"
-                });
-            },
-            writable: true,
-            configurable: true
-        },
-        _renderLayers: {
-            value: function _renderLayers() {
-                var _this = this;
-
-                this.layers.forEach(function (layer) {
-                    layer.render(_this.$el);
-                });
-            },
-            writable: true,
-            configurable: true
+            this.$el = $("#stage-container");
+            this.layers = [];
+            this._config;
+            this._trackData;
+            //Load the configuration that describes classes and track data
+            //Then start doing your thing
+            $.when(this._loadNextTrackData(), this._loadStageConfig()).then(function (trackData, configData) {
+                _this._config = configData[0];
+                _this._trackData = trackData[0];
+                _this._startTrack();
+            });
         }
-    });
+
+        _inherits(Director, Synesthesia);
+
+        _prototypeProperties(Director, null, {
+            _startTrack: {
+                value: function _startTrack() {
+                    var layersBasePath = "views/visualizer/layers/";
+                    var layersClasses = _(this._trackData.layersData).pluck("type");
+                    layersClasses.unshift("Layer");
+                    Synesthesia.loadDependencies(layersBasePath, layersClasses).done(this._initializeLayers.bind(this));
+                },
+                writable: true,
+                configurable: true
+            },
+            _initializeLayers: {
+                value: function _initializeLayers() {
+                    var _this = this;
+
+                    if (!this._layersInitsPromises) this._layersInitsPromises = [];
+                    this._trackData.layersData.forEach(function (elem) {
+                        _this._layersInitsPromises.push(_this._initializeLayer(elem));
+                    });
+                    $.when.apply($, this._layersInitsPromises).done(_.bind(this._renderLayers, this));
+                },
+                writable: true,
+                configurable: true
+            },
+            _initializeLayer: {
+                value: function _initializeLayer(layerData) {
+                    var className = layerData.type;
+                    try {
+                        var layer = new window[className](layerData, this._config);
+                        //Layers instances are kept in an array, as their order affects overlapping
+                        this.layers.push(layer);
+                        var layerInitPromise = layer.isItInitializedYet();
+                        this._layersInitsPromises.push(layerInitPromise);
+                        return layerInitPromise;
+                    } catch (ex) {
+                        console.warn("Could not initialize layer " + className);
+                        console.log(ex.stack);
+                        console.log(ex);
+                    }
+                },
+                writable: true,
+                configurable: true
+            },
+            _loadNextTrackData: {
+                value: function _loadNextTrackData() {
+                    return $.ajax({
+                        url: "/get_current_track"
+                    });
+                },
+                writable: true,
+                configurable: true
+            },
+            _loadStageConfig: {
+                value: function _loadStageConfig() {
+                    return $.ajax({
+                        url: "/get_stage_config"
+                    });
+                },
+                writable: true,
+                configurable: true
+            },
+            _renderLayers: {
+                value: function _renderLayers() {
+                    var _this = this;
+
+                    this.layers.forEach(function (layer) {
+                        layer.render(_this.$el);
+                    });
+                },
+                writable: true,
+                configurable: true
+            }
+        });
+
+        return Director;
+    })(Synesthesia);
 
     return Director;
-})(Synesthesia);
+});

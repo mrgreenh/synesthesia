@@ -6,60 +6,64 @@ var _inherits = function (subClass, superClass) { if (typeof superClass !== "fun
 
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
-var Synesthesia = (function (BaseObject) {
-    function Synesthesia() {
-        _classCallCheck(this, Synesthesia);
-    }
+define(["utils/oop"], function (BaseObject) {
+    var Synesthesia = (function (BaseObject) {
+        function Synesthesia() {
+            _classCallCheck(this, Synesthesia);
+        }
 
-    _inherits(Synesthesia, BaseObject);
+        _inherits(Synesthesia, BaseObject);
 
-    _prototypeProperties(Synesthesia, {
-        loadDependencies: {
-            value: function loadDependencies(basePath, dependencies, callback) {
-                var toLoad = [];
-                var normalizedDependencies = [];
-                dependencies.forEach(function (dependency) {
-                    var dependencyPath = basePath + dependency;
-                    if (!_(toLoad).contains(dependencyPath)) {
-                        toLoad.push(dependencyPath);
-                        normalizedDependencies.push(dependency);
-                    }
-                });
-                console.log(toLoad);
-                var dfd = $.Deferred();
-                require(toLoad, dfd.resolve);
-                return dfd.promise();
+        _prototypeProperties(Synesthesia, {
+            loadDependencies: {
+                value: function loadDependencies(basePath, dependencies, callback) {
+                    var toLoad = [];
+                    var normalizedDependencies = [];
+                    dependencies.forEach(function (dependency) {
+                        var dependencyPath = basePath + dependency;
+                        if (!_(toLoad).contains(dependencyPath)) {
+                            toLoad.push(dependencyPath);
+                            normalizedDependencies.push(dependency);
+                        }
+                    });
+                    console.log(toLoad);
+                    var dfd = $.Deferred();
+                    require(toLoad, dfd.resolve);
+                    return dfd.promise();
+                },
+                writable: true,
+                configurable: true
             },
-            writable: true,
-            configurable: true
-        },
-        loadLayersSynesthesiaClasses: {
-            value: function loadLayersSynesthesiaClasses(layersClasses) {
-                var _this = this;
+            loadLayersSynesthesiaClasses: {
+                value: function loadLayersSynesthesiaClasses(layersClasses) {
+                    var _this = this;
 
-                var dfd = $.Deferred();
-                var layersBasePath = "views/visualizer/layers/";
-                var actorsBasePath = "views/visualizer/actors/";
-                this.loadDependencies(layersBasePath, layersClasses).done(function () {
-                    layersClasses.forEach(function (layerClass) {
-                        var layerSpecificActorClass = window[layerClass].getLayerSpecificActorClass();
-                        window[layerClass].getAvailableActorsClasses().done(function (actorsClasses) {
-                            var dependencies = layerSpecificActorClass ? [layerSpecificActorClass].concat(actorsClasses) : actorsClasses;
-                            dependencies.unshift("Actor");
-                            _this.loadDependencies(actorsBasePath, dependencies).done(function () {
-                                dfd.resolve();
+                    var dfd = $.Deferred();
+                    var layersBasePath = "views/visualizer/layers/";
+                    var actorsBasePath = "views/visualizer/actors/";
+                    this.loadDependencies(layersBasePath, layersClasses).done(function () {
+                        layersClasses.forEach(function (layerClass) {
+                            var layerSpecificActorClass = window[layerClass].getLayerSpecificActorClass();
+                            window[layerClass].getAvailableActorsClasses().done(function (actorsClasses) {
+                                var dependencies = layerSpecificActorClass ? [layerSpecificActorClass].concat(actorsClasses) : actorsClasses;
+                                dependencies.unshift("Actor");
+                                _this.loadDependencies(actorsBasePath, dependencies).done(function () {
+                                    dfd.resolve();
+                                });
                             });
                         });
                     });
-                });
-                return dfd.promise();
-            },
-            writable: true,
-            configurable: true
-        }
-    });
+                    return dfd.promise();
+                },
+                writable: true,
+                configurable: true
+            }
+        });
+
+        return Synesthesia;
+    })(BaseObject);
 
     return Synesthesia;
-})(BaseObject);
+});
 
 //This should include scene awareness maybe?

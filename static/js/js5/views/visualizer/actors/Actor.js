@@ -6,24 +6,28 @@ var _inherits = function (subClass, superClass) { if (typeof superClass !== "fun
 
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
-var Actor = (function (Synesthesia) {
-    function Actor(actorData) {
-        _classCallCheck(this, Actor);
+define(["utils/oop", "views/visualizer/Synesthesia"], function (BaseObject, Synesthesia) {
+    var Actor = (function (Synesthesia) {
+        function Actor(actorData) {
+            _classCallCheck(this, Actor);
 
-        this._actorData = actorData;
-    }
-
-    _inherits(Actor, Synesthesia);
-
-    _prototypeProperties(Actor, {
-        getActorParameters: {
-            value: function getActorParameters() {
-                return ["posX", "posY"];
-            },
-            writable: true,
-            configurable: true
+            this._actorData = actorData;
         }
-    });
+
+        _inherits(Actor, Synesthesia);
+
+        _prototypeProperties(Actor, {
+            getActorParameters: {
+                value: function getActorParameters() {
+                    return ["posX", "posY"];
+                },
+                writable: true,
+                configurable: true
+            }
+        });
+
+        return Actor;
+    })(Synesthesia);
 
     return Actor;
-})(Synesthesia);
+});
