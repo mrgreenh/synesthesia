@@ -1,17 +1,16 @@
+import Layer from "views/visualizer/layers/Layer"
+import getBabelCompiledClassName from "utils/utilities"
+
 class Three3DLayer extends Layer{
     static getLayerSpecificActorClass(){
         return "ThreeActor";
     }
 
     static getAvailableActorsClasses(){
-        //Even if right now it's not, one day this will be async
-        //It will ask the server to check what classes are in the actors folder
-        var dfd = $.Deferred();
-        dfd.resolve([
+        return [
                 "ThreeCubeActor",
                 "ThreeSphereActor"
-            ]);
-        return dfd;
+            ];
     }
 
     constructor(layerData, config){
@@ -44,7 +43,7 @@ class Three3DLayer extends Layer{
 
     _initializeActors(){
         this._actorsInstances = this._actorsData.map(actorData => {
-            return new window[actorData.className](
+            return new window[getBabelCompiledClassName(actorData.className)](
                     actorData,
                     this._scene
                 );
@@ -52,3 +51,5 @@ class Three3DLayer extends Layer{
     }
 
 }
+
+export default Three3DLayer;

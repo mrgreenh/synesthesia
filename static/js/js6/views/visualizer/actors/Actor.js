@@ -1,3 +1,5 @@
+import Synesthesia from "views/visualizer/Synesthesia"
+
 class Actor extends Synesthesia{
     static getActorParameters(){
         return [
@@ -7,6 +9,9 @@ class Actor extends Synesthesia{
     }
 
     constructor(actorData){
+        super()
         this._actorData = actorData;
     }
 }
+
+export default Actor;

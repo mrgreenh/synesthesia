@@ -38,3 +38,5 @@ class BaseObject{
         console.log(eventName);
     }
 }
+
+export default BaseObject;

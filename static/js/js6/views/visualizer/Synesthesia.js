@@ -1,3 +1,5 @@
+import BaseObject from "utils/BaseObject"
+
 class Synesthesia extends BaseObject{
     static loadDependencies(basePath, dependencies, callback){
         var toLoad = [];
@@ -35,6 +37,8 @@ class Synesthesia extends BaseObject{
     }
 
     constructor(){
-        //This should include scene awareness maybe?
+        super()
     }
 }
+
+export default Synesthesia;

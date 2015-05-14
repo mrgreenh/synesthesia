@@ -88,7 +88,6 @@ var LayerEditor = React.createClass({
         return (<Collapsable itemName={this.state.name}>
                 <div className="form-group">
                     <p className="bg-warning">These options are defined by loading the js classes of each layer</p>
-                    <!-- TODO make the above statement true -->
                     <div className="form-group">
                         <label htmlFor="layer-name">Name</label>
                         <input id="layer-name" className="form-control" valueLink={this.linkState("name")} />

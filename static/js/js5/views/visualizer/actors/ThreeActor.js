@@ -1,32 +1,38 @@
-define(["exports"], function (exports) {
+define(["exports", "module", "views/visualizer/actors/Actor"], function (exports, module, _viewsVisualizerActorsActor) {
     "use strict";
 
     var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
     var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 
+    function _interopRequire(obj) { return obj && obj.__esModule ? obj["default"] : obj; }
+
     function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
     function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
 
-    var EditorView = (function (_BaseObject) {
-        function EditorView(trackData) {
-            _classCallCheck(this, EditorView);
+    var _Actor2 = _interopRequire(_viewsVisualizerActorsActor);
 
-            _get(Object.getPrototypeOf(EditorView.prototype), "constructor", this).call(this);
-            this.$el = $("#editor-view-container");
-            this._trackData = trackData;
+    var ThreeActor = (function (_Actor) {
+        function ThreeActor(actorData, threeScene) {
+            _classCallCheck(this, ThreeActor);
+
+            _get(Object.getPrototypeOf(ThreeActor.prototype), "constructor", this).call(this, actorData, threeScene);
+            this._scene = threeScene;
+            this._material = new THREE.MeshBasicMaterial({ color: 65280 });
         }
 
-        _inherits(EditorView, _BaseObject);
+        _inherits(ThreeActor, _Actor);
 
-        _createClass(EditorView, [{
-            key: "render",
-            value: function render() {
-                React.render(React.createElement(EditorForm, { trackData: this._trackData }), this.$el[0]);
+        _createClass(ThreeActor, null, [{
+            key: "getActorParameters",
+            value: function getActorParameters() {
+                return _get(Object.getPrototypeOf(ThreeActor), "getActorParameters", this).call(this).concat(["zPos"]);
             }
         }]);
 
-        return EditorView;
-    })(BaseObject);
+        return ThreeActor;
+    })(_Actor2);
+
+    module.exports = ThreeActor;
 });

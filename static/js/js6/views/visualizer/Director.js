@@ -1,5 +1,15 @@
+import Synesthesia from "views/visualizer/Synesthesia"
+import Actor from "views/visualizer/actors/Actor"
+import Layer from "views/visualizer/layers/Layer"
+import Three3DLayer from "views/visualizer/layers/Three3DLayer"
+import {getBabelCompiledClassName} from "utils/utilities"
+
 class Director extends Synesthesia{
     constructor(){
+        super()
+        Synesthesia;
+        Actor;
+        Layer;
         this.$el = $("#stage-container");
         this.layers = [];
         this._config;
@@ -14,35 +24,21 @@ class Director extends Synesthesia{
     }
 
     _startTrack(){
-        var layersClasses = _(this._trackData.layersData).map(elem => {
-            return elem.type;
-        });
-        layersClasses.unshift("Layer");
-        Synesthesia.loadLayersSynesthesiaClasses(layersClasses).done(this._initializeLayers.bind(this));
+        this._initializeLayers();
     }
 
     _initializeLayers(){
-        if(!this._layersInitsPromises) this._layersInitsPromises = [];
         this._trackData.layersData.forEach(elem => {
-            this._layersInitsPromises.push(this._initializeLayer(elem));
-        });
-        $.when.apply($, this._layersInitsPromises).done(_.bind(this._renderLayers, this));
+            this._initializeLayer(elem);
+        }, this);
+        this._renderLayers();
     }
 
     _initializeLayer(layerData){
         var className = layerData.type;
-        try{
-            var layer = new window[className](layerData, this._config);
-            //Layers instances are kept in an array, as their order affects overlapping
-            this.layers.push(layer);
-            var layerInitPromise = layer.isItInitializedYet();
-            this._layersInitsPromises.push(layerInitPromise);
-            return layerInitPromise;
-        }catch(ex){
-            console.warn("Could not initialize layer "+className);
-            console.log(ex.stack);
-            console.log(ex);
-        }
+        var layer = new window[getBabelCompiledClassName(className)](layerData, this._config);
+        //Layers instances are kept in an array, as their order affects overlapping
+        this.layers.push(layer);
     }
 
     _loadNextTrackData(){
@@ -63,3 +59,5 @@ class Director extends Synesthesia{
         });
     }
 }
+
+export default Director;

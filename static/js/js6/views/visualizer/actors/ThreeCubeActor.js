@@ -1,3 +1,5 @@
+import ThreeActor from "views/visualizer/actors/ThreeActor"
+
 class ThreeCubeActor extends ThreeActor{
     static getActorParameters(){
         return super.getActorParameters().concat(["edge"]);
@@ -13,3 +15,5 @@ class ThreeCubeActor extends ThreeActor{
         this._scene.add( cube );
     }
 }
+
+export default ThreeCubeActor;
