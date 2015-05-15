@@ -1,5 +1,5 @@
 define([
-        "utils/oop"
+        "utils/BaseObject"
     ], function(BaseObject){
 
         class Synesthesia extends BaseObject{
@@ -39,6 +39,7 @@ define([
             }
 
             constructor(){
+                super();
                 //This should include scene awareness maybe?
             }
         }

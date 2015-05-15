@@ -2,19 +2,6 @@
 <html>
   <head>
     <title>Synesthesia</title>
-    <!-- scripts -->
-    <script src="/static/js/vendor/require_2.1.16.js"></script>
-    <script>
-        require.config({
-            baseUrl: "/static/js/js5",
-            paths: {
-                "vendor": "/static/js/vendor"
-            },
-            waitSeconds: 1
-        });
-    </script>
-    {% block additional_js %}{% endblock %}
-    <!-- styles -->
     <link rel="stylesheet" type="text/css" href="/static/css/vendor/css/bootstrap-theme.css">
       <link rel="stylesheet" type="text/css" href="/static/css/vendor/css/bootstrap.css">
     <link rel="stylesheet" type="text/css" href="/static/css/styles.css">
@@ -23,5 +10,6 @@
     <div class="page container">
       {% block body %}{% endblock %}
     </div>
+    {% block additional_js %}{% endblock %}
   </body>
 </html>

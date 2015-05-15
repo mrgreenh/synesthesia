@@ -153,6 +153,7 @@ define(["vendor/react_with_addons_0.12.2.js", "vendor/jsx_transformer.js", "view
                         { className: "bg-warning" },
                         "These options are defined by loading the js classes of each layer"
                     ),
+                    "// TODO make the above statement true",
                     React.createElement(
                         "div",
                         { className: "form-group" },
@@ -270,4 +271,3 @@ define(["vendor/react_with_addons_0.12.2.js", "vendor/jsx_transformer.js", "view
 
     });
 });
-// TODO make the above statement true -->

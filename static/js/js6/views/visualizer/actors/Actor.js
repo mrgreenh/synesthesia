@@ -1,5 +1,5 @@
 define([
-        "utils/oop",
+        "utils/BaseObject",
         "views/visualizer/Synesthesia"
     ], function(BaseObject, Synesthesia){
 
@@ -12,6 +12,7 @@ define([
         }
 
         constructor(actorData){
+            super();
             this._actorData = actorData;
         }
     }

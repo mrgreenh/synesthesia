@@ -1,6 +1,6 @@
+//----------------- BetterSelect by Brandon Tilley - http://stackoverflow.com/a/24472214
 "use strict";
 
-//----------------- BetterSelect by Brandon Tilley - http://stackoverflow.com/a/24472214
 var BetterSelect = React.createClass({
     displayName: "BetterSelect",
 

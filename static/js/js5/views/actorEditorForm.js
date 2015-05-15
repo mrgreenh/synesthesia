@@ -50,7 +50,7 @@ var ActorEditor = React.createClass({
     },
 
     render: function render() {
-        var _this = this;
+        var _this2 = this;
 
         //Will eventually rerender when class is loaded
         //This needs to go first because also loads the actors parent class
@@ -84,7 +84,7 @@ var ActorEditor = React.createClass({
                         { htmlFor: "parameter-" + paramName },
                         paramName
                     ),
-                    React.createElement("input", { id: "parameter-" + paramName, className: "form-control", valueLink: _this.linkState(paramName + "Parameter") })
+                    React.createElement("input", { id: "parameter-" + paramName, className: "form-control", valueLink: _this2.linkState(paramName + "Parameter") })
                 );
             });
         } else {
@@ -141,6 +141,7 @@ var ActorEditor = React.createClass({
                 React.createElement(
                     Collapsable,
                     { itemName: "Inputs" },
+                    "//How many inputs and what kind is defined by the actors class. For now only one",
                     React.createElement(
                         "ul",
                         null,
@@ -185,6 +186,7 @@ var ActorEditor = React.createClass({
                                 { htmlFor: "input-bus" },
                                 "Bus"
                             ),
+                            "//This can be a select with options filled in by the server",
                             React.createElement("input", { id: "input-bus", className: "form-control", valueLink: this.linkState("inputBus") })
                         ),
                         React.createElement(
@@ -195,6 +197,7 @@ var ActorEditor = React.createClass({
                                 { htmlFor: "input-range-max" },
                                 "Range"
                             ),
+                            "//Notes and controls will be enriched with a normalized version of their value, computed based on this range",
                             React.createElement("input", { id: "input-range-max", className: "form-control", valueLink: this.linkState("inputRangeMax"), type: "number", min: "1" }),
                             React.createElement("input", { id: "input-range-min", className: "form-control", valueLink: this.linkState("inputRangeMin"), type: "number", min: "1" })
                         )
@@ -208,6 +211,3 @@ var ActorEditor = React.createClass({
             )
         );
     } });
-// How many inputs and what kind is defined by the actors class. For now only one -->
-// This can be a select with options filled in by the server -->
-// Notes and controls will be enriched with a normalized version of their value, computed based on this range -->

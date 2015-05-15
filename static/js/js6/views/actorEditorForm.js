@@ -103,7 +103,7 @@ var ActorEditor = React.createClass({
                         </ul>                        
                     </Collapsable>
                     <Collapsable itemName="Inputs">
-                        <!-- How many inputs and what kind is defined by the actors class. For now only one -->
+                        //How many inputs and what kind is defined by the actors class. For now only one
                         <ul>
                             <li className="form-group">
                                 <label htmlFor="input-type">Type</label>
@@ -118,12 +118,12 @@ var ActorEditor = React.createClass({
                             </li>
                             <li className="form-group form-inline">
                                 <label htmlFor="input-bus">Bus</label>
-                                <!-- This can be a select with options filled in by the server -->
+                                //This can be a select with options filled in by the server
                                 <input id="input-bus" className="form-control" valueLink={this.linkState("inputBus")} />
                             </li>
                             <li className="form-group form-inline">
                                 <label htmlFor="input-range-max">Range</label>
-                                <!-- Notes and controls will be enriched with a normalized version of their value, computed based on this range -->
+                                //Notes and controls will be enriched with a normalized version of their value, computed based on this range
                                 <input id="input-range-max" className="form-control" valueLink={this.linkState("inputRangeMax")} type="number" min="1" />
                                 <input id="input-range-min" className="form-control" valueLink={this.linkState("inputRangeMin")} type="number" min="1" />
                             </li>

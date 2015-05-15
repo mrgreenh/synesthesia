@@ -1,33 +1,14 @@
 {% extends 'layout.html' %}
-{% block additional_js %}
-<script src="/static/js/vendor/react_with_addons_0.12.2.js"></script>
-<script src="/static/js/vendor/jsx_transformer.js"></script>
-
-<script src="/static/js/js5/views/editor.js"></script>
-<script src="/static/js/js5/views/ReactUtils.js"></script>
-<script src="/static/js/js5/views/editorForm.js"></script>
-<script src="/static/js/js5/views/actorEditorForm.js"></script>
-
-<script src="/static/js/vendor/require_2.1.16.js"></script>
-<script>
-    require([
-        "vendor/mousetrap",
-        "vendor/jquery-2.1.3",
-        "vendor/underscore-1.8.2",
-        "views/editor",
-        "views/editorForm"
-        ], function(){
-            var director = new Director();
-    });
-</script>
-{% endblock %}
 {% block body %}
 <h2>Editor</h2>
 <div id="editor-view-container">
 
 </div>
 <script>
-    var trackEditor = new EditorView({{ track_data|safe }});
-    trackEditor.render();
+    //Need to move this into the editorform class
+    trackData = {{ track_data|safe }};
 </script>
+{% endblock %}
+{% block additional_js %}
+<script data-main="/static/js/js5/stage" src="/static/js/vendor/require_2.1.16.js"></script>
 {% endblock %}

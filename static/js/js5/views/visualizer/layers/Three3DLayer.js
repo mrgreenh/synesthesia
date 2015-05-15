@@ -1,43 +1,25 @@
 "use strict";
 
-var _prototypeProperties = function (child, staticProps, instanceProps) { if (staticProps) Object.defineProperties(child, staticProps); if (instanceProps) Object.defineProperties(child.prototype, instanceProps); };
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-var _get = function get(object, property, receiver) { var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc && desc.writable) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
+var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 
-var _inherits = function (subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; };
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
 
-var Three3DLayer = (function (Layer) {
-    function Three3DLayer(layerData, config) {
-        _classCallCheck(this, Three3DLayer);
+define(["views/visualizer/actors/Actor", "views/visualizer/layers/Layer", "/static/js/vendor/layers_dependencies/three.min.js"], function (Actor, Layer, _THREE_) {
+    var Three3DLayer = (function (_Layer) {
+        function Three3DLayer(layerData, config) {
+            _classCallCheck(this, Three3DLayer);
 
-        _get(Object.getPrototypeOf(Three3DLayer.prototype), "constructor", this).call(this, layerData, config);
-    }
-
-    _inherits(Three3DLayer, Layer);
-
-    _prototypeProperties(Three3DLayer, {
-        getLayerSpecificActorClass: {
-            value: function getLayerSpecificActorClass() {
-                return "ThreeActor";
-            },
-            writable: true,
-            configurable: true
-        },
-        getAvailableActorsClasses: {
-            value: function getAvailableActorsClasses() {
-                //Even if right now it's not, one day this will be async
-                //It will ask the server to check what classes are in the actors folder
-                var dfd = $.Deferred();
-                dfd.resolve(["ThreeCubeActor", "ThreeSphereActor"]);
-                return dfd;
-            },
-            writable: true,
-            configurable: true
+            _get(Object.getPrototypeOf(Three3DLayer.prototype), "constructor", this).call(this, layerData, config);
         }
-    }, {
-        render: {
+
+        _inherits(Three3DLayer, _Layer);
+
+        _createClass(Three3DLayer, [{
+            key: "render",
             value: function render($stageElement) {
                 this._scene = new THREE.Scene();
                 _get(Object.getPrototypeOf(Three3DLayer.prototype), "render", this).call(this, $stageElement);
@@ -52,33 +34,41 @@ var Three3DLayer = (function (Layer) {
                 this._camera.position.y = 1;
 
                 this.renderFrame();
-            },
-            writable: true,
-            configurable: true
-        },
-        renderFrame: {
+            }
+        }, {
+            key: "renderFrame",
             value: function renderFrame() {
                 //requestAnimationFrame( this.renderFrame );
                 this._actorsInstances.forEach(function (actorInstance) {
                     actorInstance.renderFrame();
                 });
                 this._renderer.render(this._scene, this._camera);
-            },
-            writable: true,
-            configurable: true
-        },
-        _initializeActors: {
+            }
+        }, {
+            key: "_initializeActors",
             value: function _initializeActors() {
-                var _this = this;
+                this._actorsInstances = this._actorsData.map((function (actorData) {
+                    return new this._actorsClassesByName[actorData.className](actorData, this._scene);
+                }).bind(this));
+            }
+        }], [{
+            key: "getLayerSpecificActorClass",
+            value: function getLayerSpecificActorClass() {
+                return "ThreeActor";
+            }
+        }, {
+            key: "getAvailableActorsClasses",
+            value: function getAvailableActorsClasses() {
+                //Even if right now it's not, one day this will be async
+                //It will ask the server to check what classes are in the actors folder
+                var dfd = $.Deferred();
+                dfd.resolve(["ThreeCubeActor", "ThreeSphereActor"]);
+                return dfd;
+            }
+        }]);
 
-                this._actorsInstances = this._actorsData.map(function (actorData) {
-                    return new window[actorData.className](actorData, _this._scene);
-                });
-            },
-            writable: true,
-            configurable: true
-        }
-    });
+        return Three3DLayer;
+    })(Layer);
 
     return Three3DLayer;
-})(Layer);
+});

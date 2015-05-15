@@ -1,12 +1,12 @@
 define([
-            "utils/oop",
             "views/visualizer/Synesthesia",
             "views/visualizer/actors/Actor",
-            "views/visualizer/layers/Layer"
+            "views/visualizer/layers/Three3DLayer"
 ],
-function(BaseObject, Synesthesia, Actor, Layer){
+function(Synesthesia, Actor, Three3DLayer){
     class Director extends Synesthesia{
         constructor(){
+            super();
             this.$el = $("#stage-container");
             this.layers = [];
             this._config;
@@ -37,18 +37,15 @@ function(BaseObject, Synesthesia, Actor, Layer){
 
         _initializeLayer(layerData){
             var className = layerData.type;
-            try{
-                var layer = new window[className](layerData, this._config);
+            var layerDfd = $.Deferred();
+            Synesthesia.loadDependencies("views/visualizer/layers/", [className]).done((layerClass) => {
+                var layer = new layerClass(layerData, this._config);
                 //Layers instances are kept in an array, as their order affects overlapping
                 this.layers.push(layer);
-                var layerInitPromise = layer.isItInitializedYet();
-                this._layersInitsPromises.push(layerInitPromise);
-                return layerInitPromise;
-            }catch(ex){
-                console.warn("Could not initialize layer "+className);
-                console.log(ex.stack);
-                console.log(ex);
-            }
+                layer.initialize().done(layerDfd.resolve);
+            });
+            this._layersInitsPromises.push(layerDfd);
+            return layerDfd;
         }
 
         _loadNextTrackData(){
