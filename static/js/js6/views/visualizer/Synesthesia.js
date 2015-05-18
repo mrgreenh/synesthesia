@@ -3,6 +3,14 @@ define([
     ], function(BaseObject){
 
         class Synesthesia extends BaseObject{
+            static getLayersDefinitionsPath(){
+                return "views/visualizer/layers/";
+            }
+
+            static getActorsDefinitionsPath(){
+                return "views/visualizer/actors/";
+            }
+
             static loadDependencies(basePath, dependencies, callback){
                 var toLoad = [];
                 var normalizedDependencies = [];
@@ -19,22 +27,22 @@ define([
                 return dfd.promise();
             }
 
-            static loadLayersSynesthesiaClasses(layersClasses){
+            static getLayerAvailableActors(layerClassName){
                 var dfd = $.Deferred();
-                var layersBasePath = "views/visualizer/layers/";
-                var actorsBasePath = "views/visualizer/actors/"
-                this.loadDependencies(layersBasePath, layersClasses).done(() => {
-                    layersClasses.forEach(layerClass => {
-                        var layerSpecificActorClass = window[layerClass].getLayerSpecificActorClass();
-                        window[layerClass].getAvailableActorsClasses().done(actorsClasses => {
-                            var dependencies = layerSpecificActorClass ? [layerSpecificActorClass].concat(actorsClasses) : actorsClasses;
-                            dependencies.unshift("Actor");
-                            this.loadDependencies(actorsBasePath, dependencies).done(() => {
-                                dfd.resolve();
-                            });                    
-                        });
+                require([Synesthesia.getLayersDefinitionsPath() + layerClassName], function(classDefinition){
+                    classDefinition.getAvailableActorsClasses().done(function(classesList){
+                        dfd.resolve(classesList);
                     });
                 });
+                return dfd.promise();
+            }
+
+            static getActorSpecificParameters(actorClassName){
+                var dfd = $.Deferred();
+                require([Synesthesia.getActorsDefinitionsPath() + actorClassName], function(actorClass){
+                    var specificParameters = actorClass.getActorParameters();
+                    dfd.resolve(specificParameters);
+                })
                 return dfd.promise();
             }
 

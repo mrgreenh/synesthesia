@@ -8,23 +8,27 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
 
-var EditorView = (function (_BaseObject) {
-    function EditorView(trackData) {
-        _classCallCheck(this, EditorView);
+define(["utils/BaseObject", "react", "views/editor/EditorForm"], function (BaseObject, React, EditorForm) {
+    var EditorView = (function (_BaseObject) {
+        function EditorView(trackData) {
+            _classCallCheck(this, EditorView);
 
-        _get(Object.getPrototypeOf(EditorView.prototype), "constructor", this).call(this);
-        this.$el = $("#editor-view-container");
-        this._trackData = trackData;
-    }
-
-    _inherits(EditorView, _BaseObject);
-
-    _createClass(EditorView, [{
-        key: "render",
-        value: function render() {
-            React.render(React.createElement(EditorForm, { trackData: this._trackData }), this.$el[0]);
+            _get(Object.getPrototypeOf(EditorView.prototype), "constructor", this).call(this);
+            this.$el = $("#editor-view-container");
+            this._trackData = trackData;
         }
-    }]);
+
+        _inherits(EditorView, _BaseObject);
+
+        _createClass(EditorView, [{
+            key: "render",
+            value: function render() {
+                React.render(React.createElement(EditorForm, { trackData: this._trackData }), this.$el[0]);
+            }
+        }]);
+
+        return EditorView;
+    })(BaseObject);
 
     return EditorView;
-})(BaseObject);
+});

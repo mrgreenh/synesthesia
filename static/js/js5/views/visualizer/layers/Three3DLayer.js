@@ -52,15 +52,11 @@ define(["views/visualizer/actors/Actor", "views/visualizer/layers/Layer", "/stat
                 }).bind(this));
             }
         }], [{
-            key: "getLayerSpecificActorClass",
-            value: function getLayerSpecificActorClass() {
-                return "ThreeActor";
-            }
-        }, {
             key: "getAvailableActorsClasses",
             value: function getAvailableActorsClasses() {
                 //Even if right now it's not, one day this will be async
                 //It will ask the server to check what classes are in the actors folder
+                //Because adding actors will be part of creative processes that should not require code change to the main app
                 var dfd = $.Deferred();
                 dfd.resolve(["ThreeCubeActor", "ThreeSphereActor"]);
                 return dfd;

@@ -1,11 +1,12 @@
 "use strict";
 
 require.config({
-    baseUrl: "static/js/vendor",
+    baseUrl: "/static/js/",
     paths: {
-        jquery: "jquery",
-        views: "../js5/views",
-        utils: "../js5/utils"
+        jquery: "vendor/jquery",
+        views: "js5/views",
+        utils: "js5/utils",
+        underscore: "vendor/underscore"
     },
     shim: {
         "underscore": {

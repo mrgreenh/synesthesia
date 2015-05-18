@@ -5,13 +5,10 @@ define([
 ],function(Actor, Layer, _THREE_){
 
     class Three3DLayer extends Layer{
-        static getLayerSpecificActorClass(){
-            return "ThreeActor";
-        }
-
         static getAvailableActorsClasses(){
             //Even if right now it's not, one day this will be async
             //It will ask the server to check what classes are in the actors folder
+            //Because adding actors will be part of creative processes that should not require code change to the main app
             var dfd = $.Deferred();
             dfd.resolve([
                     "ThreeCubeActor",

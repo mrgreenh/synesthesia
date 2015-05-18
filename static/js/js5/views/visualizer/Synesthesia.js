@@ -20,6 +20,16 @@ define(["utils/BaseObject"], function (BaseObject) {
         _inherits(Synesthesia, _BaseObject);
 
         _createClass(Synesthesia, null, [{
+            key: "getLayersDefinitionsPath",
+            value: function getLayersDefinitionsPath() {
+                return "views/visualizer/layers/";
+            }
+        }, {
+            key: "getActorsDefinitionsPath",
+            value: function getActorsDefinitionsPath() {
+                return "views/visualizer/actors/";
+            }
+        }, {
             key: "loadDependencies",
             value: function loadDependencies(basePath, dependencies, callback) {
                 var toLoad = [];
@@ -37,24 +47,23 @@ define(["utils/BaseObject"], function (BaseObject) {
                 return dfd.promise();
             }
         }, {
-            key: "loadLayersSynesthesiaClasses",
-            value: function loadLayersSynesthesiaClasses(layersClasses) {
-                var _this = this;
-
+            key: "getLayerAvailableActors",
+            value: function getLayerAvailableActors(layerClassName) {
                 var dfd = $.Deferred();
-                var layersBasePath = "views/visualizer/layers/";
-                var actorsBasePath = "views/visualizer/actors/";
-                this.loadDependencies(layersBasePath, layersClasses).done(function () {
-                    layersClasses.forEach(function (layerClass) {
-                        var layerSpecificActorClass = window[layerClass].getLayerSpecificActorClass();
-                        window[layerClass].getAvailableActorsClasses().done(function (actorsClasses) {
-                            var dependencies = layerSpecificActorClass ? [layerSpecificActorClass].concat(actorsClasses) : actorsClasses;
-                            dependencies.unshift("Actor");
-                            _this.loadDependencies(actorsBasePath, dependencies).done(function () {
-                                dfd.resolve();
-                            });
-                        });
+                require([Synesthesia.getLayersDefinitionsPath() + layerClassName], function (classDefinition) {
+                    classDefinition.getAvailableActorsClasses().done(function (classesList) {
+                        dfd.resolve(classesList);
                     });
+                });
+                return dfd.promise();
+            }
+        }, {
+            key: "getActorSpecificParameters",
+            value: function getActorSpecificParameters(actorClassName) {
+                var dfd = $.Deferred();
+                require([Synesthesia.getActorsDefinitionsPath() + actorClassName], function (actorClass) {
+                    var specificParameters = actorClass.getActorParameters();
+                    dfd.resolve(specificParameters);
                 });
                 return dfd.promise();
             }
