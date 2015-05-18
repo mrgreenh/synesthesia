@@ -12,6 +12,11 @@ define([
             return this.props.actorData;
         },
 
+        componentDidMount: function(){
+                this._loadLayerAvailableActorsList();
+                this._loadActorSpecificParameters();
+        },
+
         _getLayerClassName: function(){
             var layerType = this.props.layerType;
             return layerType;
@@ -41,15 +46,6 @@ define([
         },
 
         render: function(){
-            //Will eventually rerender when class is loaded
-            //This needs to go first because also loads the actors parent class
-            //These two ifs should be preceded by some "loadActorsDependencies" thing first
-            if(!this.state.availabelActors)
-                this._loadLayerAvailableActorsList();
-
-            if(!this.state.actorParameters)
-                this._loadActorSpecificParameters();
-
             var ADSRForms = _(this.ADSREnvelopeAttributes).map(_.bind(function(attr){
                var attrHtmlName = "actor-" + attr;
                 return (

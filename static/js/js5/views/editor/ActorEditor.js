@@ -11,6 +11,11 @@ define(["react", "views/visualizer/Synesthesia", "views/editor/BetterSelect", "v
             return this.props.actorData;
         },
 
+        componentDidMount: function componentDidMount() {
+            this._loadLayerAvailableActorsList();
+            this._loadActorSpecificParameters();
+        },
+
         _getLayerClassName: function _getLayerClassName() {
             var layerType = this.props.layerType;
             return layerType;
@@ -45,13 +50,6 @@ define(["react", "views/visualizer/Synesthesia", "views/editor/BetterSelect", "v
 
         render: function render() {
             var _this3 = this;
-
-            //Will eventually rerender when class is loaded
-            //This needs to go first because also loads the actors parent class
-            //These two ifs should be preceded by some "loadActorsDependencies" thing first
-            if (!this.state.availabelActors) this._loadLayerAvailableActorsList();
-
-            if (!this.state.actorParameters) this._loadActorSpecificParameters();
 
             var ADSRForms = _(this.ADSREnvelopeAttributes).map(_.bind(function (attr) {
                 var attrHtmlName = "actor-" + attr;
