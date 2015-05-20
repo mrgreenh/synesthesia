@@ -1,13 +1,27 @@
 "use strict";
 
-define(["react", "views/editor/ActorEditor", "views/visualizer/Director", "views/editor/LayersList", "views/editor/ScenesList"], function (React, ActorEditor, Director, LayersList, ScenesList) {
+define(["react", "views/editor/ActorEditor", "views/visualizer/Director", "views/editor/LayersList", "views/editor/ScenesList", "views/editor/TextField", "editorFlux/TrackStore", "editorFlux/EditorConstants"], function (React, ActorEditor, Director, LayersList, ScenesList, TextField, trackStore, EditorConstants) {
 
     var EditorForm = React.createClass({
         displayName: "EditorForm",
 
         mixins: [React.addons.LinkedStateMixin],
+        events: function events(eventName) {
+            //Meaning BaseObject events. No DOM involved.
+            switch (eventName) {
+                case EditorConstants.STORE_EVENTS.CHANGE:
+                    var newData = arguments[1];
+                    this.setState(newData);
+                    break;
+            }
+        },
+
         getInitialState: function getInitialState() {
             return this.props.trackData;
+        },
+
+        componentDidMount: function componentDidMount() {
+            trackStore.addObserver(this, EditorConstants.STORE_EVENTS.CHANGE);
         },
 
         render: function render() {
@@ -17,26 +31,8 @@ define(["react", "views/editor/ActorEditor", "views/visualizer/Director", "views
                 React.createElement(
                     "div",
                     { className: "editorSection row" },
-                    React.createElement(
-                        "div",
-                        { className: "form-group" },
-                        React.createElement(
-                            "label",
-                            { htmlFor: "track-title" },
-                            "Title"
-                        ),
-                        React.createElement("input", { id: "track-title", className: "form-control", valueLink: this.linkState("title") })
-                    ),
-                    React.createElement(
-                        "div",
-                        { className: "form-group" },
-                        React.createElement(
-                            "label",
-                            { htmlFor: "track-description" },
-                            "Description"
-                        ),
-                        React.createElement("input", { id: "track-description", className: "form-control", valueLink: this.linkState("description") })
-                    )
+                    React.createElement(TextField, { path: "title", value: this.state.title }),
+                    React.createElement(TextField, { path: "description", value: this.state.description })
                 ),
                 React.createElement(
                     "div",

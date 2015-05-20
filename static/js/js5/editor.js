@@ -8,6 +8,7 @@ require.config({
         react: "/static/js/vendor/react_with_addons",
         views: "js5/views",
         utils: "js5/utils",
+        editorFlux: "js5/editorFlux",
         underscore: "/static/js/vendor/underscore"
     },
     shim: {
@@ -17,7 +18,8 @@ require.config({
     waitSeconds: 1
 });
 
-require(["jquery", "underscore", "jsx_transformer", "react", "views/editor/EditorView"], function ($, _, _jsx_, React, EditorView, Director) {
-    var trackEditor = new EditorView(trackData);
-    trackEditor.render();
+require(["jquery", "underscore", "jsx_transformer", "react", "views/editor/EditorView", "editorFlux/EditorActions", "editorFlux/TrackStore", "editorFlux/EditorConstants"], function ($, _, _jsx_, React, EditorView, EditorActions, trackStore, EditorConstants) {
+    var trackEditor = new EditorView();
+    trackStore.addObserver(trackEditor, EditorConstants.STORE_EVENTS.LOAD);
+    EditorActions.loadTrack();
 });

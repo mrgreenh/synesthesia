@@ -57,5 +57,5 @@ define(["utils/BaseObject"], function (BaseObject) {
         return EditorDispatcher;
     })(BaseObject);
 
-    return EditorDispatcher;
+    return new EditorDispatcher();
 });

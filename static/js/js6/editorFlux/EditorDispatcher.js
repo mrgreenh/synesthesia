@@ -5,9 +5,9 @@ define([
         class EditorDispatcher extends BaseObject{
 
             constructor(){
-                super();
+                super()
                 this._callbacks = [];
-                this._promises = [];
+                this._promises = [];        
             }
 
             register(callback){
@@ -43,5 +43,5 @@ define([
         }
 
 
-        return EditorDispatcher;
+        return new EditorDispatcher();
     });

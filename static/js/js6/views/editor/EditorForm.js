@@ -3,27 +3,44 @@
         "views/editor/ActorEditor",
         "views/visualizer/Director",
         "views/editor/LayersList",
-        "views/editor/ScenesList"
-    ], function(React, ActorEditor, Director, LayersList, ScenesList){
+        "views/editor/ScenesList",
+        "views/editor/TextField",
+        "editorFlux/TrackStore",
+        "editorFlux/EditorConstants",
+    ], function(React,
+                ActorEditor,
+                Director,
+                LayersList,
+                ScenesList,
+                TextField,
+                trackStore,
+                EditorConstants){
 
     var EditorForm = React.createClass({
         mixins: [React.addons.LinkedStateMixin],
+        events: function(eventName){ //Meaning BaseObject events. No DOM involved.
+            switch(eventName){
+                case EditorConstants.STORE_EVENTS.CHANGE:
+                    var newData = arguments[1];
+                    this.setState(newData);
+                    break;
+            }
+        },
+
         getInitialState(){
             return this.props.trackData;
+        },
+
+        componentDidMount: function(){
+            trackStore.addObserver(this, EditorConstants.STORE_EVENTS.CHANGE);
         },
 
         render: function(){
             return (
                 <div id="editor-form-container" className="container">
                     <div className="editorSection row">
-                        <div className="form-group">
-                            <label htmlFor="track-title">Title</label>
-                            <input id="track-title" className="form-control" valueLink={this.linkState("title")} />
-                        </div>
-                        <div className="form-group">
-                            <label htmlFor="track-description">Description</label>
-                            <input id="track-description" className="form-control" valueLink={this.linkState("description")} />
-                        </div>
+                        <TextField path="title" value={this.state.title}/>
+                        <TextField path="description" value={this.state.description}/>
                     </div>
                     <div className="editorSection row">
                         <LayersList layersData={this.state.layersData} />

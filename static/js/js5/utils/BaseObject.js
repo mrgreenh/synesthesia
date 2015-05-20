@@ -13,9 +13,34 @@ define(function () {
         }
 
         _createClass(BaseObject, [{
+            key: "setProp",
+            value: function setProp(dict, path, value) {
+                var steps = path.split(".");
+                if (steps.length > 1) {
+                    if (_.isUndefined(dict[_.first(steps)])) dict[_.first(steps)] = {};
+                    this.setProp(dict[_.first(steps)], steps.join("."), value);
+                } else {
+                    dict[_.first(steps)] = value;
+                }
+            }
+        }, {
             key: "observe",
             value: function observe(observed, eventName) {
                 observed.addObserver(this, eventName);
+            }
+        }, {
+            key: "unobserve",
+            value: function unobserve(observed) {
+                observed.removeObserver(this);
+            }
+        }, {
+            key: "removeObserver",
+            value: function removeObserver(observer) {
+                var _this = this;
+
+                _.keys(this.observers).forEach(function (key) {
+                    _this.observers[key] = _.without(_this.observers[key], observer);
+                });
             }
         }, {
             key: "addObserver",
@@ -24,32 +49,14 @@ define(function () {
                 this.observers[eventName].push(observer);
             }
         }, {
-            key: "trigger",
-            value: function trigger(eventName) {
-                var _iteratorNormalCompletion = true;
-                var _didIteratorError = false;
-                var _iteratorError = undefined;
+            key: "triggerEvent",
+            value: function triggerEvent(eventName) {
+                var _arguments = arguments;
 
-                try {
-                    for (var _iterator = this.observers[eventName][Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-                        var observer = _step.value;
-
-                        _.bind(observer.events(), observer);
-                    }
-                } catch (err) {
-                    _didIteratorError = true;
-                    _iteratorError = err;
-                } finally {
-                    try {
-                        if (!_iteratorNormalCompletion && _iterator["return"]) {
-                            _iterator["return"]();
-                        }
-                    } finally {
-                        if (_didIteratorError) {
-                            throw _iteratorError;
-                        }
-                    }
-                }
+                if (!this.observers[eventName]) return;
+                this.observers[eventName].forEach(function (observer) {
+                    observer.events.apply(observer, _arguments);
+                });
             }
         }, {
             key: "$",
@@ -58,7 +65,7 @@ define(function () {
             }
         }, {
             key: "events",
-            value: function events() {}
+            value: function events(eventName) {}
         }, {
             key: "onEvent",
 

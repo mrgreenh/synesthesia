@@ -1,46 +1,47 @@
 {
-  "title": "The first Synesthesia track",
-  "description": "Forte!",
-  "scenesData": [
-    {
-      "name": "First part"
-    },
-    {
-      "name": "Second part"
-    }
-  ],
-  "layersData": [
-    {
-      "name": "First Layer",
-      "type": "Three3DLayer",
-      "actors": [
+    "scenesData": [
         {
-          "className": "ThreeCubeActor",
-          "name": "kick",
-          "attack": 100,
-          "decay": 20,
-          "sustain": 50,
-          "release": 40,
-          "inputType": "note",
-          "inputChannel": "3",
-          "inputBus": "Something",
-          "inputRangeMax": "34",
-          "inputRangeMin": "20"
+            "name": "First part"
         },
         {
-          "className": "ThreeSphereActor",
-          "name": "lead_synth",
-          "attack": 90,
-          "decay": 35,
-          "sustain": 28,
-          "release": 4,
-          "inputType": "control",
-          "inputChannel": "3",
-          "inputBus": "Something",
-          "inputRangeMax": "34",
-          "inputRangeMin": "20"
+            "name": "Second part"
         }
-      ]
-    }
-  ]
+    ],
+    "undefined": "Forte!!",
+    "layersData": [
+        {
+            "type": "Three3DLayer",
+            "actors": [
+                {
+                    "inputChannel": "3",
+                    "name": "kick",
+                    "decay": 20,
+                    "inputRangeMin": "20",
+                    "inputRangeMax": "34",
+                    "className": "ThreeCubeActor",
+                    "attack": 100,
+                    "sustain": 50,
+                    "release": 40,
+                    "inputType": "note",
+                    "inputBus": "Something"
+                },
+                {
+                    "inputChannel": "3",
+                    "name": "lead_synth",
+                    "decay": 35,
+                    "inputRangeMin": "20",
+                    "inputRangeMax": "34",
+                    "className": "ThreeSphereActor",
+                    "attack": 90,
+                    "sustain": 28,
+                    "release": 4,
+                    "inputType": "control",
+                    "inputBus": "Something"
+                }
+            ],
+            "name": "First Layer"
+        }
+    ],
+    "description": "Forte!!!!:!!:",
+    "title": "The first Synesthesia track"
 }

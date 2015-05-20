@@ -6,9 +6,5 @@
 </div>
 {% endblock %}
 {% block additional_js %}
-<script>
-    //TODO Need to move this into a call in the editorform class
-    trackData = {{ track_data|safe }};
-</script>
 <script data-main="/static/js/js5/editor" src="/static/js/vendor/require_2.1.16.js"></script>
 {% endblock %}

@@ -4,8 +4,29 @@ define(function(){
             this.observers = {};
         }
 
+        setProp(dict, path, value){
+            var steps = path.split(".");
+            if(steps.length>1){
+                if(_.isUndefined(dict[_.first(steps)]))
+                    dict[_.first(steps)] = {}
+                this.setProp(dict[_.first(steps)], steps.join("."), value)
+            }else{
+                dict[_.first(steps)] = value;
+            }
+        }
+
         observe(observed, eventName){
             observed.addObserver(this, eventName);
+        }
+
+        unobserve(observed){
+            observed.removeObserver(this);
+        }
+
+        removeObserver(observer){
+            _.keys(this.observers).forEach((key) => {
+                this.observers[key] = _.without(this.observers[key], observer);
+            });
         }
 
         addObserver(observer, eventName){
@@ -14,10 +35,11 @@ define(function(){
             this.observers[eventName].push(observer);
         }
 
-        trigger(eventName){
-            for(var observer of this.observers[eventName]){
-                _.bind(observer.events(), observer);
-            }
+        triggerEvent(eventName){
+            if(!this.observers[eventName]) return;
+            this.observers[eventName].forEach((observer) => {
+                observer.events.apply(observer, arguments);
+            });
         }
 
         $(selector){
@@ -25,7 +47,7 @@ define(function(){
                 return this.$el.find(selector);
         }
 
-        events(){
+        events(eventName){
             //To be subclassed
         }
 

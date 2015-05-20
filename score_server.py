@@ -33,10 +33,7 @@ def stage():
 
 @app.route('/editor/<track_id>')
 def editor(track_id):
-    bookshelf = Bookshelf()
-    track_data = bookshelf.load_track(track_id)
-
-    return render_template('editor.html', track_data = track_data)
+    return render_template('editor.html')
 
 @app.route('/get_current_track')
 def get_current_track():
@@ -44,6 +41,14 @@ def get_current_track():
     bookshelf = Bookshelf()
     track_data = bookshelf.load_track(current_track_id)
     return jsonify(**track_data)
+
+@app.route('/update_current_track', methods=["POST"])
+def update_current_track():
+    global current_track_id
+    data = request.json["trackData"]
+    bookshelf = Bookshelf()
+    track_data = bookshelf.update_track(current_track_id, data)
+    return jsonify(status=200, track_data=track_data)
 
 @app.route('/get_stage_config')
 def get_stage_config():
