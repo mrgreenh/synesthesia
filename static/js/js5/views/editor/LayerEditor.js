@@ -1,6 +1,6 @@
 "use strict";
 
-define(["react", "views/editor/Collapsable", "views/editor/ActorsList", "views/editor/BetterSelect"], function (React, Collapsable, ActorsList, BetterSelect) {
+define(["react", "views/editor/Collapsable", "views/editor/ActorsList", "views/editor/BetterSelect", "views/editor/TextField"], function (React, Collapsable, ActorsList, BetterSelect, TextField) {
 
     var LayerEditor = React.createClass({
         displayName: "LayerEditor",
@@ -18,21 +18,8 @@ define(["react", "views/editor/Collapsable", "views/editor/ActorsList", "views/e
                 React.createElement(
                     "div",
                     { className: "form-group" },
-                    React.createElement(
-                        "p",
-                        { className: "bg-warning" },
-                        "These options are defined by loading the js classes of each layer"
-                    ),
-                    React.createElement(
-                        "div",
-                        { className: "form-group" },
-                        React.createElement(
-                            "label",
-                            { htmlFor: "layer-name" },
-                            "Name"
-                        ),
-                        React.createElement("input", { id: "layer-name", className: "form-control", valueLink: this.linkState("name") })
-                    ),
+                    React.createElement(TextField, { path: this.props.path + ".name", value: this.state.name }),
+                    "/*",
                     React.createElement(
                         "label",
                         { htmlFor: "layer-type" },
@@ -57,7 +44,8 @@ define(["react", "views/editor/Collapsable", "views/editor/ActorsList", "views/e
                             "Three3D"
                         )
                     ),
-                    React.createElement(ActorsList, { actorsData: this.state.actors, layerType: this.state.type })
+                    "*/",
+                    React.createElement(ActorsList, { actorsData: this.state.actors, path: this.props.path + ".actors", layerType: this.state.type })
                 )
             );
         }

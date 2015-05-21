@@ -12,8 +12,8 @@ define([
             },
 
             render: function(){
-                var layers = this.state.layersData.map(function(layer){
-                   return <LayerEditor layerData={layer} />;
+                var layers = this.state.layersData.map((layer, index) => {
+                   return <LayerEditor layerData={layer} key={index} path={this.props.path+"."+index}/>;
                 });
                 return (<div className="layersListContainer">
                         <h3>Layers</h3>

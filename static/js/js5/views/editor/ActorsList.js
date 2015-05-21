@@ -15,8 +15,8 @@ define(["react", "views/editor/ActorEditor"], function (React, ActorEditor) {
         render: function render() {
             var _this = this;
 
-            var actors = this.state.actorsData.map(function (actor) {
-                return React.createElement(ActorEditor, { actorData: actor, layerType: _this.props.layerType });
+            var actors = this.state.actorsData.map(function (actor, index) {
+                return React.createElement(ActorEditor, { actorData: actor, key: index, path: _this.props.path + "." + index, layerType: _this.props.layerType });
             });
             return React.createElement(
                 "div",

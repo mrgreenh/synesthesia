@@ -8,7 +8,7 @@ define([
             render: function(){
                 return (
                         <div className="form-group">
-                            <label htmlFor={this.getId()}>Description</label>
+                            <label htmlFor={this.getId()}>{this.getName()}</label>
                             <input id={this.getId()} className="form-control" value={this.getValue()} onChange={this.onChange}/>
                         </div>
                     );

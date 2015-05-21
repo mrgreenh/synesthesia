@@ -14,20 +14,23 @@
             "actors": [
                 {
                     "inputChannel": "3",
-                    "name": "kick",
+                    "name": "This is one actor",
+                    "posXParameter": "always props?",
                     "decay": 20,
                     "inputRangeMin": "20",
                     "inputRangeMax": "34",
+                    "inputType": "note",
                     "className": "ThreeCubeActor",
                     "attack": 100,
                     "sustain": 50,
                     "release": 40,
-                    "inputType": "note",
+                    "posYParameter": "yayayaya",
+                    "edgeParameter": "jujujuju",
                     "inputBus": "Something"
                 },
                 {
                     "inputChannel": "3",
-                    "name": "lead_synth",
+                    "name": "lead_syntho",
                     "decay": 35,
                     "inputRangeMin": "20",
                     "inputRangeMax": "34",
@@ -39,9 +42,9 @@
                     "inputBus": "Something"
                 }
             ],
-            "name": "First Layer"
+            "name": "First Layera yayaya"
         }
     ],
-    "description": "Forte!!!!:!!:",
-    "title": "The first Synesthesia track"
+    "description": "Prova di nuovo",
+    "title": "First renamed track"
 }

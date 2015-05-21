@@ -15,14 +15,16 @@ define(["react", "editorFlux/EditorActions"], function (React, EditorActions) {
         },
 
         getValue: function getValue() {
-            return this.state.value;
+            return this.props.value;
         },
 
         getId: function getId() {
             return "track-" + this.props.path;
-        }
+        },
 
-    };
+        getName: function getName() {
+            return _.last(this.props.path.split("."));
+        } };
 
     return {
         TrackStoreUpdater: TrackStoreUpdater

@@ -13,8 +13,10 @@ define(["react", "views/editor/LayerEditor"], function (React, LayerEditor) {
         },
 
         render: function render() {
-            var layers = this.state.layersData.map(function (layer) {
-                return React.createElement(LayerEditor, { layerData: layer });
+            var _this = this;
+
+            var layers = this.state.layersData.map(function (layer, index) {
+                return React.createElement(LayerEditor, { layerData: layer, key: index, path: _this.props.path + "." + index });
             });
             return React.createElement(
                 "div",

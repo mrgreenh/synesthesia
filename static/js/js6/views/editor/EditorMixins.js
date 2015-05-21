@@ -16,12 +16,16 @@ define([
             },
 
             getValue: function(){
-                return this.state.value;
+                return this.props.value;
             },
 
             getId: function(){
                 return "track-"+this.props.path;
-            }
+            },
+
+            getName: function(){
+                return _.last(this.props.path.split("."));
+            },
 
         }
 

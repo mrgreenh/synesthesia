@@ -37,7 +37,7 @@ define(["react", "views/editor/ActorEditor", "views/visualizer/Director", "views
                 React.createElement(
                     "div",
                     { className: "editorSection row" },
-                    React.createElement(LayersList, { layersData: this.state.layersData }),
+                    React.createElement(LayersList, { layersData: this.state.layersData, path: "layersData" }),
                     React.createElement(ScenesList, { scenesData: this.state.scenesData })
                 )
             );

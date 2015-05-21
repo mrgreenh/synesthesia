@@ -13,7 +13,7 @@ define(["react", "views/editor/EditorMixins"], function (React, EditorMixins) {
                 React.createElement(
                     "label",
                     { htmlFor: this.getId() },
-                    "Description"
+                    this.getName()
                 ),
                 React.createElement("input", { id: this.getId(), className: "form-control", value: this.getValue(), onChange: this.onChange })
             );

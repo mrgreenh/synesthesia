@@ -9,7 +9,7 @@ define(function(){
             if(steps.length>1){
                 if(_.isUndefined(dict[_.first(steps)]))
                     dict[_.first(steps)] = {}
-                this.setProp(dict[_.first(steps)], steps.join("."), value)
+                this.setProp(dict[steps.shift()], steps.join("."), value)
             }else{
                 dict[_.first(steps)] = value;
             }

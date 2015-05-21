@@ -13,9 +13,9 @@ define([
             },
 
             render: function(){
-                var actors = this.state.actorsData.map(actor => {
+                var actors = this.state.actorsData.map((actor, index) => {
                    return (
-                       <ActorEditor actorData={actor} layerType={this.props.layerType} />
+                       <ActorEditor actorData={actor} key={index} path={this.props.path+"."+index} layerType={this.props.layerType} />
                    );
                 });
                 return (

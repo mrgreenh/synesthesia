@@ -43,7 +43,7 @@
                         <TextField path="description" value={this.state.description}/>
                     </div>
                     <div className="editorSection row">
-                        <LayersList layersData={this.state.layersData} />
+                        <LayersList layersData={this.state.layersData} path="layersData" />
                         <ScenesList scenesData={this.state.scenesData} />
                     </div>
                 </div>

@@ -1,6 +1,6 @@
 "use strict";
 
-define(["react", "views/visualizer/Synesthesia", "views/editor/BetterSelect", "views/editor/Collapsable"], function (React, Synesthesia, BetterSelect, Collapsable) {
+define(["react", "views/visualizer/Synesthesia", "views/editor/BetterSelect", "views/editor/Collapsable", "views/editor/TextField"], function (React, Synesthesia, BetterSelect, Collapsable, TextField) {
 
     var ActorEditor = React.createClass({
         displayName: "ActorEditor",
@@ -51,6 +51,7 @@ define(["react", "views/visualizer/Synesthesia", "views/editor/BetterSelect", "v
         render: function render() {
             var _this3 = this;
 
+            //ADSR envelope
             var ADSRForms = _(this.ADSREnvelopeAttributes).map(_.bind(function (attr) {
                 var attrHtmlName = "actor-" + attr;
                 return React.createElement(
@@ -67,23 +68,16 @@ define(["react", "views/visualizer/Synesthesia", "views/editor/BetterSelect", "v
                 );
             }, this));
 
+            //Actor specific parameters
             if (this.state.actorParameters) {
                 var actorParametersForm = this.state.actorParameters.map(function (paramName) {
-                    return React.createElement(
-                        "li",
-                        { className: "form-group form-inline" },
-                        React.createElement(
-                            "label",
-                            { htmlFor: "parameter-" + paramName },
-                            paramName
-                        ),
-                        React.createElement("input", { id: "parameter-" + paramName, className: "form-control", valueLink: _this3.linkState(paramName + "Parameter") })
-                    );
+                    return React.createElement(TextField, { path: _this3.props.path + "." + paramName + "Parameter", value: _this3.props.actorData[paramName + "Parameter"] });
                 });
             } else {
                 var actorParametersForm = "Nothing to display";
             }
 
+            //Actor classes
             if (this.state.availableActorsClasses) {
                 var actorClassOptions = this.state.availableActorsClasses.map(function (option) {
                     return React.createElement(
@@ -102,16 +96,7 @@ define(["react", "views/visualizer/Synesthesia", "views/editor/BetterSelect", "v
                 React.createElement(
                     "ul",
                     { className: "parameters-list" },
-                    React.createElement(
-                        "li",
-                        { className: "form-group" },
-                        React.createElement(
-                            "label",
-                            { htmlFor: "actor-name" },
-                            "Name"
-                        ),
-                        React.createElement("input", { id: "actor-name", className: "form-control", valueLink: this.linkState("name"), type: "text" })
-                    ),
+                    React.createElement(TextField, { path: this.props.path + ".name", value: this.props.actorData.name }),
                     React.createElement(
                         "label",
                         { htmlFor: "actor-type" },

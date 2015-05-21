@@ -2,8 +2,9 @@ define([
         "react",
         "views/visualizer/Synesthesia",
         "views/editor/BetterSelect",
-        "views/editor/Collapsable"
-    ], function(React, Synesthesia, BetterSelect, Collapsable){
+        "views/editor/Collapsable",
+        "views/editor/TextField"
+    ], function(React, Synesthesia, BetterSelect, Collapsable, TextField){
 
     var ActorEditor = React.createClass({
         mixins: [React.addons.LinkedStateMixin],
@@ -46,6 +47,7 @@ define([
         },
 
         render: function(){
+            //ADSR envelope
             var ADSRForms = _(this.ADSREnvelopeAttributes).map(_.bind(function(attr){
                var attrHtmlName = "actor-" + attr;
                 return (
@@ -56,19 +58,18 @@ define([
                 );
             }, this));
 
+            //Actor specific parameters
             if(this.state.actorParameters){
                 var actorParametersForm = this.state.actorParameters.map(paramName => {
                     return (
-                                <li className="form-group form-inline">
-                                    <label htmlFor={"parameter-"+paramName}>{paramName}</label>
-                                    <input id={"parameter-"+paramName} className="form-control" valueLink={this.linkState(paramName+"Parameter")} />
-                                </li>
+                            <TextField path={this.props.path+"."+paramName+"Parameter"} value={this.props.actorData[paramName+"Parameter"]} />
                         )
                 });
             }else{
                 var actorParametersForm = "Nothing to display";
             }
 
+            //Actor classes
             if(this.state.availableActorsClasses){
                 var actorClassOptions = this.state.availableActorsClasses.map(option => {
                     return (
@@ -82,10 +83,8 @@ define([
             return (
                 <Collapsable itemName={this.state.name}>
                     <ul className="parameters-list">
-                        <li className="form-group">
-                            <label htmlFor="actor-name">Name</label>
-                            <input id="actor-name" className="form-control" valueLink={this.linkState("name")} type="text" />
-                        </li>
+                        <TextField path={this.props.path+".name"} value={this.props.actorData.name} />
+
                         <label htmlFor="actor-type">Actor type:</label>
                         <BetterSelect value={this.state.className} onChange={this.handleActorClassChange}>
                             {actorClassOptions}
