@@ -3,7 +3,7 @@ define([
         "views/editor/Collapsable",
         "views/editor/SelectField",
         "views/editor/TextField",
-        "views/editor/EditorConstants"
+        "editorFlux/EditorConstants"
     ], function(React, Collapsable, ActorsList, SelectField, TextField, EditorConstants){
 
         var InputEditor = React.createClass({
@@ -13,7 +13,7 @@ define([
 
                 var ADSRForms = _(EditorConstants.ADSR_ATTRIBUTES).map(_.bind(function(attr){
                     return (
-                        <SliderField min=0 max=100 {this.props.path+"."+attr} value=actorData[attr] />
+                        <SliderField min="0" max="100" path={this.props.path+"."+attr} value={actorData[attr]} />
                     );
                 }, this));
 
@@ -49,5 +49,4 @@ define([
         });
 
         return InputEditor;
-
 });

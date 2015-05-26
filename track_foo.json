@@ -7,23 +7,24 @@
             "name": "Second part"
         }
     ],
-    "undefined": "Forte!!",
     "layersData": [
         {
             "type": "Three3DLayer",
             "actors": [
                 {
                     "inputChannels": [
-                      "name": "Snare",
-                      "inputBus": "SomethingElse",
-                      "attack": 100,
-                      "decay": 20,
-                      "sustain": 50,
-                      "release": 40,
-                      "inputChannel": "3",
-                      "inputRangeMax": "34",
-                      "inputRangeMin": "20",
-                      "inputType": "note",
+                      {
+                        "name": "Snare",
+                        "inputBus": "SomethingElse",
+                        "attack": 100,
+                        "decay": 20,
+                        "sustain": 50,
+                        "release": 40,
+                        "inputChannel": "3",
+                        "inputRangeMax": "34",
+                        "inputRangeMin": "20",
+                        "inputType": "note"
+                      }
                     ],
                     "name": "This is one actoryoyo",
                     "className": "ThreeCubeActor",
@@ -33,15 +34,17 @@
                 },
                 {
                     "inputChannels": [
-                      "name": "Snare",
-                      "inputBus": "Something",
-                      "inputChannel": "3",
-                      "inputRangeMax": "34",
-                      "inputRangeMin": "20",
-                      "inputType": "control",
+                      {
+                        "name": "Snare",
+                        "inputBus": "Something",
+                        "inputChannel": "3",
+                        "inputRangeMax": "34",
+                        "inputRangeMin": "20",
+                        "inputType": "control"
+                      }
                     ],
                     "name": "lead_syntho",
-                    "className": "ThreeSphereActor",
+                    "className": "ThreeSphereActor"
                 }
             ]
         }

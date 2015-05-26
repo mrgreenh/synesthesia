@@ -1,12 +1,17 @@
 "use strict";
 
-define(["react", "views/editor/Collapsable", "views/editor/SelectField", "views/editor/TextField"], function (React, Collapsable, ActorsList, SelectField, TextField) {
+define(["react", "views/editor/Collapsable", "views/editor/SelectField", "views/editor/TextField", "editorFlux/EditorConstants"], function (React, Collapsable, ActorsList, SelectField, TextField, EditorConstants) {
 
     var InputEditor = React.createClass({
         displayName: "InputEditor",
 
         render: function render() {
             var inputData = this.props.inputData;
+
+            var ADSRForms = _(EditorConstants.ADSR_ATTRIBUTES).map(_.bind(function (attr) {
+                return React.createElement(SliderField, { min: "0", max: "100", path: this.props.path + "." + attr, value: actorData[attr] });
+            }, this));
+
             return React.createElement(
                 Collapsable,
                 { itemName: inputData.name },
@@ -20,7 +25,20 @@ define(["react", "views/editor/Collapsable", "views/editor/SelectField", "views/
                         React.createElement(
                             "li",
                             { className: "form-group" },
-                            React.createElement(SelectField, { path: this.props.path + ".inputType", value: inputData.inputType, options: ["note", "control"] })
+                            React.createElement(
+                                SelectField,
+                                { path: this.props.path + ".inputType", value: inputData.inputType },
+                                React.createElement(
+                                    "option",
+                                    { value: "note" },
+                                    "Note"
+                                ),
+                                React.createElement(
+                                    "option",
+                                    { value: "control" },
+                                    "Control"
+                                )
+                            )
                         ),
                         React.createElement(
                             "li",
@@ -39,10 +57,19 @@ define(["react", "views/editor/Collapsable", "views/editor/SelectField", "views/
                             React.createElement(SliderField, { inputType: "number", path: this.props.path + ".inputRangeMin", min: "1", value: inputData.inputRangeMin })
                         )
                     )
+                ),
+                React.createElement(
+                    Collapsable,
+                    { itemName: "ADSR Envelope" },
+                    React.createElement(
+                        "div",
+                        { className: "form-group" },
+                        ADSRForms
+                    )
                 )
             );
         }
     });
 
-    return LayerEditor;
+    return InputEditor;
 });

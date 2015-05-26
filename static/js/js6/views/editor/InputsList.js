@@ -21,8 +21,7 @@ define([
                         </div>);
                 }
             });
-        });
 
-        return InputEditor;  
+        return InputsList;
     });
 
