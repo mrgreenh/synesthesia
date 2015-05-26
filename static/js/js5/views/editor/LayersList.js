@@ -4,10 +4,6 @@ define(["react", "views/editor/LayerEditor"], function (React, LayerEditor) {
     var LayersList = React.createClass({
         displayName: "LayersList",
 
-        getInitialState: function getInitialState() {
-            return { layersData: this.props.layersData };
-        },
-
         handleNewLayerClick: function handleNewLayerClick() {
             alert("Cool magic stuff will start happening here.");
         },
@@ -15,7 +11,8 @@ define(["react", "views/editor/LayerEditor"], function (React, LayerEditor) {
         render: function render() {
             var _this = this;
 
-            var layers = this.state.layersData.map(function (layer, index) {
+            var layersData = this.props.layersData;
+            var layers = layersData.map(function (layer, index) {
                 return React.createElement(LayerEditor, { layerData: layer, key: index, path: _this.props.path + "." + index });
             });
             return React.createElement(

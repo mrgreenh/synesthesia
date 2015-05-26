@@ -3,14 +3,19 @@ define([
         "views/visualizer/Synesthesia",
         "views/editor/BetterSelect",
         "views/editor/Collapsable",
-        "views/editor/TextField"
-    ], function(React, Synesthesia, BetterSelect, Collapsable, TextField){
+        "views/editor/TextField",
+        "views/editor/SelectField",
+        "views/editor/InputsList",
+        "editorFlux/EditorActions"
+    ], function(React, Synesthesia, BetterSelect, Collapsable, TextField, SelectField, InputsList, EditorActions){
 
     var ActorEditor = React.createClass({
         mixins: [React.addons.LinkedStateMixin],
-        ADSREnvelopeAttributes: ["attack", "decay", "sustain", "release"],
         getInitialState: function(){
-            return this.props.actorData;
+            return {
+                actorParameters: [],
+                availableActorsClasses: []
+            };
         },
 
         componentDidMount: function(){
@@ -24,7 +29,7 @@ define([
         },
 
         _loadActorSpecificParameters: function(className){
-            var fullClassName = className || this.state.className;
+            var fullClassName = className || this.props.actorData.className;
             Synesthesia.getActorSpecificParameters(fullClassName).done((parameters) => {
                 this.setState({actorParameters:parameters});
             });
@@ -32,10 +37,9 @@ define([
 
         handleActorClassChange: function(e){
             var className = e.currentTarget.value;
-            this.setState({
-                className: className
-            });
             this._loadActorSpecificParameters(className);
+            propertyPath = this.props.path + ".className";
+            EditorActions.updateField(propertyPath, className);
         },
 
         _loadLayerAvailableActorsList: function(){
@@ -47,17 +51,7 @@ define([
         },
 
         render: function(){
-            //ADSR envelope
-            var ADSRForms = _(this.ADSREnvelopeAttributes).map(_.bind(function(attr){
-               var attrHtmlName = "actor-" + attr;
-                return (
-                   <div className="form-group form-inline">
-                       <label htmlFor={attrHtmlName}>{attr} {this.state[attr]}</label>
-                       <input id={attrHtmlName} className="form-control" valueLink={this.linkState(attr)} type="range" min="0" max="100" />
-                   </div>
-                );
-            }, this));
-
+            var actorData = this.props.actorData;
             //Actor specific parameters
             if(this.state.actorParameters){
                 var actorParametersForm = this.state.actorParameters.map(paramName => {
@@ -85,43 +79,16 @@ define([
                     <ul className="parameters-list">
                         <TextField path={this.props.path+".name"} value={this.props.actorData.name} />
 
-                        <label htmlFor="actor-type">Actor type:</label>
-                        <BetterSelect value={this.state.className} onChange={this.handleActorClassChange}>
+                        <SelectField value={this.props.actorData.className} path={this.props.path+".className"} onChange={this.handleActorClassChange}>
                             {actorClassOptions}
-                        </BetterSelect>
+                        </SelectField>
                         <Collapsable itemName="actorParams">
                             <ul>
                                 {actorParametersForm}
                             </ul>                        
                         </Collapsable>
                         <Collapsable itemName="Inputs">
-                            <ul>
-                                <li className="form-group">
-                                    <label htmlFor="input-type">Type</label>
-                                    <BetterSelect valueLink={this.linkState("inputType")}>
-                                        <option value="note">Note</option>
-                                        <option value="control">Control</option>
-                                    </BetterSelect>
-                                </li>
-                                <li className="form-group form-inline">
-                                    <label htmlFor="input-channel">Channel</label>
-                                    <input id="input-channel" className="form-control" valueLink={this.linkState("inputChannel")} type="number" min="1" />
-                                </li>
-                                <li className="form-group form-inline">
-                                    <label htmlFor="input-bus">Bus</label>
-                                    {/*This can be a select with options filled in by the server*/}
-                                    <input id="input-bus" className="form-control" valueLink={this.linkState("inputBus")} />
-                                </li>
-                                <li className="form-group form-inline">
-                                    <label htmlFor="input-range-max">Range</label>
-                                    {/*Notes and controls will be enriched with a normalized version of their value, computed based on this range*/}
-                                    <input id="input-range-max" className="form-control" valueLink={this.linkState("inputRangeMax")} type="number" min="1" />
-                                    <input id="input-range-min" className="form-control" valueLink={this.linkState("inputRangeMin")} type="number" min="1" />
-                                </li>
-                            </ul>
-                        </Collapsable>
-                        <Collapsable itemName="ADSR Envelope">
-                            {ADSRForms}
+                            <InputsList inputsData={this.props.ActorData.inputChannels} />
                         </Collapsable>
                     </ul>
                 </Collapsable>

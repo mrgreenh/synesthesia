@@ -13,38 +13,39 @@
             "type": "Three3DLayer",
             "actors": [
                 {
-                    "inputChannel": "3",
-                    "name": "This is one actor",
-                    "posXParameter": "always props?",
-                    "decay": 20,
-                    "inputRangeMin": "20",
-                    "inputRangeMax": "34",
-                    "inputType": "note",
+                    "inputChannels": [
+                      "name": "Snare",
+                      "inputBus": "SomethingElse",
+                      "attack": 100,
+                      "decay": 20,
+                      "sustain": 50,
+                      "release": 40,
+                      "inputChannel": "3",
+                      "inputRangeMax": "34",
+                      "inputRangeMin": "20",
+                      "inputType": "note",
+                    ],
+                    "name": "This is one actoryoyo",
                     "className": "ThreeCubeActor",
-                    "attack": 100,
-                    "sustain": 50,
-                    "release": 40,
+                    "posXParameter": "always props?",
                     "posYParameter": "yayayaya",
-                    "edgeParameter": "jujujuju",
-                    "inputBus": "Something"
+                    "edgeParameter": "jujujuju"
                 },
                 {
-                    "inputChannel": "3",
+                    "inputChannels": [
+                      "name": "Snare",
+                      "inputBus": "Something",
+                      "inputChannel": "3",
+                      "inputRangeMax": "34",
+                      "inputRangeMin": "20",
+                      "inputType": "control",
+                    ],
                     "name": "lead_syntho",
-                    "decay": 35,
-                    "inputRangeMin": "20",
-                    "inputRangeMax": "34",
                     "className": "ThreeSphereActor",
-                    "attack": 90,
-                    "sustain": 28,
-                    "release": 4,
-                    "inputType": "control",
-                    "inputBus": "Something"
                 }
-            ],
-            "name": "First Layera yayaya"
+            ]
         }
     ],
-    "description": "Prova di nuovo",
+    "description": "Prova di nuovo2",
     "title": "First renamed track"
 }

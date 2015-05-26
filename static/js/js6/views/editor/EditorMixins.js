@@ -5,10 +5,14 @@ define([
 
         var TrackStoreUpdater = {
             onChange: function(e){
-                var $target = $(e.currentTarget);
-                var newValue = $target.val();
-                var propertyPath = this.props.path;
-                EditorActions.updateField(propertyPath, newValue);
+                if(this.props.onChange){
+                    return this.props.onChange(e);
+                }else{
+                    var $target = $(e.currentTarget);
+                    var newValue = $target.val();
+                    var propertyPath = this.props.path;
+                    EditorActions.updateField(propertyPath, newValue);                    
+                }
             },
 
             getInitialState: function(){

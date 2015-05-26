@@ -6,5 +6,6 @@ define({
     ACTIONS: {
         UPDATE_FIELD: "actions:update",
         LOAD_TRACK: "actions:load_track"
-    }
+    },
+    ADSR_ATTRIBUTES: ["attack", "decay", "sustain", "release"]
 });
