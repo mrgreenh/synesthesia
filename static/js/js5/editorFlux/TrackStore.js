@@ -20,11 +20,10 @@ define(["utils/BaseObject", "editorFlux/EditorConstants", "editorFlux/EditorDisp
         _inherits(TrackStore, _BaseObject);
 
         _createClass(TrackStore, [{
-            key: "_update",
-            value: function _update(path, value) {
+            key: "_persistData",
+            value: function _persistData() {
                 var _this = this;
 
-                this.setProp(this._trackData, path, value);
                 $.ajax("/update_current_track", {
                     method: "POST",
                     data: JSON.stringify({ trackData: this._trackData }),
@@ -33,6 +32,12 @@ define(["utils/BaseObject", "editorFlux/EditorConstants", "editorFlux/EditorDisp
                 }).then(function (data) {
                     if (data && data.status == 200) _this.triggerEvent(EditorConstants.STORE_EVENTS.CHANGE, data.track_data);
                 });
+            }
+        }, {
+            key: "_update",
+            value: function _update(path, value) {
+                this.setProp(this._trackData, path, value);
+                this._persistData();
             }
         }, {
             key: "_load",
@@ -45,16 +50,58 @@ define(["utils/BaseObject", "editorFlux/EditorConstants", "editorFlux/EditorDisp
                 });
             }
         }, {
+            key: "_createLayer",
+            value: function _createLayer() {
+                if (!_.isArray(this._trackData.layersData)) this._trackData.layersData = [];
+                this._trackData.layersData.push({
+                    name: "New layer",
+                    actors: [],
+                    type: "Three3DLayer"
+                });
+                this._persistData();
+            }
+        }, {
+            key: "_createActor",
+            value: function _createActor(layerIndex) {
+                var layerData = this._trackData.layersData[layerIndex];
+                if (!_.isArray(layerData.actors)) layerData.actors = [];
+                layerData.actors.push({
+                    name: "New Actor",
+                    inputChannels: [],
+                    className: "ThreeCubeActor"
+                });
+                this._persistData();
+            }
+        }, {
+            key: "_createInput",
+            value: function _createInput(layerIndex, actorIndex) {
+                var layerData = this._trackData.layersData[layerIndex];
+                var actorData = layerData.actors[actorIndex];
+                if (!_.isArray(actorData.inputChannels)) actorData.inputChannels = [];
+                actorData.inputChannels.push({
+                    name: "New Input"
+                });
+                this._persistData();
+            }
+        }, {
             key: "handleAction",
             value: function handleAction(payload) {
                 var action = payload.action;
-
                 switch (action.actionType) {
                     case EditorConstants.ACTIONS.UPDATE_FIELD:
                         this._update(action.path, action.value);
                         break;
                     case EditorConstants.ACTIONS.LOAD_TRACK:
                         this._load();
+                        break;
+                    case EditorConstants.ACTIONS.CREATE_LAYER:
+                        this._createLayer();
+                        break;
+                    case EditorConstants.ACTIONS.CREATE_ACTOR:
+                        this._createActor(action.layerIndex);
+                        break;
+                    case EditorConstants.ACTIONS.CREATE_INPUT:
+                        this._createInput(action.layerIndex, action.actorIndex);
                         break;
                 }
 

@@ -33,7 +33,22 @@ define([
 
         }
 
+        var TrackPathsParser = {
+            _getLayerIndex: function(){
+                var path = this.props.path;
+                var steps = path.split(".");
+                if(steps.length>1) return steps[1];
+            },
+
+            _getActorIndex: function(){
+                var path = this.props.path;
+                var steps = path.split(".");
+                if(steps.length>3) return steps[3];
+            }
+        }
+
         return {
-            TrackStoreUpdater: TrackStoreUpdater
+            TrackStoreUpdater: TrackStoreUpdater,
+            TrackPathsParser: TrackPathsParser
         }
     });

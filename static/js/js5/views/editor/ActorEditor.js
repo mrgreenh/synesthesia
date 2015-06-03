@@ -35,7 +35,7 @@ define(["react", "views/visualizer/Synesthesia", "views/editor/BetterSelect", "v
         handleActorClassChange: function handleActorClassChange(e) {
             var className = e.currentTarget.value;
             this._loadActorSpecificParameters(className);
-            propertyPath = this.props.path + ".className";
+            var propertyPath = this.props.path + ".className";
             EditorActions.updateField(propertyPath, className);
         },
 
@@ -77,7 +77,7 @@ define(["react", "views/visualizer/Synesthesia", "views/editor/BetterSelect", "v
 
             return React.createElement(
                 Collapsable,
-                { itemName: this.state.name },
+                { itemName: this.props.actorData.name },
                 React.createElement(
                     "ul",
                     { className: "parameters-list" },
@@ -99,7 +99,7 @@ define(["react", "views/visualizer/Synesthesia", "views/editor/BetterSelect", "v
                     React.createElement(
                         Collapsable,
                         { itemName: "Inputs" },
-                        React.createElement(InputsList, { inputsData: this.props.ActorData.inputChannels })
+                        React.createElement(InputsList, { path: this.props.path + ".inputChannels", inputsData: this.props.actorData.inputChannels })
                     )
                 )
             );

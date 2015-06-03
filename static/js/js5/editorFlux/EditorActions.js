@@ -30,6 +30,38 @@ define(["utils/BaseObject", "editorFlux/EditorDispatcher", "editorFlux/EditorCon
                     }
                 });
             }
+        }, {
+            key: "createLayer",
+            value: function createLayer() {
+                editorDispatcher.dispatch({
+                    action: {
+                        actionType: EditorConstants.ACTIONS.CREATE_LAYER
+                    }
+                });
+            }
+        }, {
+            key: "createActor",
+            value: function createActor(layerIndex) {
+                editorDispatcher.dispatch({
+                    action: {
+                        actionType: EditorConstants.ACTIONS.CREATE_ACTOR,
+                        layerIndex: layerIndex
+                    }
+                });
+            }
+        }, {
+            key: "createInput",
+
+            //For now we don't have unique ids, we can go by index
+            value: function createInput(layerIndex, actorIndex) {
+                editorDispatcher.dispatch({
+                    action: {
+                        actionType: EditorConstants.ACTIONS.CREATE_INPUT,
+                        layerIndex: layerIndex,
+                        actorIndex: actorIndex
+                    }
+                });
+            }
         }]);
 
         return EditorActions;

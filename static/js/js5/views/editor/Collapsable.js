@@ -6,7 +6,7 @@ define(["react"], function (React) {
         displayName: "Collapsable",
 
         getInitialState: function getInitialState() {
-            return { collapsed: false,
+            return { collapsed: true,
                 backgroundColor: this._getBackgroundColor() };
         },
 

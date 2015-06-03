@@ -12,41 +12,120 @@
             "type": "Three3DLayer",
             "actors": [
                 {
-                    "inputChannels": [
-                      {
-                        "name": "Snare",
-                        "inputBus": "SomethingElse",
-                        "attack": 100,
-                        "decay": 20,
-                        "sustain": 50,
-                        "release": 40,
-                        "inputChannel": "3",
-                        "inputRangeMax": "34",
-                        "inputRangeMin": "20",
-                        "inputType": "note"
-                      }
-                    ],
-                    "name": "This is one actoryoyo",
+                    "zPosParameter": " :)",
+                    "radiusParameter": "radius 4 clicks away",
+                    "name": "This is one actoryoyoyayaya!",
+                    "posXParameter": "always props?!!!",
                     "className": "ThreeCubeActor",
-                    "posXParameter": "always props?",
                     "posYParameter": "yayayaya",
-                    "edgeParameter": "jujujuju"
+                    "inputChannels": [
+                        {
+                            "inputChannel": "72",
+                            "name": "Snarefsdfsd",
+                            "decay": "100",
+                            "inputRangeMin": "1",
+                            "inputRangeMax": "100",
+                            "attack": "0",
+                            "sustain": "100",
+                            "release": "100",
+                            "inputType": "control",
+                            "inputBus": "SomethingElse!!!"
+                        }
+                    ],
+                    "edgeParameter": "jujujujujajaja"
                 },
                 {
+                    "className": "ThreeSphereActor",
                     "inputChannels": [
-                      {
-                        "name": "Snare",
-                        "inputBus": "Something",
-                        "inputChannel": "3",
-                        "inputRangeMax": "34",
-                        "inputRangeMin": "20",
-                        "inputType": "control"
-                      }
+                        {
+                            "inputChannel": "69",
+                            "name": "Snare",
+                            "inputRangeMin": "40",
+                            "inputRangeMax": "97",
+                            "inputType": "control",
+                            "inputBus": "Something"
+                        },
+                        {
+                            "inputChannel": "36",
+                            "inputRangeMax": "54",
+                            "inputType": "control",
+                            "name": "Some input"
+                        }
                     ],
-                    "name": "lead_syntho",
-                    "className": "ThreeSphereActor"
+                    "name": "lead_syntho"
+                },
+                {
+                    "className": "ThreeCubeActor",
+                    "inputChannels": [
+                        {
+                            "name": "New Input"
+                        }
+                    ],
+                    "name": "New Actor!!!"
                 }
-            ]
+            ],
+            "name": "How could this miss! :("
+        },
+        {
+            "type": "Three3DLayer",
+            "actors": [
+                {
+                    "className": "ThreeSphereActor",
+                    "inputChannels": [
+                        {
+                            "attack": "34",
+                            "inputRangeMin": "99",
+                            "inputRangeMax": "30",
+                            "name": "New Input",
+                            "decay": "100"
+                        }
+                    ],
+                    "name": "New Actorffdfsd"
+                }
+            ],
+            "name": "Other layer"
+        },
+        {
+            "type": "Three3DLayer",
+            "actors": [
+                {
+                    "className": "ThreeCubeActor",
+                    "inputChannels": [
+                        {
+                            "inputChannel": "1",
+                            "name": "Kick",
+                            "decay": "80",
+                            "inputRangeMin": "1",
+                            "attack": "12",
+                            "inputRangeMax": "5",
+                            "sustain": "37",
+                            "release": "75"
+                        },
+                        {
+                            "name": "Snare"
+                        }
+                    ],
+                    "radiusParameter": "some radius",
+                    "name": "Drums",
+                    "edgeParameter": "some edge"
+                },
+                {
+                    "className": "ThreeCubeActor",
+                    "inputChannels": [
+                        {
+                            "inputChannel": "11",
+                            "name": "Trumpet"
+                        },
+                        {
+                            "inputChannel": "78",
+                            "name": "Trumpet intensity",
+                            "inputType": "control"
+                        }
+                    ],
+                    "name": "Solo"
+                }
+            ],
+            "name": "Yayy!"
         }
     ],
     "description": "Prova di nuovo2",

@@ -8,12 +8,6 @@ define(["react", "views/editor/EditorMixins"], function (React, EditorMixins) {
 
         mixins: [EditorMixins.TrackStoreUpdater],
 
-        getInitialState: function getInitialState() {
-            return {
-                inputType: this.props.numberInputType || "range"
-            };
-        },
-
         render: function render() {
             return React.createElement(
                 "div",
@@ -23,7 +17,8 @@ define(["react", "views/editor/EditorMixins"], function (React, EditorMixins) {
                     { htmlFor: this.getId() },
                     this.getName()
                 ),
-                React.createElement("input", _extends({ id: this.getId(), className: "form-control", value: this.getValue(), onChange: this.onChange, type: this.state.inputType }, this.props))
+                React.createElement("input", _extends({ id: this.getId(), className: "form-control", value: this.getValue(), onChange: this.onChange, type: "range" }, this.props)),
+                React.createElement("input", _extends({ id: this.getId(), className: "form-control", value: this.getValue(), onChange: this.onChange, type: "number" }, this.props))
             );
         }
 

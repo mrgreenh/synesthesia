@@ -1,12 +1,16 @@
 define([
         "react",
-        "views/editor/ActorEditor"
+        "views/editor/ActorEditor",
+        "views/editor/EditorMixins",
+        "editorFlux/EditorActions"
     ],
-    function(React, ActorEditor){
+    function(React, ActorEditor, EditorMixins, EditorActions){
+
         var ActorsList = React.createClass({
+            mixins: [EditorMixins.TrackPathsParser],
 
             handleNewActorClick: function(event){
-                alert("Some more magic happens here!");
+                EditorActions.createActor(this._getLayerIndex());
             },
 
             render: function(){

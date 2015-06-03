@@ -1,11 +1,12 @@
 define([
         "react",
-        "views/editor/LayerEditor"
-    ], function(React, LayerEditor){
+        "views/editor/LayerEditor",
+        "editorFlux/EditorActions"
+    ], function(React, LayerEditor, EditorActions){
         var LayersList = React.createClass({
 
             handleNewLayerClick(){
-                alert("Cool magic stuff will start happening here.");
+                EditorActions.createLayer();
             },
 
             render: function(){

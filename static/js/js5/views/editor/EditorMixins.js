@@ -30,7 +30,22 @@ define(["react", "editorFlux/EditorActions"], function (React, EditorActions) {
             return _.last(this.props.path.split("."));
         } };
 
+    var TrackPathsParser = {
+        _getLayerIndex: function _getLayerIndex() {
+            var path = this.props.path;
+            var steps = path.split(".");
+            if (steps.length > 1) return steps[1];
+        },
+
+        _getActorIndex: function _getActorIndex() {
+            var path = this.props.path;
+            var steps = path.split(".");
+            if (steps.length > 3) return steps[3];
+        }
+    };
+
     return {
-        TrackStoreUpdater: TrackStoreUpdater
+        TrackStoreUpdater: TrackStoreUpdater,
+        TrackPathsParser: TrackPathsParser
     };
 });

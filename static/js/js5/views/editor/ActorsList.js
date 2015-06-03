@@ -1,11 +1,14 @@
 "use strict";
 
-define(["react", "views/editor/ActorEditor"], function (React, ActorEditor) {
+define(["react", "views/editor/ActorEditor", "views/editor/EditorMixins", "editorFlux/EditorActions"], function (React, ActorEditor, EditorMixins, EditorActions) {
+
     var ActorsList = React.createClass({
         displayName: "ActorsList",
 
+        mixins: [EditorMixins.TrackPathsParser],
+
         handleNewActorClick: function handleNewActorClick(event) {
-            alert("Some more magic happens here!");
+            EditorActions.createActor(this._getLayerIndex());
         },
 
         render: function render() {

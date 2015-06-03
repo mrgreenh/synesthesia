@@ -1,11 +1,11 @@
 "use strict";
 
-define(["react", "views/editor/LayerEditor"], function (React, LayerEditor) {
+define(["react", "views/editor/LayerEditor", "editorFlux/EditorActions"], function (React, LayerEditor, EditorActions) {
     var LayersList = React.createClass({
         displayName: "LayersList",
 
         handleNewLayerClick: function handleNewLayerClick() {
-            alert("Cool magic stuff will start happening here.");
+            EditorActions.createLayer();
         },
 
         render: function render() {

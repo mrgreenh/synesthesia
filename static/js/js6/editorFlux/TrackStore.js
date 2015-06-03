@@ -12,8 +12,7 @@ define([
                 this._trackData = {};
             }
 
-            _update(path, value){
-                this.setProp(this._trackData, path, value);
+            _persistData(){
                 $.ajax("/update_current_track", {
                     method: "POST",
                     data: JSON.stringify({trackData: this._trackData}),
@@ -25,6 +24,11 @@ define([
                 });
             }
 
+            _update(path, value){
+                this.setProp(this._trackData, path, value);
+                this._persistData();
+            }
+
             _load(){
                 $.ajax("/get_current_track").then((data) => {
                     this._trackData = data;
@@ -32,15 +36,54 @@ define([
                 });
             }
 
+            _createLayer(){
+                if(!_.isArray(this._trackData.layersData)) this._trackData.layersData = [];
+                this._trackData.layersData.push({
+                    name: "New layer",
+                    actors: [],
+                    type: "Three3DLayer"
+                });
+                this._persistData();
+            }
+
+            _createActor(layerIndex){
+                var layerData = this._trackData.layersData[layerIndex];
+                if(!_.isArray(layerData.actors)) layerData.actors = [];
+                layerData.actors.push({
+                    name: "New Actor",
+                    inputChannels: [],
+                    className: "ThreeCubeActor"
+                });
+                this._persistData();
+            }
+
+            _createInput(layerIndex, actorIndex){
+                var layerData = this._trackData.layersData[layerIndex];
+                var actorData = layerData.actors[actorIndex];
+                if(!_.isArray(actorData.inputChannels)) actorData.inputChannels = [];
+                actorData.inputChannels.push({
+                    name: "New Input"
+                });
+                this._persistData();
+            }
+
             handleAction(payload){
                 var action = payload.action;
-
                 switch(action.actionType){
                     case EditorConstants.ACTIONS.UPDATE_FIELD:
                         this._update(action.path, action.value);
                         break;
                     case EditorConstants.ACTIONS.LOAD_TRACK:
                         this._load();
+                        break;
+                    case EditorConstants.ACTIONS.CREATE_LAYER:
+                        this._createLayer();
+                        break;
+                    case EditorConstants.ACTIONS.CREATE_ACTOR:
+                        this._createActor(action.layerIndex)
+                        break;
+                    case EditorConstants.ACTIONS.CREATE_INPUT:
+                        this._createInput(action.layerIndex, action.actorIndex);
                         break;
                 }
 

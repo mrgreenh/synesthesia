@@ -1,8 +1,14 @@
 define({
     STORE_EVENTS: {
-        CHANGE: "store_events:update"
+        CHANGE: "store_events:update",
+        LOAD: "store_events:load"
     },
     ACTIONS: {
-        UPDATE_FIELD: "actions:update"
-    }
+        UPDATE_FIELD: "actions:update",
+        LOAD_TRACK: "actions:load_track",
+        CREATE_INPUT: "actions:create_input",
+        CREATE_ACTOR: "actions:create_actor",
+        CREATE_LAYER: "actions:create_layer"
+    },
+    ADSR_ATTRIBUTES: ["attack", "decay", "sustain", "release"]
 });

@@ -38,7 +38,7 @@ define([
         handleActorClassChange: function(e){
             var className = e.currentTarget.value;
             this._loadActorSpecificParameters(className);
-            propertyPath = this.props.path + ".className";
+            var propertyPath = this.props.path + ".className";
             EditorActions.updateField(propertyPath, className);
         },
 
@@ -75,7 +75,7 @@ define([
             }
 
             return (
-                <Collapsable itemName={this.state.name}>
+                <Collapsable itemName={this.props.actorData.name}>
                     <ul className="parameters-list">
                         <TextField path={this.props.path+".name"} value={this.props.actorData.name} />
 
@@ -88,7 +88,7 @@ define([
                             </ul>                        
                         </Collapsable>
                         <Collapsable itemName="Inputs">
-                            <InputsList inputsData={this.props.ActorData.inputChannels} />
+                            <InputsList path={ this.props.path+".inputChannels" } inputsData={this.props.actorData.inputChannels} />
                         </Collapsable>
                     </ul>
                 </Collapsable>
