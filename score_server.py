@@ -16,23 +16,24 @@ thread = None
 rtmidi = mido.Backend('mido.backends.rtmidi')
 portname = rtmidi.get_input_names()[0]
 
-current_track_id = "foo"
+current_track_id = ""
 
 @app.route('/')
 @app.route('/index')
 def index():
     return render_template('index.html')
 
-@app.route('/tracks')
-def tracks():
+@app.route('/direct/<track_id>')
+def direct(track_id):
+    set_current_track(track_id)
     return render_template('tracks.html')
 
 @app.route('/stage')
 def stage():
     return render_template('stage.html')
 
-@app.route('/editor/<track_id>')
-def editor(track_id):
+@app.route('/editor')
+def editor():
     return render_template('editor.html')
 
 @app.route('/get_current_track')
@@ -53,6 +54,12 @@ def update_current_track():
 @app.route('/get_stage_config')
 def get_stage_config():
     return jsonify(**config.STAGE_CONFIG)
+
+def set_current_track(track_id):
+    global current_track_id
+    current_track_id = track_id
+    bookshelf = Bookshelf()
+    track_data = bookshelf.ensure_track(current_track_id)
 
 #Write a template that imports layers and actors classes by reading a configuration file
 #Starting point is a webpage with two options:

@@ -11,3 +11,7 @@ STAGE_CONFIG = {
         }
     }
 }
+
+FILES_CONFIG = {
+    "tracks_path": "/Users/carloandreaconte/synesthesia_tracks/"
+}
