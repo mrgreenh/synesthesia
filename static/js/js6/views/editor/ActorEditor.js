@@ -75,7 +75,7 @@ define([
             }
 
             return (
-                <Collapsable itemName={this.props.actorData.name}>
+                <Collapsable itemName={this.props.actorData.name} path={this.props.path} deletable="true">
                     <ul className="parameters-list">
                         <TextField path={this.props.path+".name"} value={this.props.actorData.name} />
 

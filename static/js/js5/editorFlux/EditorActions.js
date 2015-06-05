@@ -31,6 +31,17 @@ define(["utils/BaseObject", "editorFlux/EditorDispatcher", "editorFlux/EditorCon
                 });
             }
         }, {
+            key: "deleteItem",
+            value: function deleteItem(pathToArray, index) {
+                editorDispatcher.dispatch({
+                    action: {
+                        actionType: EditorConstants.ACTIONS.DELETE_ITEM,
+                        pathToArray: pathToArray,
+                        index: index
+                    }
+                });
+            }
+        }, {
             key: "createLayer",
             value: function createLayer() {
                 editorDispatcher.dispatch({

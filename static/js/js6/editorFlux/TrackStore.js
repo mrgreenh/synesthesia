@@ -41,7 +41,7 @@ define([
                 this._trackData.layersData.push({
                     name: "New layer",
                     actors: [],
-                    type: "Three3DLayer"
+                    type: prompt("Insert layer type", "Three3DLayer")
                 });
                 this._persistData();
             }
@@ -67,6 +67,14 @@ define([
                 this._persistData();
             }
 
+            _deleteItem(pathToArray, index){
+                var items = this.getProp(this._trackData, pathToArray);
+                items.splice(index, 1);
+                this.setProp(this._trackData, pathToArray, items);
+
+                this._persistData();
+            }
+
             handleAction(payload){
                 var action = payload.action;
                 switch(action.actionType){
@@ -84,6 +92,9 @@ define([
                         break;
                     case EditorConstants.ACTIONS.CREATE_INPUT:
                         this._createInput(action.layerIndex, action.actorIndex);
+                        break;
+                    case EditorConstants.ACTIONS.DELETE_ITEM:
+                        this._deleteItem(action.pathToArray, action.index);
                         break;
                 }
 

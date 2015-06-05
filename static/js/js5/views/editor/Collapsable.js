@@ -1,6 +1,6 @@
 "use strict";
 
-define(["react"], function (React) {
+define(["react", "editorFlux/EditorActions"], function (React, EditorActions) {
 
     var Collapsable = React.createClass({
         displayName: "Collapsable",
@@ -22,11 +22,27 @@ define(["react"], function (React) {
             this.setState({ collapsed: !this.state.collapsed });
         },
 
+        handleDeleteItem: function handleDeleteItem(e) {
+            //Assuming it's an item of a list, last step of the path will be the index
+            var fullPath = this.props.path;
+            var steps = fullPath.split(".");
+            var index = steps[steps.length - 1];
+            steps.splice(steps.length - 1, 1);
+            var pathToArray = steps.join(".");
+            EditorActions.deleteItem(pathToArray, index);
+        },
+
         render: function render() {
             var additional_classes = this.state.collapsed ? " collapsed" : "";
             var classes = "collapsable-content" + additional_classes;
             var backgroundColor = "rgba(" + this.state.backgroundColor.join(",") + ",.1)";
             var inlineStyles = { backgroundColor: backgroundColor };
+            var deleteButton = this.props.deletable ? React.createElement(
+                "button",
+                { onClick: this.handleDeleteItem },
+                "Ø"
+            ) : undefined;
+
             return React.createElement(
                 "li",
                 { className: "collapsable", style: inlineStyles },
@@ -35,6 +51,7 @@ define(["react"], function (React) {
                     { onClick: this.handleCollapseItem, className: "bg-primary collapsing-switch" },
                     this.props.itemName
                 ),
+                deleteButton,
                 React.createElement(
                     "div",
                     { className: classes },

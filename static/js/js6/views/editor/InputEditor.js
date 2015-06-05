@@ -18,7 +18,7 @@ define([
                     );
                 }, this));
                 return (
-                    <Collapsable itemName={inputData.name}>
+                    <Collapsable itemName={inputData.name} path={this.props.path} deletable="true">
                         <TextField path={this.props.path+".name"} value={inputData.name} />
                         <div className="form-group">
                             <ul>

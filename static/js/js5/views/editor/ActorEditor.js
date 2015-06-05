@@ -77,7 +77,7 @@ define(["react", "views/visualizer/Synesthesia", "views/editor/BetterSelect", "v
 
             return React.createElement(
                 Collapsable,
-                { itemName: this.props.actorData.name },
+                { itemName: this.props.actorData.name, path: this.props.path, deletable: "true" },
                 React.createElement(
                     "ul",
                     { className: "parameters-list" },

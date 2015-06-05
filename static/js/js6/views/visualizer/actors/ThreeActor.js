@@ -5,7 +5,7 @@ define([
 
     class ThreeActor extends Actor{
         static getActorParameters(){
-            return super.getActorParameters().concat(["zPos"]);
+            return super.getActorParameters().concat(["posZ"]);
         }
 
         constructor(actorData, threeScene){

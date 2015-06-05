@@ -9,7 +9,7 @@ define(["react", "views/editor/Collapsable", "views/editor/ActorsList", "views/e
             var layerData = this.props.layerData;
             return React.createElement(
                 Collapsable,
-                { itemName: layerData.name },
+                { itemName: layerData.name, deletable: "true", path: this.props.path },
                 React.createElement(
                     "div",
                     { className: "form-group" },

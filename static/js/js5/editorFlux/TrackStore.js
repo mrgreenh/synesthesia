@@ -56,7 +56,7 @@ define(["utils/BaseObject", "editorFlux/EditorConstants", "editorFlux/EditorDisp
                 this._trackData.layersData.push({
                     name: "New layer",
                     actors: [],
-                    type: "Three3DLayer"
+                    type: prompt("Insert layer type", "Three3DLayer")
                 });
                 this._persistData();
             }
@@ -84,6 +84,15 @@ define(["utils/BaseObject", "editorFlux/EditorConstants", "editorFlux/EditorDisp
                 this._persistData();
             }
         }, {
+            key: "_deleteItem",
+            value: function _deleteItem(pathToArray, index) {
+                var items = this.getProp(this._trackData, pathToArray);
+                items.splice(index, 1);
+                this.setProp(this._trackData, pathToArray, items);
+
+                this._persistData();
+            }
+        }, {
             key: "handleAction",
             value: function handleAction(payload) {
                 var action = payload.action;
@@ -102,6 +111,9 @@ define(["utils/BaseObject", "editorFlux/EditorConstants", "editorFlux/EditorDisp
                         break;
                     case EditorConstants.ACTIONS.CREATE_INPUT:
                         this._createInput(action.layerIndex, action.actorIndex);
+                        break;
+                    case EditorConstants.ACTIONS.DELETE_ITEM:
+                        this._deleteItem(action.pathToArray, action.index);
                         break;
                 }
 

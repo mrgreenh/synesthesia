@@ -15,6 +15,17 @@ define(function(){
             }
         }
 
+        getProp(dict, path, defaultValue){
+            var steps = path.split(".");
+            if(_.isUndefined(dict[_.first(steps)])){
+                return defaultValue;
+            }else if(steps.length>1){
+                return this.getProp(dict[steps.shift()], steps.join("."), defaultValue)
+            }else{
+                return dict[_.first(steps)];
+            }
+        }
+
         observe(observed, eventName){
             observed.addObserver(this, eventName);
         }

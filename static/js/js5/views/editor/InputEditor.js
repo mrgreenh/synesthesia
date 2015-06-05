@@ -13,7 +13,7 @@ define(["react", "views/editor/Collapsable", "views/editor/SelectField", "views/
             }, this));
             return React.createElement(
                 Collapsable,
-                { itemName: inputData.name },
+                { itemName: inputData.name, path: this.props.path, deletable: "true" },
                 React.createElement(TextField, { path: this.props.path + ".name", value: inputData.name }),
                 React.createElement(
                     "div",

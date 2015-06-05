@@ -23,6 +23,16 @@ define([
                 });
             }
 
+            static deleteItem(pathToArray, index){
+                editorDispatcher.dispatch({
+                    action: {
+                        actionType: EditorConstants.ACTIONS.DELETE_ITEM,
+                        pathToArray: pathToArray,
+                        index: index
+                    }
+                });                
+            }
+
             static createLayer(){
                 editorDispatcher.dispatch({
                     action: {

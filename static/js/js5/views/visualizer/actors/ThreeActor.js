@@ -23,7 +23,7 @@ define(["views/visualizer/actors/Actor", "/static/js/vendor/layers_dependencies/
         _createClass(ThreeActor, null, [{
             key: "getActorParameters",
             value: function getActorParameters() {
-                return _get(Object.getPrototypeOf(ThreeActor), "getActorParameters", this).call(this).concat(["zPos"]);
+                return _get(Object.getPrototypeOf(ThreeActor), "getActorParameters", this).call(this).concat(["posZ"]);
             }
         }]);
 

@@ -10,7 +10,7 @@ define([
 
             render: function(){
                 var layerData = this.props.layerData;
-                return (<Collapsable itemName={layerData.name}>
+                return (<Collapsable itemName={layerData.name} deletable="true" path={this.props.path}>
                         <div className="form-group">
                             <TextField path={this.props.path+".name"} value={layerData.name} />
                             <ActorsList actorsData={layerData.actors} path={this.props.path+".actors"} layerType={layerData.type} />

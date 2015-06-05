@@ -10,7 +10,8 @@ define({
         LOAD_TRACK: "actions:load_track",
         CREATE_INPUT: "actions:create_input",
         CREATE_ACTOR: "actions:create_actor",
-        CREATE_LAYER: "actions:create_layer"
+        CREATE_LAYER: "actions:create_layer",
+        DELETE_ITEM: "actions:delete_item"
     },
     ADSR_ATTRIBUTES: ["attack", "decay", "sustain", "release"]
 });
