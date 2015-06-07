@@ -1,5 +1,6 @@
 import simplejson as json
 import synesthesia.config as config
+import os
 
 DEFAULT_TRACK = {
     "scenesData": [],
@@ -33,4 +34,9 @@ class Bookshelf:
             return True
 
     def get_track_filename(self, track_id):
-        return config.FILES_CONFIG.get("tracks_path", "") + 'track_'+track_id+'.json'
+        return config.FILES_CONFIG.get("tracks_path", "") + track_id+'.json'
+
+    def get_tracks_list(self):
+        path = config.FILES_CONFIG.get("tracks_path", "")
+        filenames = os.listdir(path)
+        return [filename.replace(".json", "") for filename in filenames]

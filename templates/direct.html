@@ -1,0 +1,18 @@
+{% extends 'layout.html' %}
+{% block body %}
+<div id="tracks-view-container" class="container">
+    <h2>{{track_id}}</h2>
+    <p>Sup! </br>
+    You are playing <strong>{{track_id}}</strong>.
+    One day there will be some cool tool here for showing/hiding actors and changing scenes on the fly.</br>
+    Or may be not. At the moment of writing, there aren't even the MIDI pipeline and the rendering engine implemented yet, so why plan so much ahead?</p>
+
+    <p>For now, you only get two lousy buttons:</p>
+    <ul>
+        <li><a target="_blank" href="/stage">Stage</a></li>
+        <li><a target="_blank" href="/editor">Editor</a></li>
+    </ul>
+
+    <a href="/">Select other track</a>
+</div>
+{% endblock %}

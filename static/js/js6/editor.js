@@ -9,24 +9,18 @@ require.config({
         editorFlux: "js5/editorFlux",
         underscore: "/static/js/vendor/underscore"
     },
-    shim: {
-        'underscore': {
-            exports: '_'
-        },
-    },
     waitSeconds: 1
 });
 
 require([
-"jquery",
-"underscore",
-"jsx_transformer",
-"react",
-"views/editor/EditorView",
-"editorFlux/EditorActions",
-"editorFlux/TrackStore",
-"editorFlux/EditorConstants"
-], function($, _, _jsx_, React, EditorView, EditorActions, trackStore, EditorConstants){
+    "jquery",
+    "underscore",
+    "react",
+    "views/editor/EditorView",
+    "editorFlux/EditorActions",
+    "editorFlux/TrackStore",
+    "editorFlux/EditorConstants"
+], function($, _, React, EditorView, EditorActions, trackStore, EditorConstants){
     var trackEditor = new EditorView();
     trackStore.addObserver(trackEditor, EditorConstants.STORE_EVENTS.LOAD);
     EditorActions.loadTrack();

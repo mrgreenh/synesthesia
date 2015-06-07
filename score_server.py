@@ -21,12 +21,14 @@ current_track_id = ""
 @app.route('/')
 @app.route('/index')
 def index():
-    return render_template('index.html')
+    bookshelf = Bookshelf();
+    tracks = bookshelf.get_tracks_list()
+    return render_template('index.html', tracks=tracks)
 
 @app.route('/direct/<track_id>')
 def direct(track_id):
     set_current_track(track_id)
-    return render_template('tracks.html')
+    return render_template('direct.html', track_id=track_id)
 
 @app.route('/stage')
 def stage():
