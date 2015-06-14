@@ -1,0 +1,3 @@
+[submodule "static/js/vendor/signaljs"]
+	path = static/js/vendor/signaljs
+	url = https://github.com/mrgreenh/Signal.js.git
