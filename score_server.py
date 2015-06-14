@@ -16,7 +16,7 @@ thread = None
 rtmidi = mido.Backend('mido.backends.rtmidi')
 portname = rtmidi.get_input_names()[0]
 
-current_track_id = ""
+CURRENT_TRACK_ID = ""
 
 @app.route('/')
 @app.route('/index')
@@ -40,17 +40,17 @@ def editor():
 
 @app.route('/get_current_track')
 def get_current_track():
-    global current_track_id
+    global CURRENT_TRACK_ID
     bookshelf = Bookshelf()
-    track_data = bookshelf.load_track(current_track_id)
+    track_data = bookshelf.load_track(CURRENT_TRACK_ID)
     return jsonify(**track_data)
 
 @app.route('/update_current_track', methods=["POST"])
 def update_current_track():
-    global current_track_id
+    global CURRENT_TRACK_ID
     data = request.json["trackData"]
     bookshelf = Bookshelf()
-    track_data = bookshelf.update_track(current_track_id, data)
+    track_data = bookshelf.update_track(CURRENT_TRACK_ID, data)
     return jsonify(status=200, track_data=track_data)
 
 @app.route('/get_stage_config')
@@ -58,10 +58,10 @@ def get_stage_config():
     return jsonify(**config.STAGE_CONFIG)
 
 def set_current_track(track_id):
-    global current_track_id
-    current_track_id = track_id
+    global CURRENT_TRACK_ID
+    CURRENT_TRACK_ID = track_id
     bookshelf = Bookshelf()
-    track_data = bookshelf.ensure_track(current_track_id)
+    track_data = bookshelf.ensure_track(CURRENT_TRACK_ID)
 
 #Write a template that imports layers and actors classes by reading a configuration file
 #Starting point is a webpage with two options:
