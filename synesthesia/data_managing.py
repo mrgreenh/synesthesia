@@ -41,4 +41,11 @@ class Bookshelf:
         filenames = os.listdir(path)
         return [filename.replace(".json", "") for filename in filenames]
 
-#    def get_active_busses(self):
+def set_in_dict(dict, path, value):
+    steps = path.split(".")
+    if len(steps) >1:
+        if dict.get(steps[0]) is None:
+            dict[steps[0]] = {}
+        set_in_dict(dict[steps[0]], ".".join(steps[1:]), value)
+    else:
+        dict[steps[0]] = value;

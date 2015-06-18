@@ -67,11 +67,17 @@ def set_current_track(track_id):
     track_data = bookshelf.ensure_track(CURRENT_TRACK_ID)
 
 @socketio.on('connect', namespace='/stage')
-def test_connect():
+def connect():
+    global CURRENT_TRACK_ID
     logging.info( "Stage connecting")
-    emit('message', {'message': 'Connected'})
-    midi_manager = MidiManager(on_midi_note)
+
+    bookshelf = Bookshelf()
+    track_data = bookshelf.load_track(CURRENT_TRACK_ID)
+    midi_manager = MidiManager(on_midi_note, track_data)
     midi_manager.ignite()
+
+    emit('message', {'message': 'Connected, midi loop started'})
+
 
 
 if __name__ == '__main__':
