@@ -1,22 +1,21 @@
 from flask import Flask, render_template, session, request, jsonify
 from flask.ext.socketio import SocketIO, emit, disconnect
-from synesthesia.data_managing import Bookshelf as Bookshelf
+from synesthesia.data_managing import Bookshelf
+from synesthesia.midi_managing import MidiManager
 import synesthesia.config as config
+import logging
 
-from threading import Thread
 import json
-
-import mido
 
 app = Flask(__name__)
 app.debug = True
 app.config['SECRET_KEY'] = 'secret!'
 socketio = SocketIO(app)
-thread = None
-rtmidi = mido.Backend('mido.backends.rtmidi')
-portname = rtmidi.get_input_names()[0]
 
 CURRENT_TRACK_ID = ""
+
+def on_midi_note(note):
+    socketio.emit('midi_note', note, namespace = '/stage')
 
 @app.route('/')
 @app.route('/index')
@@ -30,12 +29,16 @@ def direct(track_id):
     set_current_track(track_id)
     return render_template('direct.html', track_id=track_id)
 
-@app.route('/stage')
-def stage():
+@app.route('/stage/')
+@app.route('/stage/<track_id>')
+def stage(track_id=None):
+    if track_id is not None: set_current_track(track_id)
     return render_template('stage.html')
 
+@app.route('/editor/<track_id>')
 @app.route('/editor')
-def editor():
+def editor(track_id=None):
+    if track_id is not None: set_current_track(track_id)
     return render_template('editor.html')
 
 @app.route('/get_current_track')
@@ -63,15 +66,14 @@ def set_current_track(track_id):
     bookshelf = Bookshelf()
     track_data = bookshelf.ensure_track(CURRENT_TRACK_ID)
 
-#Write a template that imports layers and actors classes by reading a configuration file
-#Starting point is a webpage with two options:
+@socketio.on('connect', namespace='/stage')
+def test_connect():
+    logging.info( "Stage connecting")
+    emit('message', {'message': 'Connected'})
+    midi_manager = MidiManager(on_midi_note)
+    midi_manager.ignite()
 
-# Direct (1)
-# ----------
-# Stage  (2)
-# ----------
-
-#Write actors and layers properties from a json configuration file
 
 if __name__ == '__main__':
-    app.run()
+    logging.basicConfig(level=logging.INFO)
+    socketio.run(app)

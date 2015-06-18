@@ -1,9 +1,10 @@
 define([
             "views/visualizer/Synesthesia",
             "views/visualizer/actors/Actor",
-            "views/visualizer/layers/Three3DLayer"
+            "views/visualizer/layers/Three3DLayer",
+            "views/visualizer/InputBuffer"
 ],
-function(Synesthesia, Actor, Three3DLayer){
+function(Synesthesia, Actor, Three3DLayer, InputBuffer){
     class Director extends Synesthesia{
         constructor(){
             super();
@@ -11,6 +12,8 @@ function(Synesthesia, Actor, Three3DLayer){
             this.layers = [];
             this._config;
             this._trackData;
+
+            this._inputBuffer = new InputBuffer();
             //Load the configuration that describes classes and track data
             //Then start doing your thing
             $.when(this._loadNextTrackData(), this._loadStageConfig()).then((trackData, configData) => {
@@ -32,7 +35,9 @@ function(Synesthesia, Actor, Three3DLayer){
             this._trackData.layersData.forEach(elem => {
                 this._layersInitsPromises.push(this._initializeLayer(elem));
             });
-            $.when.apply($, this._layersInitsPromises).done(_.bind(this._renderLayers, this));
+            $.when.apply($, this._layersInitsPromises).done(function(){
+                this._renderLayers();
+            }.bind(this));
         }
 
         _initializeLayer(layerData){
@@ -42,9 +47,10 @@ function(Synesthesia, Actor, Three3DLayer){
                 var layer = new layerClass(layerData, this._config);
                 //Layers instances are kept in an array, as their order affects overlapping
                 this.layers.push(layer);
-                layer.initialize().done(layerDfd.resolve);
+                layer.initialize().done(() => {
+                    layerDfd.resolve();
+                });
             });
-            this._layersInitsPromises.push(layerDfd);
             return layerDfd;
         }
 

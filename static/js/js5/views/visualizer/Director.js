@@ -8,7 +8,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
 
-define(["views/visualizer/Synesthesia", "views/visualizer/actors/Actor", "views/visualizer/layers/Three3DLayer"], function (Synesthesia, Actor, Three3DLayer) {
+define(["views/visualizer/Synesthesia", "views/visualizer/actors/Actor", "views/visualizer/layers/Three3DLayer", "views/visualizer/InputBuffer"], function (Synesthesia, Actor, Three3DLayer, InputBuffer) {
     var Director = (function (_Synesthesia) {
         function Director() {
             var _this = this;
@@ -20,6 +20,8 @@ define(["views/visualizer/Synesthesia", "views/visualizer/actors/Actor", "views/
             this.layers = [];
             this._config;
             this._trackData;
+
+            this._inputBuffer = new InputBuffer();
             //Load the configuration that describes classes and track data
             //Then start doing your thing
             $.when(this._loadNextTrackData(), this._loadStageConfig()).then(function (trackData, configData) {
@@ -48,7 +50,9 @@ define(["views/visualizer/Synesthesia", "views/visualizer/actors/Actor", "views/
                 this._trackData.layersData.forEach(function (elem) {
                     _this2._layersInitsPromises.push(_this2._initializeLayer(elem));
                 });
-                $.when.apply($, this._layersInitsPromises).done(_.bind(this._renderLayers, this));
+                $.when.apply($, this._layersInitsPromises).done((function () {
+                    this._renderLayers();
+                }).bind(this));
             }
         }, {
             key: "_initializeLayer",
@@ -61,9 +65,10 @@ define(["views/visualizer/Synesthesia", "views/visualizer/actors/Actor", "views/
                     var layer = new layerClass(layerData, _this3._config);
                     //Layers instances are kept in an array, as their order affects overlapping
                     _this3.layers.push(layer);
-                    layer.initialize().done(layerDfd.resolve);
+                    layer.initialize().done(function () {
+                        layerDfd.resolve();
+                    });
                 });
-                this._layersInitsPromises.push(layerDfd);
                 return layerDfd;
             }
         }, {

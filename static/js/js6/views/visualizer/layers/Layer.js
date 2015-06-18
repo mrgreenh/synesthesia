@@ -20,13 +20,24 @@ define([
                 this.type = layerData.type;
                 this._layerConfig = config.layers[this.type];
                 this._actorsData = layerData["actors"]; 
+
+                this._actorsClassesByName = {};
+                this._actorsClassesDefinitions = [];
             }
 
             initialize(){
                 var initDfd = $.Deferred();
                 this._loadActorsClasses().done(function(){
-                    this._actorsClassesDefinitions = arguments;
-                    this._actorsClassesByName = _.object(this._actorsClasses, this._actorsClassesDefinitions);
+                    var normalizedActorsClasses = [];
+                    //loadDependencies normalizes the list of classes it gets passed in this same way
+                    this._actorsClasses.forEach((className) => {
+                            if(!_.contains(normalizedActorsClasses, className)) normalizedActorsClasses.push(className);
+                    });
+                    for(var i in normalizedActorsClasses){
+                        var currentClass = normalizedActorsClasses[i];
+                        this._actorsClassesByName[currentClass] = arguments[i];
+                        this._actorsClassesDefinitions.push(arguments[i]);
+                    }
                     initDfd.resolve();
                 }.bind(this));
                 return initDfd.promise();
@@ -36,7 +47,14 @@ define([
                 var baseActorDependencyPath = "views/visualizer/actors/";
                 this._actorsClasses = _(this._actorsData).pluck("className");
                 var dfd = $.Deferred();
-                Synesthesia.loadDependencies(baseActorDependencyPath, this._actorsClasses).done(dfd.resolve);
+                Synesthesia.loadDependencies(baseActorDependencyPath, this._actorsClasses).done(function(){
+                    var classes = [];
+                    for(var i in _.range(arguments.length)){
+                        classes.push(arguments[i]);   
+                    }
+
+                    dfd.resolve.apply($, classes);
+                }.bind(this));
                 return dfd.promise();
             }
 
