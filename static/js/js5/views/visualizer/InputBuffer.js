@@ -24,12 +24,18 @@ define(["utils/BaseObject", "vendor/socket.io.min"], function (BaseObject, io) {
             key: "connect",
             value: function connect() {
                 this._socket = io.connect("http://" + document.domain + ":" + location.port + this._ioNamespace);
+                this._setupSocketEvents();
+            }
+        }, {
+            key: "_setupSocketEvents",
+            value: function _setupSocketEvents() {
                 this._socket.on("message", function (data) {
                     console.log(data.message);
                 });
                 this._socket.on("midi_note", function (data) {
                     if (data.type == "note_on") $("body").text(data.note);
-                    console.log(data.note);
+                    //Notify all actors that will have subscribed to a note/channel/type combination
+                    //Based on their inputs settings
                 });
             }
         }]);

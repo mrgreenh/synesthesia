@@ -15,7 +15,7 @@ define(["react", "views/editor/InputEditor", "views/editor/EditorMixins", "edito
 
             var inputsData = this.props.inputsData;
             var inputs = inputsData.map(function (input, index) {
-                return React.createElement(InputEditor, { inputData: input, key: index, path: _this.props.path + "." + index });
+                return React.createElement(InputEditor, { inputData: input, targetParameters: _this.props.targetParameters, key: index, path: _this.props.path + "." + index });
             });
             return React.createElement(
                 "div",

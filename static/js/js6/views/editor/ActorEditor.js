@@ -88,7 +88,7 @@ define([
                             </ul>                        
                         </Collapsable>
                         <Collapsable itemName="Inputs">
-                            <InputsList path={ this.props.path+".inputChannels" } inputsData={this.props.actorData.inputChannels} />
+                            <InputsList path={ this.props.path+".inputChannels" } inputsData={this.props.actorData.inputChannels} targetParameters={this.state.actorParameters} />
                         </Collapsable>
                     </ul>
                 </Collapsable>

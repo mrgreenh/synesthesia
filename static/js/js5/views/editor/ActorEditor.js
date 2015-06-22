@@ -99,7 +99,7 @@ define(["react", "views/visualizer/Synesthesia", "views/editor/BetterSelect", "v
                     React.createElement(
                         Collapsable,
                         { itemName: "Inputs" },
-                        React.createElement(InputsList, { path: this.props.path + ".inputChannels", inputsData: this.props.actorData.inputChannels })
+                        React.createElement(InputsList, { path: this.props.path + ".inputChannels", inputsData: this.props.actorData.inputChannels, targetParameters: this.state.actorParameters })
                     )
                 )
             );

@@ -8,6 +8,18 @@ define(["react", "views/editor/Collapsable", "views/editor/SelectField", "views/
         render: function render() {
             var inputData = this.props.inputData;
 
+            if (this.props.targetParameters) {
+                var targetParametersOptions = this.props.targetParameters.map(function (option) {
+                    return React.createElement(
+                        "option",
+                        { value: option },
+                        option
+                    );
+                });
+            } else {
+                var targetParametersOptions = [];
+            }
+
             var ADSRForms = _(EditorConstants.ADSR_ATTRIBUTES).map(_.bind(function (attr) {
                 return React.createElement(SliderField, { min: "0", max: "100", path: this.props.path + "." + attr, value: inputData[attr] });
             }, this));
@@ -15,6 +27,11 @@ define(["react", "views/editor/Collapsable", "views/editor/SelectField", "views/
                 Collapsable,
                 { itemName: inputData.name, path: this.props.path, deletable: "true" },
                 React.createElement(TextField, { path: this.props.path + ".name", value: inputData.name }),
+                React.createElement(
+                    SelectField,
+                    { value: inputData.targetParameter, path: this.props.path + ".targetParameter" },
+                    targetParametersOptions
+                ),
                 React.createElement(
                     "div",
                     { className: "form-group" },
