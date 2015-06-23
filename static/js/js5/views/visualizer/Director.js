@@ -62,7 +62,7 @@ define(["views/visualizer/Synesthesia", "views/visualizer/actors/Actor", "views/
                 var className = layerData.type;
                 var layerDfd = $.Deferred();
                 Synesthesia.loadDependencies("views/visualizer/layers/", [className]).done(function (layerClass) {
-                    var layer = new layerClass(layerData, _this3._config);
+                    var layer = new layerClass(layerData, _this3._config, _this3._inputBuffer);
                     //Layers instances are kept in an array, as their order affects overlapping
                     _this3.layers.push(layer);
                     layer.initialize().done(function () {

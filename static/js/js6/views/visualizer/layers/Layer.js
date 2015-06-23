@@ -15,7 +15,7 @@ define([
                 return dfd.promise();
             }
 
-            constructor(layerData, config){
+            constructor(layerData, config, inputBuffer){
                 super();
                 this.type = layerData.type;
                 this._layerConfig = config.layers[this.type];
@@ -23,6 +23,8 @@ define([
 
                 this._actorsClassesByName = {};
                 this._actorsClassesDefinitions = [];
+
+                this._inputBuffer = inputBuffer;
             }
 
             initialize(){

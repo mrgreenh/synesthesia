@@ -44,7 +44,7 @@ function(Synesthesia, Actor, Three3DLayer, InputBuffer){
             var className = layerData.type;
             var layerDfd = $.Deferred();
             Synesthesia.loadDependencies("views/visualizer/layers/", [className]).done((layerClass) => {
-                var layer = new layerClass(layerData, this._config);
+                var layer = new layerClass(layerData, this._config, this._inputBuffer);
                 //Layers instances are kept in an array, as their order affects overlapping
                 this.layers.push(layer);
                 layer.initialize().done(() => {

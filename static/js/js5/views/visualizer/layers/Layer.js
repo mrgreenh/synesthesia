@@ -10,7 +10,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 define(["views/visualizer/Synesthesia", "views/visualizer/actors/Actor"], function (Synesthesia, Actor) {
     var Layer = (function (_Synesthesia) {
-        function Layer(layerData, config) {
+        function Layer(layerData, config, inputBuffer) {
             _classCallCheck(this, Layer);
 
             _get(Object.getPrototypeOf(Layer.prototype), "constructor", this).call(this);
@@ -20,6 +20,8 @@ define(["views/visualizer/Synesthesia", "views/visualizer/actors/Actor"], functi
 
             this._actorsClassesByName = {};
             this._actorsClassesDefinitions = [];
+
+            this._inputBuffer = inputBuffer;
         }
 
         _inherits(Layer, _Synesthesia);

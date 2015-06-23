@@ -49,7 +49,8 @@ define([
             this._actorsInstances = this._actorsData.map(function(actorData){
                 return new this._actorsClassesByName[actorData.className](
                         actorData,
-                        this._scene
+                        this._scene,
+                        this._inputBuffer;
                     );
             }.bind(this));
         }

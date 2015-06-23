@@ -8,41 +8,50 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
 
-define(["views/visualizer/Synesthesia", "views/visualizer/InputChannel"], function (Synesthesia, InputChannel) {
-    var Actor = (function (_Synesthesia) {
-        function Actor(actorData, inputBuffer) {
-            _classCallCheck(this, Actor);
+define(["views/visualizer/Synesthesia"], function (Synesthesia) {
+    var InputChannel = (function (_Synesthesia) {
+        function InputChannel(inputData, inputBuffer) {
+            _classCallCheck(this, InputChannel);
 
-            _get(Object.getPrototypeOf(Actor.prototype), "constructor", this).call(this);
-            this._actorData = actorData;
-            this._initializeInputs();
-            this._inputBuffer = inputBuffer;
-            this._inputChannels = {};
+            _get(Object.getPrototypeOf(InputChannel.prototype), "constructor", this).call(this);
+            this._inputData = inputData;
+            this._signal = 0;
+            inputBuffer.subscribeInput(this, this.inputData.inputBus, this.inputData.inputType, this.inputData.inputChannel);
         }
 
-        _inherits(Actor, _Synesthesia);
+        _inherits(InputChannel, _Synesthesia);
 
-        _createClass(Actor, [{
-            key: "_initializeInputs",
-            value: function _initializeInputs() {
-                var _this = this;
-
-                var inputChannelsData = this._actorData.inputChannels;
-                inputChannelsData.forEach(function (inputData) {
-                    var inputChannel = new InputChannel(inputData, _this._inputBuffer);
-                    var targetParameter = inputChannel.getTargetParameter();
-                    if (targetParameter) _this._inputChannels[targetParameter] = inputChannel;
-                });
+        _createClass(InputChannel, [{
+            key: "getTargetParameter",
+            value: function getTargetParameter() {
+                return this._inputData.targetParameter;
             }
-        }], [{
-            key: "getActorParameters",
-            value: function getActorParameters() {
-                return ["posX", "posY"];
+        }, {
+            key: "getCurrentFrameValue",
+            value: function getCurrentFrameValue() {
+                //This will have to increment T of the signaljs instance
+                return this._signal();
+            }
+        }, {
+            key: "onInputEvent",
+            value: function onInputEvent(noteData) {
+                if (noteData.type == "control") this._onControlEvent(noteData);else this._onNoteEvent(noteData);
+            }
+        }, {
+            key: "_onNoteEvent",
+            value: function _onNoteEvent(noteData) {
+                //this._signal will be an instance of signal.js
+                if (noteData.type == "note_on") this._signal = 1;else this._signal = 0;
+            }
+        }, {
+            key: "_onControlEvent",
+            value: function _onControlEvent() {
+                throw Exception("Not yet implemented!");
             }
         }]);
 
-        return Actor;
+        return InputChannel;
     })(Synesthesia);
 
-    return Actor;
+    return InputChannel;
 });
