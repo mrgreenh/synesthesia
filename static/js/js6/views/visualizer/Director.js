@@ -1,10 +1,12 @@
 define([
+            "utils/constants",
             "views/visualizer/Synesthesia",
             "views/visualizer/actors/Actor",
             "views/visualizer/layers/Three3DLayer",
-            "views/visualizer/InputBuffer"
+            "views/visualizer/InputBuffer",
+            "views/visualizer/TimeKeeper"
 ],
-function(Synesthesia, Actor, Three3DLayer, InputBuffer){
+function(constants, Synesthesia, Actor, Three3DLayer, InputBuffer, TimeKeeper){
     class Director extends Synesthesia{
         constructor(){
             super();
@@ -14,6 +16,9 @@ function(Synesthesia, Actor, Three3DLayer, InputBuffer){
             this._trackData;
 
             this._inputBuffer = new InputBuffer();
+            this._timeKeeper = new TimeKeeper();
+
+            this.observe(this._timeKeeper, constants.EVENTS.TIME.INCREMENT);
             //Load the configuration that describes classes and track data
             //Then start doing your thing
             $.when(this._loadNextTrackData(), this._loadStageConfig()).then((trackData, configData) => {
@@ -21,6 +26,14 @@ function(Synesthesia, Actor, Three3DLayer, InputBuffer){
                 this._trackData = trackData[0];
                 this._startTrack();
             });
+        }
+
+        events(eventName){
+            switch(eventName){
+                case constants.EVENTS.TIME.INCREMENT:
+                    this._renderFrame();
+                    break;
+            }
         }
 
         _startTrack(){
@@ -37,7 +50,14 @@ function(Synesthesia, Actor, Three3DLayer, InputBuffer){
             });
             $.when.apply($, this._layersInitsPromises).done(function(){
                 this._renderLayers();
+                this._timeKeeper.ignite();
             }.bind(this));
+        }
+
+        _renderFrame(){
+            this.layers.forEach((layer) => {
+                layer.renderFrame();
+            });
         }
 
         _initializeLayer(layerData){

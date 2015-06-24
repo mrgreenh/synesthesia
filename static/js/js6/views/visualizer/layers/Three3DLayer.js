@@ -17,12 +17,7 @@ define([
             return dfd;
         }
 
-        constructor(layerData, config){
-            super(layerData, config);
-        }
-
         render($stageElement){
-            this._scene = new THREE.Scene();
             super.render($stageElement);
             this._camera = new THREE.PerspectiveCamera( 75, this.width / this.height, 0.1, 1000 );
             this._renderer = new THREE.WebGLRenderer({ alpha: true });
@@ -38,9 +33,9 @@ define([
         }
 
         renderFrame(){
-            //requestAnimationFrame( this.renderFrame );
+            this._scene = new THREE.Scene();
             this._actorsInstances.forEach(actorInstance => {
-                actorInstance.renderFrame();
+                actorInstance.renderFrame(this._scene);
             });
             this._renderer.render( this._scene, this._camera );
         }
@@ -49,8 +44,7 @@ define([
             this._actorsInstances = this._actorsData.map(function(actorData){
                 return new this._actorsClassesByName[actorData.className](
                         actorData,
-                        this._scene,
-                        this._inputBuffer;
+                        this._inputBuffer
                     );
             }.bind(this));
         }

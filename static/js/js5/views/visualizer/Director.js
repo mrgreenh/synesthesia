@@ -8,7 +8,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
 
-define(["views/visualizer/Synesthesia", "views/visualizer/actors/Actor", "views/visualizer/layers/Three3DLayer", "views/visualizer/InputBuffer"], function (Synesthesia, Actor, Three3DLayer, InputBuffer) {
+define(["utils/constants", "views/visualizer/Synesthesia", "views/visualizer/actors/Actor", "views/visualizer/layers/Three3DLayer", "views/visualizer/InputBuffer", "views/visualizer/TimeKeeper"], function (constants, Synesthesia, Actor, Three3DLayer, InputBuffer, TimeKeeper) {
     var Director = (function (_Synesthesia) {
         function Director() {
             var _this = this;
@@ -22,6 +22,9 @@ define(["views/visualizer/Synesthesia", "views/visualizer/actors/Actor", "views/
             this._trackData;
 
             this._inputBuffer = new InputBuffer();
+            this._timeKeeper = new TimeKeeper();
+
+            this.observe(this._timeKeeper, constants.EVENTS.TIME.INCREMENT);
             //Load the configuration that describes classes and track data
             //Then start doing your thing
             $.when(this._loadNextTrackData(), this._loadStageConfig()).then(function (trackData, configData) {
@@ -34,6 +37,15 @@ define(["views/visualizer/Synesthesia", "views/visualizer/actors/Actor", "views/
         _inherits(Director, _Synesthesia);
 
         _createClass(Director, [{
+            key: "events",
+            value: function events(eventName) {
+                switch (eventName) {
+                    case constants.EVENTS.TIME.INCREMENT:
+                        this._renderFrame();
+                        break;
+                }
+            }
+        }, {
             key: "_startTrack",
             value: function _startTrack() {
                 var layersBasePath = "views/visualizer/layers/";
@@ -52,7 +64,15 @@ define(["views/visualizer/Synesthesia", "views/visualizer/actors/Actor", "views/
                 });
                 $.when.apply($, this._layersInitsPromises).done((function () {
                     this._renderLayers();
+                    this._timeKeeper.ignite();
                 }).bind(this));
+            }
+        }, {
+            key: "_renderFrame",
+            value: function _renderFrame() {
+                this.layers.forEach(function (layer) {
+                    layer.renderFrame();
+                });
             }
         }, {
             key: "_initializeLayer",

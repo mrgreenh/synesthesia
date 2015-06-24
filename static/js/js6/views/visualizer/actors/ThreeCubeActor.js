@@ -4,17 +4,15 @@ define([
 ], function(ThreeActor, _THREE_){
     class ThreeCubeActor extends ThreeActor{
         static getActorParameters(){
-            return super.getActorParameters().concat(["edge"]);
+            return super.getActorParameters().concat(["edge", "size"]);
         }
 
-        constructor(actorData, threeScene){
-            super(actorData, threeScene);
-        }
 
-        renderFrame(){
-            var geometry = new THREE.BoxGeometry( 1, 1, 1 );
+        renderFrame(scene){
+            var size = this._getSignalForParameter("size");
+            var geometry = new THREE.BoxGeometry( size, size, size );
             var cube = new THREE.Mesh( geometry, this._material );
-            this._scene.add( cube );
+            scene.add( cube );
         }
     }
     

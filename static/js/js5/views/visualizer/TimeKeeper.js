@@ -8,26 +8,33 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
 
-define(["views/visualizer/actors/Actor", "/static/js/vendor/layers_dependencies/three.min.js"], function (Actor, _THREE_) {
-    var ThreeActor = (function (_Actor) {
-        function ThreeActor(actorData, inputBuffer) {
-            _classCallCheck(this, ThreeActor);
+define(["views/visualizer/Synesthesia", "utils/constants"], function (Synesthesia, constants) {
+    var TimeKeeper = (function (_Synesthesia) {
+        function TimeKeeper() {
+            _classCallCheck(this, TimeKeeper);
 
-            _get(Object.getPrototypeOf(ThreeActor.prototype), "constructor", this).call(this, actorData, inputBuffer);
-            this._material = new THREE.MeshBasicMaterial({ color: 65280 });
+            _get(Object.getPrototypeOf(TimeKeeper.prototype), "constructor", this).call(this);
         }
 
-        _inherits(ThreeActor, _Actor);
+        _inherits(TimeKeeper, _Synesthesia);
 
-        _createClass(ThreeActor, null, [{
-            key: "getActorParameters",
-            value: function getActorParameters() {
-                return _get(Object.getPrototypeOf(ThreeActor), "getActorParameters", this).call(this).concat(["posZ"]);
+        _createClass(TimeKeeper, [{
+            key: "ignite",
+            value: function ignite() {
+                this._frame = 0;
+                this._incrementFrame();
+            }
+        }, {
+            key: "_incrementFrame",
+            value: function _incrementFrame() {
+                this.triggerEvent(constants.EVENTS.TIME.INCREMENT);
+                this._frame++;
+                window.requestAnimationFrame(_.bind(this._incrementFrame, this));
             }
         }]);
 
-        return ThreeActor;
-    })(Actor);
+        return TimeKeeper;
+    })(Synesthesia);
 
-    return ThreeActor;
+    return TimeKeeper;
 });

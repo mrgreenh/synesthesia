@@ -15,9 +15,9 @@ define(["views/visualizer/Synesthesia", "views/visualizer/InputChannel"], functi
 
             _get(Object.getPrototypeOf(Actor.prototype), "constructor", this).call(this);
             this._actorData = actorData;
-            this._initializeInputs();
             this._inputBuffer = inputBuffer;
             this._inputChannels = {};
+            this._initializeInputs();
         }
 
         _inherits(Actor, _Synesthesia);
@@ -33,6 +33,12 @@ define(["views/visualizer/Synesthesia", "views/visualizer/InputChannel"], functi
                     var targetParameter = inputChannel.getTargetParameter();
                     if (targetParameter) _this._inputChannels[targetParameter] = inputChannel;
                 });
+            }
+        }, {
+            key: "_getSignalForParameter",
+            value: function _getSignalForParameter(parameterName) {
+                var inputChannel = this._inputChannels[parameterName];
+                return inputChannel ? inputChannel.getCurrentFrameValue() : 0;
             }
         }], [{
             key: "getActorParameters",

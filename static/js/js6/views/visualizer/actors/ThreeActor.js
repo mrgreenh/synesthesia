@@ -8,9 +8,8 @@ define([
             return super.getActorParameters().concat(["posZ"]);
         }
 
-        constructor(actorData, threeScene){
-            super(actorData, threeScene);
-            this._scene = threeScene;
+        constructor(actorData, inputBuffer){
+            super(actorData, inputBuffer);
             this._material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
         }
 

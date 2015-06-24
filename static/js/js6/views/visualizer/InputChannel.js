@@ -6,13 +6,17 @@ define([
 
             constructor(inputData, inputBuffer){
                 super();
-                this._inputData = inputData;
+                this._inputData = _.defaults(inputData, {
+                    inputBus: "",
+                    inputType: "note",
+                    inputChannel: 1
+                });
                 this._signal = 0;
                 inputBuffer.subscribeInput(
                     this,
-                    this.inputData.inputBus,
-                    this.inputData.inputType,
-                    this.inputData.inputChannel
+                    this._inputData.inputBus,
+                    this._inputData.inputType,
+                    this._inputData.inputChannel
                 );
             }
 
@@ -22,7 +26,7 @@ define([
 
             getCurrentFrameValue(){
                 //This will have to increment T of the signaljs instance
-                return this._signal();
+                return this._signal;
             }
 
             onInputEvent(noteData){
@@ -34,6 +38,8 @@ define([
 
             _onNoteEvent(noteData){
                 //this._signal will be an instance of signal.js
+                //Should actually also update values like note and velocity
+                //And the actor should receive one of these values (whatever selected in the editor "srcProperty")
                 if(noteData.type == "note_on")
                     this._signal = 1;
                 else

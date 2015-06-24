@@ -22,9 +22,6 @@ define([
                 });
                 this._socket.on('midi_note', (data) => {
                     this._onNoteReceived(data);
-                    if(data.type=="note_on") $("body").text(data.note);
-                    //Notify all actors that will have subscribed to a note/channel/type combination
-                    //Based on their inputs settings
                 });
             }
 
@@ -35,7 +32,7 @@ define([
                         eventType,
                         noteData.channel
                     );
-                if(_.hasKey(this._inputInstances, inputId))
+                if(_.has(this._inputInstances, inputId))
                     this._inputInstances[inputId].onInputEvent(noteData);
             }
 
@@ -45,7 +42,7 @@ define([
 
             subscribeInput(inputInstance, inputBus, eventType, inputChannel){
                 var inputId = this._getInputIdentifier(inputBus, eventType, inputChannel);
-                if(!_.haskey(this._inputInstances, inputId))
+                if(!_.has(this._inputInstances, inputId))
                     this._inputInstances[inputId] = inputInstance;
             }
 

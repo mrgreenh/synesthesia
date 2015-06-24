@@ -10,10 +10,12 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 define(["views/visualizer/actors/Actor", "views/visualizer/layers/Layer", "/static/js/vendor/layers_dependencies/three.min.js"], function (Actor, Layer, _THREE_) {
     var Three3DLayer = (function (_Layer) {
-        function Three3DLayer(layerData, config) {
+        function Three3DLayer() {
             _classCallCheck(this, Three3DLayer);
 
-            _get(Object.getPrototypeOf(Three3DLayer.prototype), "constructor", this).call(this, layerData, config);
+            if (_Layer != null) {
+                _Layer.apply(this, arguments);
+            }
         }
 
         _inherits(Three3DLayer, _Layer);
@@ -21,7 +23,6 @@ define(["views/visualizer/actors/Actor", "views/visualizer/layers/Layer", "/stat
         _createClass(Three3DLayer, [{
             key: "render",
             value: function render($stageElement) {
-                this._scene = new THREE.Scene();
                 _get(Object.getPrototypeOf(Three3DLayer.prototype), "render", this).call(this, $stageElement);
                 this._camera = new THREE.PerspectiveCamera(75, this.width / this.height, 0.1, 1000);
                 this._renderer = new THREE.WebGLRenderer({ alpha: true });
@@ -38,9 +39,11 @@ define(["views/visualizer/actors/Actor", "views/visualizer/layers/Layer", "/stat
         }, {
             key: "renderFrame",
             value: function renderFrame() {
-                //requestAnimationFrame( this.renderFrame );
+                var _this = this;
+
+                this._scene = new THREE.Scene();
                 this._actorsInstances.forEach(function (actorInstance) {
-                    actorInstance.renderFrame();
+                    actorInstance.renderFrame(_this._scene);
                 });
                 this._renderer.render(this._scene, this._camera);
             }
@@ -48,7 +51,7 @@ define(["views/visualizer/actors/Actor", "views/visualizer/layers/Layer", "/stat
             key: "_initializeActors",
             value: function _initializeActors() {
                 this._actorsInstances = this._actorsData.map((function (actorData) {
-                    return new this._actorsClassesByName[actorData.className](actorData, this._scene);
+                    return new this._actorsClassesByName[actorData.className](actorData, this._inputBuffer);
                 }).bind(this));
             }
         }], [{

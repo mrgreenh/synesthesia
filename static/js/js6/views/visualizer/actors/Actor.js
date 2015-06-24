@@ -14,9 +14,9 @@ define([
         constructor(actorData, inputBuffer){
             super();
             this._actorData = actorData;
-            this._initializeInputs();
             this._inputBuffer = inputBuffer;
             this._inputChannels = {};
+            this._initializeInputs();
         }
 
         _initializeInputs(){
@@ -28,7 +28,12 @@ define([
                     this._inputChannels[targetParameter] = inputChannel;
             });
         }
+
+        _getSignalForParameter(parameterName){
+            var inputChannel = this._inputChannels[parameterName];
+            return inputChannel ? inputChannel.getCurrentFrameValue() : 0;
+        }
     }
 
-    return Actor;    
+    return Actor;
 });

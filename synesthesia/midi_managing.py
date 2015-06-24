@@ -24,11 +24,7 @@ class MidiManager:
         for bus, channels in self._active_channels_data.iteritems():
             #Default bus is the first one of the active busses
             rtmidi = mido.Backend('mido.backends.rtmidi')
-            current_active_busses = rtmidi.get_input_names()
-            if bus == DEFAULT_BUS and len(current_active_busses):
-                bus = current_active_busses[0]
 
-            if bus not in current_active_busses: continue
             midi_loop_thread = MidiBusThread(manager=self, channels=channels, bus_name=bus)
             self._active_threads.append(midi_loop_thread)
             midi_loop_thread.start()
@@ -70,12 +66,19 @@ class MidiBusThread(Thread):
         self._exit_loop = False
 
     def run(self):
+        global DEFAULT_BUS
         rtmidi = mido.Backend('mido.backends.rtmidi')
         #Will have to be passed to the function
         busname = self._bus_name
+        current_active_busses = rtmidi.get_input_names()
+        if busname == DEFAULT_BUS:
+            src_bus = current_active_busses[0]
+        else:
+            if busname not in current_active_busses: return
+            src_bus = busname
 
         logging.info("Igniting midi event loop")
-        with rtmidi.open_input(busname) as port:
+        with rtmidi.open_input(src_bus) as port:
             for message in port:
                 note = {
                     'note': getattr(message, 'note', None),

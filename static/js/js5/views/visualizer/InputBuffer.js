@@ -38,9 +38,6 @@ define(["utils/BaseObject", "vendor/socket.io.min"], function (BaseObject, io) {
                 });
                 this._socket.on("midi_note", function (data) {
                     _this._onNoteReceived(data);
-                    if (data.type == "note_on") $("body").text(data.note);
-                    //Notify all actors that will have subscribed to a note/channel/type combination
-                    //Based on their inputs settings
                 });
             }
         }, {
@@ -48,7 +45,7 @@ define(["utils/BaseObject", "vendor/socket.io.min"], function (BaseObject, io) {
             value: function _onNoteReceived(noteData) {
                 var eventType = noteData != "control" ? "note" : "control";
                 var inputId = this._getInputIdentifier(noteData.bus, eventType, noteData.channel);
-                if (_.hasKey(this._inputInstances, inputId)) this._inputInstances[inputId].onInputEvent(noteData);
+                if (_.has(this._inputInstances, inputId)) this._inputInstances[inputId].onInputEvent(noteData);
             }
         }, {
             key: "_getInputIdentifier",
@@ -59,7 +56,7 @@ define(["utils/BaseObject", "vendor/socket.io.min"], function (BaseObject, io) {
             key: "subscribeInput",
             value: function subscribeInput(inputInstance, inputBus, eventType, inputChannel) {
                 var inputId = this._getInputIdentifier(inputBus, eventType, inputChannel);
-                if (!_.haskey(this._inputInstances, inputId)) this._inputInstances[inputId] = inputInstance;
+                if (!_.has(this._inputInstances, inputId)) this._inputInstances[inputId] = inputInstance;
             }
         }]);
 

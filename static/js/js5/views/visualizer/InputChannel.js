@@ -14,9 +14,13 @@ define(["views/visualizer/Synesthesia"], function (Synesthesia) {
             _classCallCheck(this, InputChannel);
 
             _get(Object.getPrototypeOf(InputChannel.prototype), "constructor", this).call(this);
-            this._inputData = inputData;
+            this._inputData = _.defaults(inputData, {
+                inputBus: "",
+                inputType: "note",
+                inputChannel: 1
+            });
             this._signal = 0;
-            inputBuffer.subscribeInput(this, this.inputData.inputBus, this.inputData.inputType, this.inputData.inputChannel);
+            inputBuffer.subscribeInput(this, this._inputData.inputBus, this._inputData.inputType, this._inputData.inputChannel);
         }
 
         _inherits(InputChannel, _Synesthesia);
@@ -30,7 +34,7 @@ define(["views/visualizer/Synesthesia"], function (Synesthesia) {
             key: "getCurrentFrameValue",
             value: function getCurrentFrameValue() {
                 //This will have to increment T of the signaljs instance
-                return this._signal();
+                return this._signal;
             }
         }, {
             key: "onInputEvent",
@@ -41,6 +45,8 @@ define(["views/visualizer/Synesthesia"], function (Synesthesia) {
             key: "_onNoteEvent",
             value: function _onNoteEvent(noteData) {
                 //this._signal will be an instance of signal.js
+                //Should actually also update values like note and velocity
+                //And the actor should receive one of these values (whatever selected in the editor "srcProperty")
                 if (noteData.type == "note_on") this._signal = 1;else this._signal = 0;
             }
         }, {

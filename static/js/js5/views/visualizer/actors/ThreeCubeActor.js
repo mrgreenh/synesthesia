@@ -10,25 +10,28 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 define(["views/visualizer/actors/ThreeActor", "/static/js/vendor/layers_dependencies/three.min.js"], function (ThreeActor, _THREE_) {
     var ThreeCubeActor = (function (_ThreeActor) {
-        function ThreeCubeActor(actorData, threeScene) {
+        function ThreeCubeActor() {
             _classCallCheck(this, ThreeCubeActor);
 
-            _get(Object.getPrototypeOf(ThreeCubeActor.prototype), "constructor", this).call(this, actorData, threeScene);
+            if (_ThreeActor != null) {
+                _ThreeActor.apply(this, arguments);
+            }
         }
 
         _inherits(ThreeCubeActor, _ThreeActor);
 
         _createClass(ThreeCubeActor, [{
             key: "renderFrame",
-            value: function renderFrame() {
-                var geometry = new THREE.BoxGeometry(1, 1, 1);
+            value: function renderFrame(scene) {
+                var size = this._getSignalForParameter("size");
+                var geometry = new THREE.BoxGeometry(size, size, size);
                 var cube = new THREE.Mesh(geometry, this._material);
-                this._scene.add(cube);
+                scene.add(cube);
             }
         }], [{
             key: "getActorParameters",
             value: function getActorParameters() {
-                return _get(Object.getPrototypeOf(ThreeCubeActor), "getActorParameters", this).call(this).concat(["edge"]);
+                return _get(Object.getPrototypeOf(ThreeCubeActor), "getActorParameters", this).call(this).concat(["edge", "size"]);
             }
         }]);
 
