@@ -16,12 +16,17 @@ define([
                     this,
                     this._inputData.inputBus,
                     this._inputData.inputType,
-                    this._inputData.inputChannel
+                    this._inputData.inputChannel,
+                    this._inputData.sourceParameter
                 );
             }
 
             getTargetParameter(){
                 return this._inputData.targetParameter;
+            }
+
+            _getSourceParameter(){
+                return this._inputData.sourceParameter || "note";
             }
 
             getCurrentFrameValue(){
@@ -40,10 +45,24 @@ define([
                 //this._signal will be an instance of signal.js
                 //Should actually also update values like note and velocity
                 //And the actor should receive one of these values (whatever selected in the editor "srcProperty")
-                if(noteData.type == "note_on")
-                    this._signal = 1;
-                else
-                    this._signal = 0;
+                switch(this._getSourceParameter()){
+                    case "value":
+                        this._signal = noteData.note;
+                        break;
+                    case "velocity":
+                        if(noteData.type == "note_on")
+                            this._signal = noteData.velocity || 0;
+                        else
+                            this._signal = 0;    
+                        break;
+                    case "intensity":
+                        if(noteData.type == "note_on")
+                            this._signal = 1;
+                        else
+                            this._signal = 0;                        
+                        break;
+                }
+
             }
 
             _onControlEvent(){

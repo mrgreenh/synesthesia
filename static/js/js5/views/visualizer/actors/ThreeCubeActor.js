@@ -24,7 +24,7 @@ define(["views/visualizer/actors/ThreeActor", "/static/js/vendor/layers_dependen
             key: "renderFrame",
             value: function renderFrame(scene) {
                 var size = this._getSignalForParameter("size");
-                var geometry = new THREE.BoxGeometry(size, size, size);
+                var geometry = new THREE.BoxGeometry(size / 100, size / 100, size / 100);
                 var cube = new THREE.Mesh(geometry, this._material);
                 scene.add(cube);
             }

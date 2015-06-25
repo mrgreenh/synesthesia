@@ -79,7 +79,12 @@ define(["utils/BaseObject", "editorFlux/EditorConstants", "editorFlux/EditorDisp
                 var actorData = layerData.actors[actorIndex];
                 if (!_.isArray(actorData.inputChannels)) actorData.inputChannels = [];
                 actorData.inputChannels.push({
-                    name: "New Input"
+                    "inputChannel": "1",
+                    "targetParameter": "posx",
+                    "sourceParameter": "value",
+                    "inputType": "note",
+                    "inputBus": "default_bus",
+                    "name": "New Input"
                 });
                 this._persistData();
             }

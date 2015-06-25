@@ -43,19 +43,24 @@ define(["utils/BaseObject", "vendor/socket.io.min"], function (BaseObject, io) {
         }, {
             key: "_onNoteReceived",
             value: function _onNoteReceived(noteData) {
+                var _this2 = this;
+
                 var eventType = noteData != "control" ? "note" : "control";
-                var inputId = this._getInputIdentifier(noteData.bus, eventType, noteData.channel);
-                if (_.has(this._inputInstances, inputId)) this._inputInstances[inputId].onInputEvent(noteData);
+                ["value", "intensity", "velocity"].forEach(function (sourceParameter) {
+                    //Move this array to constants
+                    var inputId = _this2._getInputIdentifier(noteData.bus, eventType, noteData.channel, sourceParameter);
+                    if (_.has(_this2._inputInstances, inputId)) _this2._inputInstances[inputId].onInputEvent(noteData);
+                });
             }
         }, {
             key: "_getInputIdentifier",
-            value: function _getInputIdentifier(inputBus, eventType, inputChannel) {
-                return inputBus + ":" + eventType + ":" + inputChannel;
+            value: function _getInputIdentifier(inputBus, eventType, inputChannel, sourceParameter) {
+                return inputBus + ":" + eventType + ":" + inputChannel + ":" + sourceParameter;
             }
         }, {
             key: "subscribeInput",
-            value: function subscribeInput(inputInstance, inputBus, eventType, inputChannel) {
-                var inputId = this._getInputIdentifier(inputBus, eventType, inputChannel);
+            value: function subscribeInput(inputInstance, inputBus, eventType, inputChannel, sourceParameter) {
+                var inputId = this._getInputIdentifier(inputBus, eventType, inputChannel, sourceParameter);
                 if (!_.has(this._inputInstances, inputId)) this._inputInstances[inputId] = inputInstance;
             }
         }]);

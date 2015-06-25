@@ -20,6 +20,14 @@ define(["react", "views/editor/Collapsable", "views/editor/SelectField", "views/
                 var targetParametersOptions = [];
             }
 
+            var sourceParameters = [["value", "note"], ["velocity", "velocity"], ["intensity", "intensity"]].map(function (option) {
+                return React.createElement(
+                    "option",
+                    { value: option[0] },
+                    option[1]
+                );
+            });
+
             var ADSRForms = _(EditorConstants.ADSR_ATTRIBUTES).map(_.bind(function (attr) {
                 return React.createElement(SliderField, { min: "0", max: "100", path: this.props.path + "." + attr, value: inputData[attr] });
             }, this));
@@ -31,6 +39,11 @@ define(["react", "views/editor/Collapsable", "views/editor/SelectField", "views/
                     SelectField,
                     { value: inputData.targetParameter, path: this.props.path + ".targetParameter" },
                     targetParametersOptions
+                ),
+                React.createElement(
+                    SelectField,
+                    { value: inputData.sourceParameter, path: this.props.path + ".sourceParameter" },
+                    sourceParameters
                 ),
                 React.createElement(
                     "div",

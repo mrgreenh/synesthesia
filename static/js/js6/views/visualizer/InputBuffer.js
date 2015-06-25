@@ -27,21 +27,24 @@ define([
 
             _onNoteReceived(noteData){
                 var eventType = noteData != "control" ? "note" : "control";
-                var inputId = this._getInputIdentifier(
-                        noteData.bus,
-                        eventType,
-                        noteData.channel
-                    );
-                if(_.has(this._inputInstances, inputId))
-                    this._inputInstances[inputId].onInputEvent(noteData);
+                ["value", "intensity", "velocity"].forEach(sourceParameter => { //Move this array to constants
+                    var inputId = this._getInputIdentifier(
+                            noteData.bus,
+                            eventType,
+                            noteData.channel,
+                            sourceParameter
+                        );
+                    if(_.has(this._inputInstances, inputId))
+                        this._inputInstances[inputId].onInputEvent(noteData);                    
+                });
             }
 
-            _getInputIdentifier(inputBus, eventType, inputChannel){
-                return inputBus + ":" + eventType + ":" + inputChannel;
+            _getInputIdentifier(inputBus, eventType, inputChannel, sourceParameter){
+                return inputBus + ":" + eventType + ":" + inputChannel + ":" + sourceParameter;
             }
 
-            subscribeInput(inputInstance, inputBus, eventType, inputChannel){
-                var inputId = this._getInputIdentifier(inputBus, eventType, inputChannel);
+            subscribeInput(inputInstance, inputBus, eventType, inputChannel, sourceParameter){
+                var inputId = this._getInputIdentifier(inputBus, eventType, inputChannel, sourceParameter);
                 if(!_.has(this._inputInstances, inputId))
                     this._inputInstances[inputId] = inputInstance;
             }

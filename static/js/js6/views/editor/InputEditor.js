@@ -22,6 +22,10 @@ define([
                     var targetParametersOptions = [];
                 }
 
+                var sourceParameters = [["value","note"], ["velocity", "velocity"], ["intensity", "intensity"]].map(option => {
+                    return (<option value={option[0]}>{option[1]}</option>);
+                });
+
                 var ADSRForms = _(EditorConstants.ADSR_ATTRIBUTES).map(_.bind(function(attr){
                     return (
                         <SliderField min="0" max="100" path={this.props.path+"."+attr} value={inputData[attr]} />
@@ -32,6 +36,9 @@ define([
                         <TextField path={this.props.path+".name"} value={inputData.name} />
                         <SelectField value={inputData.targetParameter} path={this.props.path+".targetParameter"}>
                             {targetParametersOptions}
+                        </SelectField>
+                        <SelectField value={inputData.sourceParameter} path={this.props.path+".sourceParameter"}>
+                            {sourceParameters}
                         </SelectField>
                         <div className="form-group">
                             <ul>
