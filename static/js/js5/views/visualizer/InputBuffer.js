@@ -8,7 +8,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
 
-define(["utils/BaseObject", "vendor/socket.io.min"], function (BaseObject, io) {
+define(["utils/BaseObject", "vendor/socket.io.min", "utils/constants"], function (BaseObject, io, constants) {
     var InputBuffer = (function (_BaseObject) {
         function InputBuffer() {
             _classCallCheck(this, InputBuffer);
@@ -46,7 +46,7 @@ define(["utils/BaseObject", "vendor/socket.io.min"], function (BaseObject, io) {
                 var _this2 = this;
 
                 var eventType = noteData != "control" ? "note" : "control";
-                ["value", "intensity", "velocity"].forEach(function (sourceParameter) {
+                constants.INPUTS.SOURCE_PARAMETERS.forEach(function (sourceParameter) {
                     //Move this array to constants
                     var inputId = _this2._getInputIdentifier(noteData.bus, eventType, noteData.channel, sourceParameter);
                     if (_.has(_this2._inputInstances, inputId)) _this2._inputInstances[inputId].onInputEvent(noteData);

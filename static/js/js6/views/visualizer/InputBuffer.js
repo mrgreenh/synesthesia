@@ -1,7 +1,8 @@
 define([
         "utils/BaseObject",
-        "vendor/socket.io.min"
-    ], function(BaseObject, io){
+        "vendor/socket.io.min",
+        "utils/constants"
+    ], function(BaseObject, io, constants){
         class InputBuffer extends BaseObject{
             constructor(){
                 super()
@@ -27,7 +28,7 @@ define([
 
             _onNoteReceived(noteData){
                 var eventType = noteData != "control" ? "note" : "control";
-                ["value", "intensity", "velocity"].forEach(sourceParameter => { //Move this array to constants
+                constants.INPUTS.SOURCE_PARAMETERS.forEach(sourceParameter => { //Move this array to constants
                     var inputId = this._getInputIdentifier(
                             noteData.bus,
                             eventType,

@@ -4,8 +4,9 @@ define([
         "views/editor/SelectField",
         "views/editor/SliderField",
         "views/editor/TextField",
-        "editorFlux/EditorConstants"
-    ], function(React, Collapsable, SelectField, SliderField, TextField, EditorConstants){
+        "editorFlux/EditorConstants",
+        "utils/constants"
+    ], function(React, Collapsable, SelectField, SliderField, TextField, EditorConstants, constants){
 
         var InputEditor = React.createClass({
 
@@ -22,8 +23,8 @@ define([
                     var targetParametersOptions = [];
                 }
 
-                var sourceParameters = [["value","note"], ["velocity", "velocity"], ["intensity", "intensity"]].map(option => {
-                    return (<option value={option[0]}>{option[1]}</option>);
+                var sourceParameters = constants.INPUTS.SOURCE_PARAMETERS.map(option => {
+                    return (<option value={option}>{option}</option>);
                 });
 
                 var ADSRForms = _(EditorConstants.ADSR_ATTRIBUTES).map(_.bind(function(attr){

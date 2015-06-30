@@ -1,6 +1,6 @@
 "use strict";
 
-define(["react", "views/editor/Collapsable", "views/editor/SelectField", "views/editor/SliderField", "views/editor/TextField", "editorFlux/EditorConstants"], function (React, Collapsable, SelectField, SliderField, TextField, EditorConstants) {
+define(["react", "views/editor/Collapsable", "views/editor/SelectField", "views/editor/SliderField", "views/editor/TextField", "editorFlux/EditorConstants", "utils/constants"], function (React, Collapsable, SelectField, SliderField, TextField, EditorConstants, constants) {
 
     var InputEditor = React.createClass({
         displayName: "InputEditor",
@@ -20,11 +20,11 @@ define(["react", "views/editor/Collapsable", "views/editor/SelectField", "views/
                 var targetParametersOptions = [];
             }
 
-            var sourceParameters = [["value", "note"], ["velocity", "velocity"], ["intensity", "intensity"]].map(function (option) {
+            var sourceParameters = constants.INPUTS.SOURCE_PARAMETERS.map(function (option) {
                 return React.createElement(
                     "option",
-                    { value: option[0] },
-                    option[1]
+                    { value: option },
+                    option
                 );
             });
 
