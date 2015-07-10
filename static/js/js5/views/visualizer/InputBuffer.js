@@ -8,16 +8,17 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
 
-define(["utils/BaseObject", "vendor/socket.io.min", "utils/constants"], function (BaseObject, io, constants) {
+define(["utils/BaseObject", "utils/constants", "views/visualizer/MidiManager"], function (BaseObject, constants, MidiManager) {
     var InputBuffer = (function (_BaseObject) {
-        function InputBuffer() {
+        function InputBuffer(trackData) {
             _classCallCheck(this, InputBuffer);
 
             _get(Object.getPrototypeOf(InputBuffer.prototype), "constructor", this).call(this);
             this._ioNamespace = "/stage";
-            this.connect();
-
             this._inputInstances = {};
+
+            this._midiManager = new MidiManager(trackData);
+            this._midiManager.addObserver(this, constants.EVENTS.MIDI.NOTE);
         }
 
         _inherits(InputBuffer, _BaseObject);
@@ -29,27 +30,23 @@ define(["utils/BaseObject", "vendor/socket.io.min", "utils/constants"], function
                 this._setupSocketEvents();
             }
         }, {
-            key: "_setupSocketEvents",
-            value: function _setupSocketEvents() {
-                var _this = this;
-
-                this._socket.on("message", function (data) {
-                    console.log(data.message);
-                });
-                this._socket.on("midi_note", function (data) {
-                    _this._onNoteReceived(data);
-                });
+            key: "events",
+            value: function events(eventName) {
+                switch (eventName) {
+                    case constants.EVENTS.MIDI.NOTE:
+                        this._onNoteReceived(arguments[1]);
+                        break;
+                }
             }
         }, {
             key: "_onNoteReceived",
             value: function _onNoteReceived(noteData) {
-                var _this2 = this;
+                var _this = this;
 
-                var eventType = noteData != "control" ? "note" : "control";
+                var eventType = noteData.type != "control" ? "note" : "control";
                 constants.INPUTS.SOURCE_PARAMETERS.forEach(function (sourceParameter) {
-                    //Move this array to constants
-                    var inputId = _this2._getInputIdentifier(noteData.bus, eventType, noteData.channel, sourceParameter);
-                    if (_.has(_this2._inputInstances, inputId)) _this2._inputInstances[inputId].onInputEvent(noteData);
+                    var inputId = _this._getInputIdentifier(noteData.bus, eventType, noteData.channel, sourceParameter);
+                    if (_.has(_this._inputInstances, inputId)) _this._inputInstances[inputId].onInputEvent(noteData);
                 });
             }
         }, {

@@ -21,15 +21,15 @@ define(["utils/constants", "views/visualizer/Synesthesia", "views/visualizer/act
             this._config;
             this._trackData;
 
-            this._inputBuffer = new InputBuffer();
-            this._timeKeeper = new TimeKeeper();
-
-            this.observe(this._timeKeeper, constants.EVENTS.TIME.INCREMENT);
             //Load the configuration that describes classes and track data
             //Then start doing your thing
             $.when(this._loadNextTrackData(), this._loadStageConfig()).then(function (trackData, configData) {
                 _this._config = configData[0];
                 _this._trackData = trackData[0];
+                _this._inputBuffer = new InputBuffer(_this._trackData);
+                _this._timeKeeper = new TimeKeeper();
+
+                _this.observe(_this._timeKeeper, constants.EVENTS.TIME.INCREMENT);
                 _this._startTrack();
             });
         }

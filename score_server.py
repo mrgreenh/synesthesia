@@ -1,21 +1,19 @@
 from flask import Flask, render_template, session, request, jsonify
-from flask.ext.socketio import SocketIO, emit, disconnect
 from synesthesia.data_managing import Bookshelf
-from synesthesia.midi_managing import MidiManager
 import synesthesia.config as config
 import logging
-
 import json
 
 app = Flask(__name__)
 app.debug = True
-app.config['SECRET_KEY'] = 'secret!'
-socketio = SocketIO(app)
+app.config['SECRET_KEY'] = 'gonna_work_on_my_machine_only'
 
 CURRENT_TRACK_ID = ""
 
 def on_midi_note(note):
+    print str(note)
     socketio.emit('midi_note', note, namespace = '/stage')
+    print str("note sent")
 
 @app.route('/')
 @app.route('/index')
@@ -66,20 +64,7 @@ def set_current_track(track_id):
     bookshelf = Bookshelf()
     track_data = bookshelf.ensure_track(CURRENT_TRACK_ID)
 
-@socketio.on('connect', namespace='/stage')
-def connect():
-    global CURRENT_TRACK_ID
-    logging.info( "Stage connecting")
-
-    bookshelf = Bookshelf()
-    track_data = bookshelf.load_track(CURRENT_TRACK_ID)
-    midi_manager = MidiManager(on_midi_note, track_data)
-    midi_manager.ignite()
-
-    emit('message', {'message': 'Connected, midi loop started'})
-
-
 
 if __name__ == '__main__':
     logging.basicConfig(level=logging.INFO)
-    socketio.run(app)
+    app.run()

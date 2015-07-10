@@ -15,15 +15,15 @@ function(constants, Synesthesia, Actor, Three3DLayer, InputBuffer, TimeKeeper){
             this._config;
             this._trackData;
 
-            this._inputBuffer = new InputBuffer();
-            this._timeKeeper = new TimeKeeper();
-
-            this.observe(this._timeKeeper, constants.EVENTS.TIME.INCREMENT);
             //Load the configuration that describes classes and track data
             //Then start doing your thing
             $.when(this._loadNextTrackData(), this._loadStageConfig()).then((trackData, configData) => {
                 this._config = configData[0];
                 this._trackData = trackData[0];
+                this._inputBuffer = new InputBuffer(this._trackData);
+                this._timeKeeper = new TimeKeeper();
+
+                this.observe(this._timeKeeper, constants.EVENTS.TIME.INCREMENT);
                 this._startTrack();
             });
         }
