@@ -11,7 +11,8 @@ require.config({
     shim: {
         "underscore": {
             exports: "_"
-        } },
+        }
+    },
     waitSeconds: 1
 });
 

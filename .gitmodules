@@ -1,3 +1,6 @@
 [submodule "static/js/vendor/signaljs"]
 	path = static/js/vendor/signaljs
 	url = https://github.com/mrgreenh/Signal.js.git
+[submodule "static/js/vendor/vivaldijs"]
+	path = static/js/vendor/vivaldijs
+	url = https://github.com/mrgreenh/VivaldiJs.git

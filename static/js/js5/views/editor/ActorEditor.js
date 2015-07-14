@@ -103,7 +103,8 @@ define(["react", "views/visualizer/Synesthesia", "views/editor/BetterSelect", "v
                     )
                 )
             );
-        } });
+        }
+    });
 
     return ActorEditor;
 });

@@ -28,7 +28,9 @@ define(["react", "editorFlux/EditorActions"], function (React, EditorActions) {
 
         getName: function getName() {
             return _.last(this.props.path.split("."));
-        } };
+        }
+
+    };
 
     var TrackPathsParser = {
         _getLayerIndex: function _getLayerIndex() {

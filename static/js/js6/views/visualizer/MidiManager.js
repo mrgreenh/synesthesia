@@ -1,54 +1,42 @@
 define([
     "utils/BaseObject",
     "utils/constants",
-    ], function(BaseObject, constants){
+    "vendor/vivaldijs/dist/vivaldi"
+    ], function(BaseObject, constants, VivaldiJs){
         class MidiManager extends BaseObject{
 
             constructor(trackData){
                 super();
                 this._trackData = trackData;
-                this._connect();
-                this._busses = [];
+                this._busses = this.getActiveBusses();
 
-                this.MIDI_EVENT_CODES = {
-                    8: "note_off",
-                    9: "note_on"
-                }
-            }
-
-            _connect(){
-                window.navigator.requestMIDIAccess().then((midiAccess)=>{
-                    if(midiAccess.inputs && midiAccess.inputs.size > 0){
-                        var inputs = midiAccess.inputs.values();
-                        var input = null;
-                        while(input = inputs.next()){
-                            if(input.done) break;
-
-                            input.value.onmidimessage = (midiEvent) => {
-                                this._onMidiEvent(midiEvent);
-                            }
-                            this._busses.push(input);
-                        }
-
-                    }else{
-                        console.error("No MIDI device detected :/");
-                    }
+                this._midiInput = new VivaldiJs(this._busses);
+                this._midiInput.onNote((note) => {
+                    this._onMidiEvent(note);
                 });
             }
 
-            _onMidiEvent(midiEvent){
-                var note = {};
-                var eventData = midiEvent.data;
-                note["command"] = eventData[0] >> 4;
-                note["channel"] = eventData[0] & 0xf;
-                note["type"] = this.MIDI_EVENT_CODES[note["command"]];
-                note["note"] = eventData[1];
-                note["velocity"] = eventData[2];
-                note["bus"] = "default_bus"; //for now. Then: midiEvent.srcElement.name;
+            getActiveBusses(){
+                var result = [];
 
-                this.triggerEvent(constants.EVENTS.MIDI.NOTE, note);
+                var layersData = this.getProp(this._trackData, "layersData", []);
+                layersData.forEach((layerData) => {
+                    var actorsData = this.getProp(layerData, "actors", []);
+                    actorsData.forEach((actorData) => {
+                        var inputsData = this.getProp(actorData, "inputChannels", []);
+                        inputsData.forEach((inputData) => {
+                            if(inputData.inputBus && inputData.inputBus!="default_bus")
+                                result.push(inputData.inputBus);
+                        });
+                    });
+                });
+
+                return result;
             }
 
+            _onMidiEvent(note){
+                this.triggerEvent(constants.EVENTS.MIDI.NOTE, note);
+            }
         }
 
         return MidiManager;
