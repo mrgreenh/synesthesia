@@ -1,6 +1,7 @@
 define([
-        "views/visualizer/Synesthesia"
-    ], function(Synesthesia){
+        "views/visualizer/Synesthesia",
+        "vendor/signaljs/dist/signal"
+    ], function(Synesthesia, Signal){
 
         class InputChannel extends Synesthesia{
 
@@ -19,6 +20,8 @@ define([
                     this._inputData.inputChannel,
                     this._inputData.sourceParameter
                 );
+
+                this._signalProcessor = new Signal();
             }
 
             getTargetParameter(){
@@ -30,8 +33,8 @@ define([
             }
 
             getCurrentFrameValue(){
-                //This will have to increment T of the signaljs instance
-                return this._signal;
+                var result = this._signalProcessor.push(this._signal);
+                return result;
             }
 
             onInputEvent(noteData){

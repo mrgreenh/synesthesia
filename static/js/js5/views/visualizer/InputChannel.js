@@ -8,7 +8,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
 
-define(["views/visualizer/Synesthesia"], function (Synesthesia) {
+define(["views/visualizer/Synesthesia", "vendor/signaljs/dist/signal"], function (Synesthesia, Signal) {
     var InputChannel = (function (_Synesthesia) {
         _inherits(InputChannel, _Synesthesia);
 
@@ -23,6 +23,8 @@ define(["views/visualizer/Synesthesia"], function (Synesthesia) {
             });
             this._signal = 0;
             inputBuffer.subscribeInput(this, this._inputData.inputBus, this._inputData.inputType, this._inputData.inputChannel, this._inputData.sourceParameter);
+
+            this._signalProcessor = new Signal();
         }
 
         _createClass(InputChannel, [{
@@ -38,8 +40,8 @@ define(["views/visualizer/Synesthesia"], function (Synesthesia) {
         }, {
             key: "getCurrentFrameValue",
             value: function getCurrentFrameValue() {
-                //This will have to increment T of the signaljs instance
-                return this._signal;
+                var result = this._signalProcessor.push(this._signal);
+                return result;
             }
         }, {
             key: "onInputEvent",
