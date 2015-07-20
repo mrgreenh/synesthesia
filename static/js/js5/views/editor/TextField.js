@@ -15,7 +15,7 @@ define(["react", "views/editor/EditorMixins"], function (React, EditorMixins) {
                     { htmlFor: this.getId() },
                     this.getName()
                 ),
-                React.createElement("input", { id: this.getId(), className: "form-control", value: this.getValue(), onChange: this.onChange })
+                React.createElement("input", { id: this.getId(), className: "form-control", defaultValue: this.getValue(), onChange: this.onChange })
             );
         }
 
