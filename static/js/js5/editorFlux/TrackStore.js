@@ -8,7 +8,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
 
-define(["utils/BaseObject", "editorFlux/EditorConstants", "editorFlux/EditorDispatcher"], function (BaseObject, EditorConstants, editorDispatcher) {
+define(["utils/BaseObject", "editorFlux/EditorConstants", "editorFlux/EditorDispatcher", "vendor/signaljs/dist/signal"], function (BaseObject, EditorConstants, editorDispatcher, Signal) {
     var TrackStore = (function (_BaseObject) {
         _inherits(TrackStore, _BaseObject);
 
@@ -84,8 +84,30 @@ define(["utils/BaseObject", "editorFlux/EditorConstants", "editorFlux/EditorDisp
                     "sourceParameter": "value",
                     "inputType": "note",
                     "inputBus": "default_bus",
-                    "name": "New Input"
+                    "name": "New Input",
+                    "signalsList": []
                 });
+                this._persistData();
+            }
+        }, {
+            key: "_createSignal",
+            value: function _createSignal(layerIndex, actorIndex, inputIndex, moduleName) {
+                var layerData = this._trackData.layersData[layerIndex];
+                var actorData = layerData.actors[actorIndex];
+                var inputData = actorData.inputChannels[inputIndex];
+                if (!_.isArray(inputData.signalsList)) inputData.signalsList = [];
+
+                var modulesList = Signal.getModulesList();
+                var moduleConfigurationSchema = Signal.getConfigurationSchemaForModule(moduleName);
+
+                var defaultModuleConfiguration = {};
+                for (var k in moduleConfigurationSchema) {
+                    defaultModuleConfiguration[k] = moduleConfigurationSchema[k];
+                }
+
+                defaultModuleConfiguration.name = moduleName;
+                inputData.signalsList.push(defaultModuleConfiguration);
+
                 this._persistData();
             }
         }, {
@@ -116,6 +138,9 @@ define(["utils/BaseObject", "editorFlux/EditorConstants", "editorFlux/EditorDisp
                         break;
                     case EditorConstants.ACTIONS.CREATE_INPUT:
                         this._createInput(action.layerIndex, action.actorIndex);
+                        break;
+                    case EditorConstants.ACTIONS.CREATE_SIGNAL:
+                        this._createSignal(action.layerIndex, action.actorIndex, action.inputIndex, action.moduleName);
                         break;
                     case EditorConstants.ACTIONS.DELETE_ITEM:
                         this._deleteItem(action.pathToArray, action.index);

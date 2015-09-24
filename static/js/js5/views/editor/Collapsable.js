@@ -6,7 +6,7 @@ define(["react", "editorFlux/EditorActions"], function (React, EditorActions) {
         displayName: "Collapsable",
 
         getInitialState: function getInitialState() {
-            return { collapsed: true,
+            return { collapsed: false,
                 backgroundColor: this._getBackgroundColor() };
         },
 

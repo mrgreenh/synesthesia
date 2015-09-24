@@ -1,6 +1,6 @@
 "use strict";
 
-define(["react", "views/editor/Collapsable", "views/editor/SelectField", "views/editor/SliderField", "views/editor/TextField", "editorFlux/EditorConstants", "utils/constants"], function (React, Collapsable, SelectField, SliderField, TextField, EditorConstants, constants) {
+define(["react", "views/editor/Collapsable", "views/editor/SelectField", "views/editor/SliderField", "views/editor/TextField", "views/editor/SignalEditor", "views/editor/SignalsList", "editorFlux/EditorConstants", "utils/constants"], function (React, Collapsable, SelectField, SliderField, TextField, SignalEditor, SignalsList, EditorConstants, constants) {
 
     var InputEditor = React.createClass({
         displayName: "InputEditor",
@@ -28,9 +28,6 @@ define(["react", "views/editor/Collapsable", "views/editor/SelectField", "views/
                 );
             });
 
-            var ADSRForms = _(EditorConstants.ADSR_ATTRIBUTES).map(_.bind(function (attr) {
-                return React.createElement(SliderField, { min: "0", max: "100", path: this.props.path + "." + attr, value: inputData[attr] });
-            }, this));
             return React.createElement(
                 Collapsable,
                 { itemName: inputData.name, path: this.props.path, deletable: "true" },
@@ -90,11 +87,11 @@ define(["react", "views/editor/Collapsable", "views/editor/SelectField", "views/
                             null,
                             React.createElement(
                                 Collapsable,
-                                { itemName: "ADSR Envelope" },
+                                { itemName: "Signal processor" },
                                 React.createElement(
                                     "div",
                                     { className: "form-group" },
-                                    ADSRForms
+                                    React.createElement(SignalsList, { path: this.props.path + ".signalsList", signalData: this.props.inputData.signalsList })
                                 )
                             )
                         )

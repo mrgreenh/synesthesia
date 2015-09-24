@@ -43,6 +43,12 @@ define(["react", "editorFlux/EditorActions"], function (React, EditorActions) {
             var path = this.props.path;
             var steps = path.split(".");
             if (steps.length > 3) return steps[3];
+        },
+
+        _getInputIndex: function _getInputIndex() {
+            var path = this.props.path;
+            var steps = path.split(".");
+            if (steps.length > 5) return steps[5];
         }
     };
 

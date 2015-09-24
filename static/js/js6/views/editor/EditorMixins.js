@@ -44,6 +44,12 @@ define([
                 var path = this.props.path;
                 var steps = path.split(".");
                 if(steps.length>3) return steps[3];
+            },
+
+            _getInputIndex: function(){
+                var path = this.props.path;
+                var steps = path.split(".");
+                if(steps.length>5) return steps[5];
             }
         }
 

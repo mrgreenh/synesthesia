@@ -11,6 +11,7 @@ define({
         CREATE_INPUT: "actions:create_input",
         CREATE_ACTOR: "actions:create_actor",
         CREATE_LAYER: "actions:create_layer",
+        CREATE_SIGNAL: "actions:create_signal",
         DELETE_ITEM: "actions:delete_item"
     },
     ADSR_ATTRIBUTES: ["attack", "decay", "sustain", "release"]

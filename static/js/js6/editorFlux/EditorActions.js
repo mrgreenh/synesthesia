@@ -60,6 +60,18 @@ define([
                     }
                 });
             }
+       
+            static createSignal(layerIndex, actorIndex, inputIndex, moduleName){
+                editorDispatcher.dispatch({
+                    action:{
+                        actionType: EditorConstants.ACTIONS.CREATE_SIGNAL,
+                        layerIndex: layerIndex,
+                        actorIndex: actorIndex,
+                        inputIndex: inputIndex,
+                        moduleName: moduleName
+                    }
+                });
+            }
         }
 
         return EditorActions;

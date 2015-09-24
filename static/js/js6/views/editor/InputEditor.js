@@ -4,9 +4,11 @@ define([
         "views/editor/SelectField",
         "views/editor/SliderField",
         "views/editor/TextField",
+        "views/editor/SignalEditor",
+        "views/editor/SignalsList",
         "editorFlux/EditorConstants",
         "utils/constants"
-    ], function(React, Collapsable, SelectField, SliderField, TextField, EditorConstants, constants){
+    ], function(React, Collapsable, SelectField, SliderField, TextField, SignalEditor, SignalsList, EditorConstants, constants){
 
         var InputEditor = React.createClass({
 
@@ -27,11 +29,6 @@ define([
                     return (<option value={option}>{option}</option>);
                 });
 
-                var ADSRForms = _(EditorConstants.ADSR_ATTRIBUTES).map(_.bind(function(attr){
-                    return (
-                        <SliderField min="0" max="100" path={this.props.path+"."+attr} value={inputData[attr]} />
-                    );
-                }, this));
                 return (
                     <Collapsable itemName={inputData.name} path={this.props.path} deletable="true">
                         <TextField path={this.props.path+".name"} value={inputData.name} />
@@ -60,9 +57,9 @@ define([
                                     <SliderField path={this.props.path+".inputRangeMin"} min="1" value={inputData.inputRangeMin} />
                                 </li>
                                 <li>
-                                    <Collapsable itemName="ADSR Envelope">
+                                    <Collapsable itemName="Signal processor">
                                         <div className="form-group">
-                                            {ADSRForms}
+                                            <SignalsList path={ this.props.path+".signalsList" } signalData={this.props.inputData.signalsList} />
                                         </div>
                                     </Collapsable>
                                 </li>

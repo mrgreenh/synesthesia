@@ -73,6 +73,19 @@ define(["utils/BaseObject", "editorFlux/EditorDispatcher", "editorFlux/EditorCon
                     }
                 });
             }
+        }, {
+            key: "createSignal",
+            value: function createSignal(layerIndex, actorIndex, inputIndex, moduleName) {
+                editorDispatcher.dispatch({
+                    action: {
+                        actionType: EditorConstants.ACTIONS.CREATE_SIGNAL,
+                        layerIndex: layerIndex,
+                        actorIndex: actorIndex,
+                        inputIndex: inputIndex,
+                        moduleName: moduleName
+                    }
+                });
+            }
         }]);
 
         return EditorActions;

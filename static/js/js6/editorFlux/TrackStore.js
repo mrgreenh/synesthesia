@@ -1,8 +1,9 @@
 define([
     "utils/BaseObject",
     "editorFlux/EditorConstants",
-    "editorFlux/EditorDispatcher"
-    ], function(BaseObject, EditorConstants, editorDispatcher){
+    "editorFlux/EditorDispatcher",
+    "vendor/signaljs/dist/signal",
+    ], function(BaseObject, EditorConstants, editorDispatcher, Signal){
 
 
         class TrackStore extends BaseObject{
@@ -67,8 +68,29 @@ define([
                     "sourceParameter": "value",
                     "inputType": "note",
                     "inputBus": "default_bus",
-                    "name": "New Input"
+                    "name": "New Input",
+                    "signalsList": []
                 });
+                this._persistData();
+            }
+
+            _createSignal(layerIndex, actorIndex, inputIndex, moduleName){
+                var layerData = this._trackData.layersData[layerIndex];
+                var actorData = layerData.actors[actorIndex];
+                var inputData = actorData.inputChannels[inputIndex];
+                if(!_.isArray(inputData.signalsList)) inputData.signalsList = [];
+
+                var modulesList = Signal.getModulesList();
+                var moduleConfigurationSchema = Signal.getConfigurationSchemaForModule(moduleName);
+
+                var defaultModuleConfiguration = {}
+                for(let k in moduleConfigurationSchema){
+                    defaultModuleConfiguration[k] = moduleConfigurationSchema[k];
+                }
+
+                defaultModuleConfiguration.name = moduleName;
+                inputData.signalsList.push(defaultModuleConfiguration);
+
                 this._persistData();
             }
 
@@ -97,6 +119,13 @@ define([
                         break;
                     case EditorConstants.ACTIONS.CREATE_INPUT:
                         this._createInput(action.layerIndex, action.actorIndex);
+                        break;
+                    case EditorConstants.ACTIONS.CREATE_SIGNAL:
+                        this._createSignal(
+                            action.layerIndex,
+                            action.actorIndex,
+                            action.inputIndex,
+                            action.moduleName)
                         break;
                     case EditorConstants.ACTIONS.DELETE_ITEM:
                         this._deleteItem(action.pathToArray, action.index);
