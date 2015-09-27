@@ -30,25 +30,29 @@ define([
             _onNoteReceived(noteData){
                 var eventType = noteData.type != "control" ? "note" : "control";
                 constants.INPUTS.SOURCE_PARAMETERS.forEach(sourceParameter => {
-                    var inputId = this._getInputIdentifier(
+                    var inputGroup = this._getInputGroupentifier(
                             noteData.bus,
                             eventType,
                             noteData.channel,
                             sourceParameter
                         );
-                    if(_.has(this._inputInstances, inputId))
-                        this._inputInstances[inputId].onInputEvent(noteData);                    
+                    if(_.has(this._inputInstances, inputGroup))
+                        this._inputInstances[inputGroup].forEach((inputInstance) => {
+                            inputInstance.onInputEvent(noteData);
+                        });
                 });
             }
 
-            _getInputIdentifier(inputBus, eventType, inputChannel, sourceParameter){
+            _getInputGroupentifier(inputBus, eventType, inputChannel, sourceParameter){
                 return inputBus + ":" + eventType + ":" + inputChannel + ":" + sourceParameter;
             }
 
             subscribeInput(inputInstance, inputBus, eventType, inputChannel, sourceParameter){
-                var inputId = this._getInputIdentifier(inputBus, eventType, inputChannel, sourceParameter);
-                if(!_.has(this._inputInstances, inputId))
-                    this._inputInstances[inputId] = inputInstance;
+                var inputGroup = this._getInputGroupentifier(inputBus, eventType, inputChannel, sourceParameter);
+                if(!_.has(this._inputInstances, inputGroup))
+                    this._inputInstances[inputGroup] = [];
+                if(!this._inputInstances[inputGroup].indexOf(inputInstance) > -1)
+                    this._inputInstances[inputGroup].push(inputInstance);
             }
 
         }

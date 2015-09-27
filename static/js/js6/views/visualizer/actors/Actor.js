@@ -30,7 +30,7 @@ define([
         }
 
         _getParameter(parameterName){
-            return this._actorData[parameterName];
+            return parseFloat(this._actorData[parameterName+"Parameter"]) + parseFloat(this._getSignalForParameter(parameterName)) || 0;
         }
 
         _getSignalForParameter(parameterName){

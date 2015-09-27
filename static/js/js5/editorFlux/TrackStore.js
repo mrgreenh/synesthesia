@@ -80,7 +80,7 @@ define(["utils/BaseObject", "editorFlux/EditorConstants", "editorFlux/EditorDisp
                 if (!_.isArray(actorData.inputChannels)) actorData.inputChannels = [];
                 actorData.inputChannels.push({
                     "inputChannel": "1",
-                    "targetParameter": "posx",
+                    "targetParameter": "posX",
                     "sourceParameter": "value",
                     "inputType": "note",
                     "inputBus": "default_bus",

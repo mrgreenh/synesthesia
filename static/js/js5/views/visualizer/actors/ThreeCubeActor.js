@@ -21,10 +21,12 @@ define(["views/visualizer/actors/ThreeActor", "/static/js/vendor/layers_dependen
         _createClass(ThreeCubeActor, [{
             key: "renderFrame",
             value: function renderFrame(scene) {
-                var size = this._getSignalForParameter("size") * this._getParameter("sizeParameter");
-                console.log(size);
+                var size = this._getParameter("size");
                 var geometry = new THREE.BoxGeometry(size, size, size);
                 var cube = new THREE.Mesh(geometry, this._material);
+
+                cube.translateX(this._getParameter("posX"));
+                cube.translateY(this._getParameter("posY"));
                 scene.add(cube);
             }
         }], [{

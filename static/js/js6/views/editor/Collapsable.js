@@ -6,7 +6,7 @@ define([
 
     var Collapsable = React.createClass({
         getInitialState(){
-            return {collapsed: false,
+            return {collapsed: true,
                     backgroundColor: this._getBackgroundColor()};
         },
 
