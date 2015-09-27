@@ -42,6 +42,11 @@ define(["views/visualizer/Synesthesia", "views/visualizer/InputChannel"], functi
                 });
             }
         }, {
+            key: "_getParameter",
+            value: function _getParameter(parameterName) {
+                return this._actorData[parameterName];
+            }
+        }, {
             key: "_getSignalForParameter",
             value: function _getSignalForParameter(parameterName) {
                 var inputChannel = this._inputChannels[parameterName];

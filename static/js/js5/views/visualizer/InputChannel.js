@@ -24,7 +24,7 @@ define(["views/visualizer/Synesthesia", "vendor/signaljs/dist/signal"], function
             this._signal = 0;
             inputBuffer.subscribeInput(this, this._inputData.inputBus, this._inputData.inputType, this._inputData.inputChannel, this._inputData.sourceParameter);
 
-            this._signalProcessor = new Signal();
+            this._signalProcessor = new Signal(this._inputData.signalsList);
         }
 
         _createClass(InputChannel, [{

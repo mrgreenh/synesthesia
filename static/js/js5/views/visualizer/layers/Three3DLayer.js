@@ -24,13 +24,14 @@ define(["views/visualizer/actors/Actor", "views/visualizer/layers/Layer", "/stat
                 _get(Object.getPrototypeOf(Three3DLayer.prototype), "render", this).call(this, $stageElement);
                 this._camera = new THREE.PerspectiveCamera(75, this.width / this.height, 0.1, 1000);
                 this._renderer = new THREE.WebGLRenderer({ alpha: true });
+                this._renderer.setPixelRatio(window.devicePixelRatio);
                 this._renderer.setSize(this.width, this.height);
                 //$(this._renderer.domElement).addClass("layer-canvas");
                 $stageElement[0].appendChild(this._renderer.domElement);
 
-                this._camera.position.z = 5;
-                this._camera.position.x = 1;
-                this._camera.position.y = 1;
+                this._camera.position.z = 400;
+                this._camera.position.x = 100;
+                this._camera.position.y = 100;
 
                 this.renderFrame();
             }

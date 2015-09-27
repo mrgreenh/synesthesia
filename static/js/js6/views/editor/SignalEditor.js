@@ -14,6 +14,7 @@ define([
 
                 var configurationFields = Object.keys(signalData).map((key) => {
                     var datum = signalData[key];
+                    if(key=="type") return;
                     var input;
                     switch(datum.type){
                         case "number":
@@ -33,6 +34,7 @@ define([
 
                 return (
                         <Collapsable itemName={signalData.name} path={this.props.path} deletable="true">
+                            <strong>Module type: {signalData.type}</strong>
                             <div className="form-group">
                                 <ul>
                                     {configurationFields}

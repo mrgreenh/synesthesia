@@ -9,7 +9,8 @@ define([
 
 
         renderFrame(scene){
-            var size = this._getSignalForParameter("size");
+            var size = this._getSignalForParameter("size") * this._getParameter("sizeParameter");
+            console.log(size);
             var geometry = new THREE.BoxGeometry( size, size, size );
             var cube = new THREE.Mesh( geometry, this._material );
             scene.add( cube );

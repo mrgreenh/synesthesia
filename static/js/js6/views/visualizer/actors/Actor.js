@@ -29,6 +29,10 @@ define([
             });
         }
 
+        _getParameter(parameterName){
+            return this._actorData[parameterName];
+        }
+
         _getSignalForParameter(parameterName){
             var inputChannel = this._inputChannels[parameterName];
             return inputChannel ? inputChannel.getCurrentFrameValue() : 0;

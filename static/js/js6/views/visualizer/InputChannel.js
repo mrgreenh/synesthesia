@@ -21,7 +21,7 @@ define([
                     this._inputData.sourceParameter
                 );
 
-                this._signalProcessor = new Signal();
+                this._signalProcessor = new Signal(this._inputData.signalsList);
             }
 
             getTargetParameter(){

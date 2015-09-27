@@ -12,6 +12,7 @@ define(["react", "vendor/signaljs/dist/signal", "views/editor/SliderField", "vie
 
             var configurationFields = Object.keys(signalData).map(function (key) {
                 var datum = signalData[key];
+                if (key == "type") return;
                 var input;
                 switch (datum.type) {
                     case "number":
@@ -33,6 +34,12 @@ define(["react", "vendor/signaljs/dist/signal", "views/editor/SliderField", "vie
             return React.createElement(
                 Collapsable,
                 { itemName: signalData.name, path: this.props.path, deletable: "true" },
+                React.createElement(
+                    "strong",
+                    null,
+                    "Module type: ",
+                    signalData.type
+                ),
                 React.createElement(
                     "div",
                     { className: "form-group" },
