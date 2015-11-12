@@ -12,10 +12,24 @@ define(["views/visualizer/actors/Actor", "views/visualizer/layers/Layer", "/stat
     var Three3DLayer = (function (_Layer) {
         _inherits(Three3DLayer, _Layer);
 
-        function Three3DLayer() {
+        _createClass(Three3DLayer, null, [{
+            key: "getAvailableActorsClasses",
+            value: function getAvailableActorsClasses() {
+                //Even if right now it's not, one day this will be async
+                //It will ask the server to check what classes are in the actors folder
+                //Because adding actors will be part of creative processes that should not require code change to the main app
+                var dfd = $.Deferred();
+                dfd.resolve(["ThreeCubeActor", "ThreeSphereActor"]);
+                return dfd;
+            }
+        }]);
+
+        function Three3DLayer(layerData, config, inputBuffer) {
             _classCallCheck(this, Three3DLayer);
 
-            _get(Object.getPrototypeOf(Three3DLayer.prototype), "constructor", this).apply(this, arguments);
+            _get(Object.getPrototypeOf(Three3DLayer.prototype), "constructor", this).call(this, layerData, config, inputBuffer);
+
+            this._scene = new THREE.Scene();
         }
 
         _createClass(Three3DLayer, [{
@@ -38,11 +52,8 @@ define(["views/visualizer/actors/Actor", "views/visualizer/layers/Layer", "/stat
         }, {
             key: "renderFrame",
             value: function renderFrame() {
-                var _this = this;
-
-                this._scene = new THREE.Scene();
                 this._actorsInstances.forEach(function (actorInstance) {
-                    actorInstance.renderFrame(_this._scene);
+                    actorInstance.renderFrame();
                 });
                 this._renderer.render(this._scene, this._camera);
             }
@@ -50,18 +61,8 @@ define(["views/visualizer/actors/Actor", "views/visualizer/layers/Layer", "/stat
             key: "_initializeActors",
             value: function _initializeActors() {
                 this._actorsInstances = this._actorsData.map((function (actorData) {
-                    return new this._actorsClassesByName[actorData.className](actorData, this._inputBuffer);
+                    return new this._actorsClassesByName[actorData.className](actorData, this._inputBuffer, this._scene);
                 }).bind(this));
-            }
-        }], [{
-            key: "getAvailableActorsClasses",
-            value: function getAvailableActorsClasses() {
-                //Even if right now it's not, one day this will be async
-                //It will ask the server to check what classes are in the actors folder
-                //Because adding actors will be part of creative processes that should not require code change to the main app
-                var dfd = $.Deferred();
-                dfd.resolve(["ThreeCubeActor", "ThreeSphereActor"]);
-                return dfd;
             }
         }]);
 

@@ -12,27 +12,33 @@ define(["views/visualizer/actors/ThreeActor", "/static/js/vendor/layers_dependen
     var ThreeCubeActor = (function (_ThreeActor) {
         _inherits(ThreeCubeActor, _ThreeActor);
 
-        function ThreeCubeActor() {
+        _createClass(ThreeCubeActor, null, [{
+            key: "getActorParameters",
+            value: function getActorParameters() {
+                return _get(Object.getPrototypeOf(ThreeCubeActor), "getActorParameters", this).call(this).concat(["edge", "size"]);
+            }
+        }]);
+
+        function ThreeCubeActor(actorData, inputBuffer, scene) {
             _classCallCheck(this, ThreeCubeActor);
 
-            _get(Object.getPrototypeOf(ThreeCubeActor.prototype), "constructor", this).apply(this, arguments);
+            _get(Object.getPrototypeOf(ThreeCubeActor.prototype), "constructor", this).call(this, actorData, inputBuffer);
+            this._material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+            var geometry = new THREE.BoxGeometry(1, 1, 1);
+            this._cube = new THREE.Mesh(geometry, this._material);
+            scene.add(this._cube);
         }
 
         _createClass(ThreeCubeActor, [{
             key: "renderFrame",
-            value: function renderFrame(scene) {
-                var size = this._getParameter("size");
-                var geometry = new THREE.BoxGeometry(size, size, size);
-                var cube = new THREE.Mesh(geometry, this._material);
+            value: function renderFrame() {
+                this._cube.scale.x = this._getParameter("size");
+                this._cube.scale.y = this._getParameter("size");
+                this._cube.scale.z = this._getParameter("size");
 
-                cube.translateX(this._getParameter("posX"));
-                cube.translateY(this._getParameter("posY"));
-                scene.add(cube);
-            }
-        }], [{
-            key: "getActorParameters",
-            value: function getActorParameters() {
-                return _get(Object.getPrototypeOf(ThreeCubeActor), "getActorParameters", this).call(this).concat(["edge", "size"]);
+                this._cube.position.x = this._getParameter("posX");
+                this._cube.position.y = this._getParameter("posY");
+                this._cube.updateMatrixWorld();
             }
         }]);
 

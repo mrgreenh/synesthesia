@@ -7,15 +7,22 @@ define([
             return super.getActorParameters().concat(["edge", "size"]);
         }
 
+        constructor(actorData, inputBuffer, scene){
+            super(actorData, inputBuffer);
+            this._material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+            var geometry = new THREE.BoxGeometry( 1, 1, 1 );
+            this._cube = new THREE.Mesh( geometry, this._material );
+            scene.add( this._cube );
+        }
 
-        renderFrame(scene){
-            var size = this._getParameter("size");
-            var geometry = new THREE.BoxGeometry( size, size, size );
-            var cube = new THREE.Mesh( geometry, this._material );
+        renderFrame(){
+            this._cube.scale.x = this._getParameter("size");
+            this._cube.scale.y = this._getParameter("size");
+            this._cube.scale.z = this._getParameter("size");
 
-            cube.translateX(this._getParameter("posX"));
-            cube.translateY(this._getParameter("posY"));
-            scene.add( cube );
+            this._cube.position.x = this._getParameter("posX");
+            this._cube.position.y = this._getParameter("posY");
+            this._cube.updateMatrixWorld();
         }
     }
     

@@ -16,7 +16,7 @@ define([
             }
 
             constructor(layerData, config, inputBuffer){
-                super();
+                super(layerData, config, inputBuffer);
                 this.type = layerData.type;
                 this._layerConfig = config.layers[this.type];
                 this._actorsData = layerData["actors"]; 

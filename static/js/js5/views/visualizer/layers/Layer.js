@@ -27,7 +27,7 @@ define(["views/visualizer/Synesthesia", "views/visualizer/actors/Actor"], functi
         function Layer(layerData, config, inputBuffer) {
             _classCallCheck(this, Layer);
 
-            _get(Object.getPrototypeOf(Layer.prototype), "constructor", this).call(this);
+            _get(Object.getPrototypeOf(Layer.prototype), "constructor", this).call(this, layerData, config, inputBuffer);
             this.type = layerData.type;
             this._layerConfig = config.layers[this.type];
             this._actorsData = layerData["actors"];
