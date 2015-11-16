@@ -31,6 +31,7 @@ define(["views/visualizer/Synesthesia", "views/visualizer/actors/Actor"], functi
             this.type = layerData.type;
             this._layerConfig = config.layers[this.type];
             this._actorsData = layerData["actors"];
+            this._actorsOptions = {}; //Override with stuff like three scene or canvas context
 
             this._actorsClassesByName = {};
             this._actorsClassesDefinitions = [];
@@ -72,6 +73,13 @@ define(["views/visualizer/Synesthesia", "views/visualizer/actors/Actor"], functi
                     dfd.resolve.apply($, classes);
                 }).bind(this));
                 return dfd.promise();
+            }
+        }, {
+            key: "_initializeActors",
+            value: function _initializeActors() {
+                this._actorsInstances = this._actorsData.map((function (actorData) {
+                    return new this._actorsClassesByName[actorData.className](actorData, this._inputBuffer, this._actorsOptions);
+                }).bind(this));
             }
         }, {
             key: "render",

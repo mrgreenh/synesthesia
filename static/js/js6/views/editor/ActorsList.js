@@ -2,15 +2,32 @@ define([
         "react",
         "views/editor/ActorEditor",
         "views/editor/EditorMixins",
-        "editorFlux/EditorActions"
+        "editorFlux/EditorActions",
+        "views/visualizer/Synesthesia"
     ],
-    function(React, ActorEditor, EditorMixins, EditorActions){
+    function(React, ActorEditor, EditorMixins, EditorActions, Synesthesia){
 
         var ActorsList = React.createClass({
             mixins: [EditorMixins.TrackPathsParser],
 
+            getInitialState: function(){
+                return {
+                    availableActorsClasses: []
+                }
+            },
+
+            componentDidMount: function(){
+                Synesthesia.getLayerAvailableActors([this.props.layerType]).done((classes) => {
+                    this.setState({
+                        availableActorsClasses: classes
+                    });                            
+                });
+            },
+
             handleNewActorClick: function(event){
-                EditorActions.createActor(this._getLayerIndex());
+                var availableClasses = this.state.availableActorsClasses;
+                if(availableClasses.length)
+                    EditorActions.createActor(this._getLayerIndex(), availableClasses[0]);
             },
 
             render: function(){

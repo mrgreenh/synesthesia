@@ -52,11 +52,12 @@ define(["utils/BaseObject", "editorFlux/EditorDispatcher", "editorFlux/EditorCon
             }
         }, {
             key: "createActor",
-            value: function createActor(layerIndex) {
+            value: function createActor(layerIndex, actorClass) {
                 editorDispatcher.dispatch({
                     action: {
                         actionType: EditorConstants.ACTIONS.CREATE_ACTOR,
-                        layerIndex: layerIndex
+                        layerIndex: layerIndex,
+                        actorClass: actorClass
                     }
                 });
             }

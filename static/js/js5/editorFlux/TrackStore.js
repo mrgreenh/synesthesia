@@ -62,13 +62,13 @@ define(["utils/BaseObject", "editorFlux/EditorConstants", "editorFlux/EditorDisp
             }
         }, {
             key: "_createActor",
-            value: function _createActor(layerIndex) {
+            value: function _createActor(layerIndex, actorClass) {
                 var layerData = this._trackData.layersData[layerIndex];
                 if (!_.isArray(layerData.actors)) layerData.actors = [];
                 layerData.actors.push({
                     name: "New Actor",
                     inputChannels: [],
-                    className: "ThreeCubeActor"
+                    className: actorClass
                 });
                 this._persistData();
             }
@@ -134,7 +134,7 @@ define(["utils/BaseObject", "editorFlux/EditorConstants", "editorFlux/EditorDisp
                         this._createLayer();
                         break;
                     case EditorConstants.ACTIONS.CREATE_ACTOR:
-                        this._createActor(action.layerIndex);
+                        this._createActor(action.layerIndex, action.actorClass);
                         break;
                     case EditorConstants.ACTIONS.CREATE_INPUT:
                         this._createInput(action.layerIndex, action.actorIndex);

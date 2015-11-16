@@ -41,11 +41,12 @@ define([
                 });
             }
 
-            static createActor(layerIndex){
+            static createActor(layerIndex, actorClass){
                 editorDispatcher.dispatch({
                     action: {
                         actionType: EditorConstants.ACTIONS.CREATE_ACTOR,
-                        layerIndex: layerIndex
+                        layerIndex: layerIndex,
+                        actorClass: actorClass
                     }
                 });
             }

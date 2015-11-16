@@ -44,7 +44,7 @@ define(["views/visualizer/Synesthesia", "views/visualizer/InputChannel"], functi
         }, {
             key: "_getParameter",
             value: function _getParameter(parameterName) {
-                return parseFloat(this._actorData[parameterName + "Parameter"]) + parseFloat(this._getSignalForParameter(parameterName)) || 0;
+                return parseFloat(this._actorData[parameterName + "Parameter"]) * parseFloat(this._getSignalForParameter(parameterName)) || 0;
             }
         }, {
             key: "_getSignalForParameter",

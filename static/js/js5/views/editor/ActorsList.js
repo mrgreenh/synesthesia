@@ -1,22 +1,39 @@
 "use strict";
 
-define(["react", "views/editor/ActorEditor", "views/editor/EditorMixins", "editorFlux/EditorActions"], function (React, ActorEditor, EditorMixins, EditorActions) {
+define(["react", "views/editor/ActorEditor", "views/editor/EditorMixins", "editorFlux/EditorActions", "views/visualizer/Synesthesia"], function (React, ActorEditor, EditorMixins, EditorActions, Synesthesia) {
 
     var ActorsList = React.createClass({
         displayName: "ActorsList",
 
         mixins: [EditorMixins.TrackPathsParser],
 
+        getInitialState: function getInitialState() {
+            return {
+                availableActorsClasses: []
+            };
+        },
+
+        componentDidMount: function componentDidMount() {
+            var _this = this;
+
+            Synesthesia.getLayerAvailableActors([this.props.layerType]).done(function (classes) {
+                _this.setState({
+                    availableActorsClasses: classes
+                });
+            });
+        },
+
         handleNewActorClick: function handleNewActorClick(event) {
-            EditorActions.createActor(this._getLayerIndex());
+            var availableClasses = this.state.availableActorsClasses;
+            if (availableClasses.length) EditorActions.createActor(this._getLayerIndex(), availableClasses[0]);
         },
 
         render: function render() {
-            var _this = this;
+            var _this2 = this;
 
             var actorsData = this.props.actorsData;
             var actors = actorsData.map(function (actor, index) {
-                return React.createElement(ActorEditor, { actorData: actor, key: index, path: _this.props.path + "." + index, layerType: _this.props.layerType });
+                return React.createElement(ActorEditor, { actorData: actor, key: index, path: _this2.props.path + "." + index, layerType: _this2.props.layerType });
             });
             return React.createElement(
                 "div",

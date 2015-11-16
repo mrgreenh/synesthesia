@@ -21,6 +21,7 @@ define([
             super(layerData, config, inputBuffer);
 
             this._scene = new THREE.Scene();
+            this._actorsOptions = this._scene;
         }
 
         render($stageElement){
@@ -45,17 +46,6 @@ define([
             });
             this._renderer.render( this._scene, this._camera );
         }
-
-        _initializeActors(){
-            this._actorsInstances = this._actorsData.map(function(actorData){
-                return new this._actorsClassesByName[actorData.className](
-                        actorData,
-                        this._inputBuffer,
-                        this._scene
-                    );
-            }.bind(this));
-        }
-
     }
 
     return Three3DLayer;

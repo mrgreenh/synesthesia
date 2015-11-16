@@ -30,6 +30,7 @@ define(["views/visualizer/actors/Actor", "views/visualizer/layers/Layer", "/stat
             _get(Object.getPrototypeOf(Three3DLayer.prototype), "constructor", this).call(this, layerData, config, inputBuffer);
 
             this._scene = new THREE.Scene();
+            this._actorsOptions = this._scene;
         }
 
         _createClass(Three3DLayer, [{
@@ -56,13 +57,6 @@ define(["views/visualizer/actors/Actor", "views/visualizer/layers/Layer", "/stat
                     actorInstance.renderFrame();
                 });
                 this._renderer.render(this._scene, this._camera);
-            }
-        }, {
-            key: "_initializeActors",
-            value: function _initializeActors() {
-                this._actorsInstances = this._actorsData.map((function (actorData) {
-                    return new this._actorsClassesByName[actorData.className](actorData, this._inputBuffer, this._scene);
-                }).bind(this));
             }
         }]);
 
