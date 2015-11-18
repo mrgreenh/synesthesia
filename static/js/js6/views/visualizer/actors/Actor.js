@@ -7,7 +7,10 @@ define([
         static getActorParameters(){
             return [
                 "posX",
-                "posY"
+                "posY",
+                "posType", //percent or absolute
+                "posAnchor", //top, bottom, right, left, any _ separated combination
+                "color"
             ];
         }
 
@@ -29,8 +32,12 @@ define([
             });
         }
 
+        _getUnprocessedParameter(parameterName){
+            return this._actorData[parameterName+"Parameter"];
+        }
+
         _getParameter(parameterName){
-            return parseFloat(this._actorData[parameterName+"Parameter"]) * parseFloat(this._getSignalForParameter(parameterName)) || 0;
+            return parseFloat(this._actorData[parameterName+"Parameter"]) * (parseFloat(this._getSignalForParameter(parameterName)) || 1);
         }
 
         _getSignalForParameter(parameterName){

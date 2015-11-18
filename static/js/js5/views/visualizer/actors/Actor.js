@@ -15,7 +15,9 @@ define(["views/visualizer/Synesthesia", "views/visualizer/InputChannel"], functi
         _createClass(Actor, null, [{
             key: "getActorParameters",
             value: function getActorParameters() {
-                return ["posX", "posY"];
+                return ["posX", "posY", "posType", //percent or absolute
+                "posAnchor", //top, bottom, right, left, any _ separated combination
+                "color"];
             }
         }]);
 
@@ -42,9 +44,14 @@ define(["views/visualizer/Synesthesia", "views/visualizer/InputChannel"], functi
                 });
             }
         }, {
+            key: "_getUnprocessedParameter",
+            value: function _getUnprocessedParameter(parameterName) {
+                return this._actorData[parameterName + "Parameter"];
+            }
+        }, {
             key: "_getParameter",
             value: function _getParameter(parameterName) {
-                return parseFloat(this._actorData[parameterName + "Parameter"]) * parseFloat(this._getSignalForParameter(parameterName)) || 0;
+                return parseFloat(this._actorData[parameterName + "Parameter"]) * (parseFloat(this._getSignalForParameter(parameterName)) || 1);
             }
         }, {
             key: "_getSignalForParameter",
