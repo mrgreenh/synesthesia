@@ -9,13 +9,15 @@ define(["react", "views/editor/EditorMixins"], function (React, EditorMixins) {
         mixins: [EditorMixins.TrackStoreUpdater],
 
         render: function render() {
+            var labelValue = this.props.label || this.getName();
+
             return React.createElement(
                 "div",
                 { className: "form-group form-inline" },
                 React.createElement(
                     "label",
                     { htmlFor: this.getId() },
-                    this.getName()
+                    labelValue
                 ),
                 React.createElement("input", _extends({ id: this.getId(), className: "form-control", value: this.getValue(), onChange: this.onChange, type: "range" }, this.props)),
                 React.createElement("input", _extends({ id: this.getId(), className: "form-control", value: this.getValue(), onChange: this.onChange, type: "number" }, this.props))

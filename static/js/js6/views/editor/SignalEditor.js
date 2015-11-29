@@ -18,7 +18,7 @@ define([
                     var input;
                     switch(datum.type){
                         case "number":
-                            input = <SliderField path={[this.props.path, key, "value"].join(".")} value={datum.value} min={datum.range[0]} max={datum.range[1]} />;
+                            input = <SliderField label={datum.display} key={key} path={[this.props.path, key, "value"].join(".")} value={datum.value} min={datum.range[0]} max={datum.range[1]} />;
                             break;
                         default: //It's not even an object
                             input = <TextField path={[this.props.path, key].join(".")} value={datum} />;

@@ -37,7 +37,7 @@ define([
         }
 
         _getParameter(parameterName){
-            return parseFloat(this._actorData[parameterName+"Parameter"]) * (parseFloat(this._getSignalForParameter(parameterName)) || 1);
+            return parseFloat(this._actorData[parameterName+"Parameter"]) * (parseFloat(this._getSignalForParameter(parameterName)) || 0);
         }
 
         _getSignalForParameter(parameterName){

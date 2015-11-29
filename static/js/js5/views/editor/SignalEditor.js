@@ -16,7 +16,7 @@ define(["react", "vendor/signaljs/dist/signal", "views/editor/SliderField", "vie
                 var input;
                 switch (datum.type) {
                     case "number":
-                        input = React.createElement(SliderField, { path: [_this.props.path, key, "value"].join("."), value: datum.value, min: datum.range[0], max: datum.range[1] });
+                        input = React.createElement(SliderField, { label: datum.display, key: key, path: [_this.props.path, key, "value"].join("."), value: datum.value, min: datum.range[0], max: datum.range[1] });
                         break;
                     default:
                         //It's not even an object
