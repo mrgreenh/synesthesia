@@ -73,6 +73,16 @@ define([
                     }
                 });
             }
+
+            static moveActor(path, direction){
+                editorDispatcher.dispatch({
+                    action:{
+                        actionType: EditorConstants.ACTIONS.MOVE_ACTOR,
+                        path: path,
+                        direction: direction
+                    }
+                });
+            }
         }
 
         return EditorActions;

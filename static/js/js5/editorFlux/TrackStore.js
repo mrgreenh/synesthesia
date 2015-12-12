@@ -120,6 +120,17 @@ define(["utils/BaseObject", "editorFlux/EditorConstants", "editorFlux/EditorDisp
                 this._persistData();
             }
         }, {
+            key: "_moveAction",
+            value: function _moveAction(path, direction) {
+                var pathToActors = path.split(".");
+                var currentIndex = parseInt(pathToActors.splice(-1, 1));
+                var actors = this.getProp(this._trackData, pathToActors.join("."));
+                var movingActor = actors.splice(currentIndex, 1)[0];
+                var newIndex = direction == "up" ? currentIndex - 1 : currentIndex + 1;
+                actors.splice(newIndex, 0, movingActor);
+                this._persistData();
+            }
+        }, {
             key: "handleAction",
             value: function handleAction(payload) {
                 var action = payload.action;
@@ -141,6 +152,9 @@ define(["utils/BaseObject", "editorFlux/EditorConstants", "editorFlux/EditorDisp
                         break;
                     case EditorConstants.ACTIONS.CREATE_SIGNAL:
                         this._createSignal(action.layerIndex, action.actorIndex, action.inputIndex, action.moduleName);
+                        break;
+                    case EditorConstants.ACTIONS.MOVE_ACTION:
+                        this._moveAction(action.path, action.direction);
                         break;
                     case EditorConstants.ACTIONS.DELETE_ITEM:
                         this._deleteItem(action.pathToArray, action.index);

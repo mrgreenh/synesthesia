@@ -90,6 +90,16 @@ define(["views/visualizer/actors/Actor"], function (Actor) {
                         };
                 }
             }
+        }, {
+            key: "_getParameter",
+            value: function _getParameter(paramName, canvasDimension) {
+                var originalResult = _get(Object.getPrototypeOf(CanvasActor.prototype), "_getParameter", this).call(this, paramName);
+                if (canvasDimension && originalResult <= 100 && originalResult >= 0) {
+                    return originalResult / 100 * canvasDimension;
+                } else {
+                    return originalResult;
+                }
+            }
         }]);
 
         return CanvasActor;

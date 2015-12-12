@@ -14,4 +14,4 @@
 #editor-view-container input[type="range"] { width:50%; }
 
 /* Stage */
-#stage-container { position: absolute; top:0px; bottom: 0px; right:0px; left:0px; width:100%; box-sizing: border-box; border: dashed 2px black }
+#stage-container { position: absolute; top:0px; bottom: 0px; right:0px; left:0px; width:100%; box-sizing: border-box;}

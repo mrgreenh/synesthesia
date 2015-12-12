@@ -10,7 +10,8 @@ define([
             //Because adding actors will be part of creative processes that should not require code change to the main app
             var dfd = $.Deferred();
             dfd.resolve([
-                    "CanvasCircle"
+                    "CanvasCircle",
+                    "CanvasSquare"
                 ]);
             return dfd;
         }

@@ -42,6 +42,14 @@ define([
             EditorActions.updateField(propertyPath, className);
         },
 
+        handleMoveActorUp: function(e){
+            EditorActions.moveActor(this.props.path, "up");
+        },
+
+        handleMoveActorDown: function(e){
+            EditorActions.moveActor(this.props.path, "down");
+        },
+
         _loadLayerAvailableActorsList: function(){
             Synesthesia.getLayerAvailableActors([this.props.layerType]).done((classes) => {
                     this.setState({
@@ -76,9 +84,10 @@ define([
 
             return (
                 <Collapsable itemName={this.props.actorData.name} path={this.props.path} deletable="true">
+                    <button id="move-actor-up-button" onClick={this.handleMoveActorUp}>Move Up</button>
+                    <button id="move-actor-down-button" onClick={this.handleMoveActorDown}>Move Down</button>
                     <ul className="parameters-list">
                         <TextField path={this.props.path+".name"} value={this.props.actorData.name} />
-
                         <SelectField value={this.props.actorData.className} path={this.props.path+".className"} onChange={this.handleActorClassChange}>
                             {actorClassOptions}
                         </SelectField>

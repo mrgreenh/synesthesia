@@ -87,6 +87,17 @@ define(["utils/BaseObject", "editorFlux/EditorDispatcher", "editorFlux/EditorCon
                     }
                 });
             }
+        }, {
+            key: "moveActor",
+            value: function moveActor(path, direction) {
+                editorDispatcher.dispatch({
+                    action: {
+                        actionType: EditorConstants.ACTIONS.MOVE_ACTOR,
+                        path: path,
+                        direction: direction
+                    }
+                });
+            }
         }]);
 
         return EditorActions;

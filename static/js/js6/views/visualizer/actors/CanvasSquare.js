@@ -1,9 +1,9 @@
 define([
     "views/visualizer/actors/CanvasActor"
 ], function(CanvasActor){
-    class CanvasCircle extends CanvasActor{
+    class CanvasSquare extends CanvasActor{
         static getActorParameters(){
-            return super.getActorParameters().concat(["size"]);
+            return super.getActorParameters().concat(["sizeX", "sizeY"]);
         }
 
         constructor(actorData, inputBuffer, options){
@@ -12,13 +12,12 @@ define([
 
         renderFrame(context, width, height){
             context.fillStyle = this._getUnprocessedParameter("color");
-            var radius = this._getParameter("size");
+            var sizeX = this._getParameter("sizeX", width);
+            var sizeY = this._getParameter("sizeY", height);
             var {posX, posY} = this._getPositionCoords(width, height);
-            context.beginPath();
-            context.ellipse(posX, posY, radius, radius, 0, 0, 2 * Math.PI);
-            context.fill();
+            context.fillRect(posX, posY, sizeX, sizeY);
         }
     }
     
-    return CanvasCircle;
+    return CanvasSquare;
 });

@@ -42,7 +42,7 @@ define([
 
         _getSignalForParameter(parameterName){
             var inputChannel = this._inputChannels[parameterName];
-            return inputChannel ? inputChannel.getCurrentFrameValue() : 0;
+            return inputChannel ? inputChannel.getCurrentFrameValue() : 1;
         }
     }
 

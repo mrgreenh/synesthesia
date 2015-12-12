@@ -39,6 +39,14 @@ define(["react", "views/visualizer/Synesthesia", "views/editor/BetterSelect", "v
             EditorActions.updateField(propertyPath, className);
         },
 
+        handleMoveActorUp: function handleMoveActorUp(e) {
+            EditorActions.moveActor(this.props.path, "up");
+        },
+
+        handleMoveActorDown: function handleMoveActorDown(e) {
+            EditorActions.moveActor(this.props.path, "down");
+        },
+
         _loadLayerAvailableActorsList: function _loadLayerAvailableActorsList() {
             var _this2 = this;
 
@@ -78,6 +86,16 @@ define(["react", "views/visualizer/Synesthesia", "views/editor/BetterSelect", "v
             return React.createElement(
                 Collapsable,
                 { itemName: this.props.actorData.name, path: this.props.path, deletable: "true" },
+                React.createElement(
+                    "button",
+                    { id: "move-actor-up-button", onClick: this.handleMoveActorUp },
+                    "Move Up"
+                ),
+                React.createElement(
+                    "button",
+                    { id: "move-actor-down-button", onClick: this.handleMoveActorDown },
+                    "Move Down"
+                ),
                 React.createElement(
                     "ul",
                     { className: "parameters-list" },
