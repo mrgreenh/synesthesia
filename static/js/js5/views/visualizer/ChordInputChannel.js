@@ -51,7 +51,7 @@ define(["views/visualizer/Synesthesia", "vendor/signaljs/dist/signal", "views/vi
             value: function _onNoteEvent(noteData) {
                 var currentNote = noteData.note;
                 if (!this._signalProcessors[currentNote]) {
-                    this._signalProcessors[currentNote] = new Signal(this._inputData.signalsList);
+                    this._signalProcessors[currentNote] = new Signal(_.clone(this._inputData.signalsList));
                 }
                 switch (this._getSourceParameter()) {
                     case "value":

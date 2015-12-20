@@ -30,7 +30,6 @@ define(["views/visualizer/actors/CanvasActor", "views/visualizer/actors/CanvasCi
                     for (var _iterator = activeNotes[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
                         var note = _step.value;
 
-                        console.log(note);
                         var radius = this._getParameter("size", { note: note });
 
                         var _getPositionCoords = this._getPositionCoords(width, height, note);
@@ -38,7 +37,6 @@ define(["views/visualizer/actors/CanvasActor", "views/visualizer/actors/CanvasCi
                         var posX = _getPositionCoords.posX;
                         var posY = _getPositionCoords.posY;
 
-                        console.log(radius + ":" + posX + ":" + posY);
                         this._renderCircle(context, posX, posY, radius);
                     }
                 } catch (err) {

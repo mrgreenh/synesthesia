@@ -10,10 +10,8 @@ define([
         renderFrame(context, width, height){
             var activeNotes = this._getActiveNotes();
             for(let note of activeNotes){
-                console.log(note);
                 var radius = this._getParameter("size", {note: note});
                 var {posX, posY} = this._getPositionCoords(width, height, note);
-                console.log(radius + ":" + posX + ":" + posY);
                 this._renderCircle(context, posX, posY, radius);
             }
         }
