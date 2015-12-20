@@ -45,21 +45,21 @@ define(["utils/BaseObject", "utils/constants", "views/visualizer/MidiManager"], 
 
                 var eventType = noteData.type != "control" ? "note" : "control";
                 constants.INPUTS.SOURCE_PARAMETERS.forEach(function (sourceParameter) {
-                    var inputGroup = _this._getInputGroupentifier(noteData.bus, eventType, noteData.channel, sourceParameter);
+                    var inputGroup = _this._getInputGroupIdentifier(noteData.bus, eventType, noteData.channel, sourceParameter);
                     if (_.has(_this._inputInstances, inputGroup)) _this._inputInstances[inputGroup].forEach(function (inputInstance) {
                         inputInstance.onInputEvent(noteData);
                     });
                 });
             }
         }, {
-            key: "_getInputGroupentifier",
-            value: function _getInputGroupentifier(inputBus, eventType, inputChannel, sourceParameter) {
+            key: "_getInputGroupIdentifier",
+            value: function _getInputGroupIdentifier(inputBus, eventType, inputChannel, sourceParameter) {
                 return inputBus + ":" + eventType + ":" + inputChannel + ":" + sourceParameter;
             }
         }, {
             key: "subscribeInput",
             value: function subscribeInput(inputInstance, inputBus, eventType, inputChannel, sourceParameter) {
-                var inputGroup = this._getInputGroupentifier(inputBus, eventType, inputChannel, sourceParameter);
+                var inputGroup = this._getInputGroupIdentifier(inputBus, eventType, inputChannel, sourceParameter);
                 if (!_.has(this._inputInstances, inputGroup)) this._inputInstances[inputGroup] = [];
                 if (!this._inputInstances[inputGroup].indexOf(inputInstance) > -1) this._inputInstances[inputGroup].push(inputInstance);
             }

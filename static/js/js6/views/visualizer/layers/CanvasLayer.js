@@ -11,7 +11,8 @@ define([
             var dfd = $.Deferred();
             dfd.resolve([
                     "CanvasCircle",
-                    "CanvasSquare"
+                    "CanvasSquare",
+                    "CanvasCircleChord"
                 ]);
             return dfd;
         }

@@ -12,10 +12,10 @@ define(["views/visualizer/actors/Actor"], function (Actor) {
     var CanvasActor = (function (_Actor) {
         _inherits(CanvasActor, _Actor);
 
-        function CanvasActor(actorData, inputBuffer) {
+        function CanvasActor(actorData, inputBuffer, options, inputChannelsType) {
             _classCallCheck(this, CanvasActor);
 
-            _get(Object.getPrototypeOf(CanvasActor.prototype), "constructor", this).call(this, actorData, inputBuffer);
+            _get(Object.getPrototypeOf(CanvasActor.prototype), "constructor", this).call(this, actorData, inputBuffer, options, inputChannelsType);
         }
 
         _createClass(CanvasActor, [{
@@ -71,7 +71,7 @@ define(["views/visualizer/actors/Actor"], function (Actor) {
             }
         }, {
             key: "_getPositionCoords",
-            value: function _getPositionCoords(width, height) {
+            value: function _getPositionCoords(width, height, note) {
                 var _getAnchorPosition2 = this._getAnchorPosition(width, height);
 
                 var anchorX = _getAnchorPosition2.anchorX;
@@ -80,22 +80,27 @@ define(["views/visualizer/actors/Actor"], function (Actor) {
                 switch (this._getUnprocessedParameter("posType")) {
                     case "percent":
                         return {
-                            posX: anchorX + this._getParameter("posX") * width,
-                            posY: anchorY + this._getParameter("posY") * height
+                            posX: anchorX + this._getParameter("posX", { note: note }) * width,
+                            posY: anchorY + this._getParameter("posY", { note: note }) * height
                         };
                     case "absolute":
                         return {
-                            posX: anchorX + this._getParameter("posX"),
-                            posY: anchorY + this._getParameter("posY")
+                            posX: anchorX + this._getParameter("posX", { note: note }),
+                            posY: anchorY + this._getParameter("posY", { note: note })
                         };
                 }
             }
         }, {
             key: "_getParameter",
-            value: function _getParameter(paramName, canvasDimension) {
-                var originalResult = _get(Object.getPrototypeOf(CanvasActor.prototype), "_getParameter", this).call(this, paramName);
-                if (canvasDimension && originalResult <= 100 && originalResult >= 0) {
-                    return originalResult / 100 * canvasDimension;
+            value: function _getParameter(paramName, options) {
+                options = options || {};
+                _.defaults(options, {
+                    canvasDimension: undefined,
+                    note: undefined
+                });
+                var originalResult = _get(Object.getPrototypeOf(CanvasActor.prototype), "_getParameter", this).call(this, paramName, options.note);
+                if (options.canvasDimension && originalResult <= 100 && originalResult >= 0) {
+                    return originalResult / 100 * options.canvasDimension;
                 } else {
                     return originalResult;
                 }

@@ -3,8 +3,8 @@ define([
 ], function(Actor){
 
     class CanvasActor extends Actor{
-        constructor(actorData, inputBuffer){
-            super(actorData, inputBuffer);  
+        constructor(actorData, inputBuffer, options, inputChannelsType){
+            super(actorData, inputBuffer, options, inputChannelsType);  
         }
 
         _getAnchorPosition(width, height){
@@ -57,26 +57,31 @@ define([
             }
         }
 
-        _getPositionCoords(width, height){
+        _getPositionCoords(width, height, note){
             var {anchorX, anchorY} = this._getAnchorPosition(width, height);
             switch(this._getUnprocessedParameter("posType")){
                 case "percent":
                     return {
-                        posX: anchorX + (this._getParameter("posX") * width),
-                        posY: anchorY + (this._getParameter("posY") * height)
+                        posX: anchorX + (this._getParameter("posX", {note: note}) * width),
+                        posY: anchorY + (this._getParameter("posY", {note: note}) * height)
                     };
                 case "absolute":
                     return {
-                        posX: anchorX + this._getParameter("posX"),
-                        posY: anchorY + this._getParameter("posY")
+                        posX: anchorX + this._getParameter("posX", {note: note}),
+                        posY: anchorY + this._getParameter("posY", {note: note})
                     };
             }
         }
 
-        _getParameter(paramName, canvasDimension){
-            var originalResult = super._getParameter(paramName);
-            if(canvasDimension && originalResult <= 100 && originalResult >= 0){
-                return (originalResult/100) * canvasDimension;
+        _getParameter(paramName, options){
+            options = options || {};
+            _.defaults(options, {
+                canvasDimension: undefined,
+                note: undefined
+            });
+            var originalResult = super._getParameter(paramName, options.note);
+            if(options.canvasDimension && originalResult <= 100 && originalResult >= 0){
+                return (originalResult/100) * options.canvasDimension;
             }else{
                 return originalResult;
             }

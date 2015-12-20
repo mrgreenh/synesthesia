@@ -19,16 +19,23 @@ define(["views/visualizer/actors/CanvasActor"], function (CanvasActor) {
             }
         }]);
 
-        function CanvasCircle(actorData, inputBuffer, options) {
+        function CanvasCircle(actorData, inputBuffer, options, inputType) {
             _classCallCheck(this, CanvasCircle);
 
-            _get(Object.getPrototypeOf(CanvasCircle.prototype), "constructor", this).call(this, actorData, inputBuffer);
+            _get(Object.getPrototypeOf(CanvasCircle.prototype), "constructor", this).call(this, actorData, inputBuffer, options, inputType);
         }
 
         _createClass(CanvasCircle, [{
+            key: "_renderCircle",
+            value: function _renderCircle(context, posX, posY, radius) {
+                context.fillStyle = this._getUnprocessedParameter("color");
+                context.beginPath();
+                context.ellipse(posX, posY, radius, radius, 0, 0, 2 * Math.PI);
+                context.fill();
+            }
+        }, {
             key: "renderFrame",
             value: function renderFrame(context, width, height) {
-                context.fillStyle = this._getUnprocessedParameter("color");
                 var radius = this._getParameter("size");
 
                 var _getPositionCoords = this._getPositionCoords(width, height);
@@ -36,9 +43,7 @@ define(["views/visualizer/actors/CanvasActor"], function (CanvasActor) {
                 var posX = _getPositionCoords.posX;
                 var posY = _getPositionCoords.posY;
 
-                context.beginPath();
-                context.ellipse(posX, posY, radius, radius, 0, 0, 2 * Math.PI);
-                context.fill();
+                this._renderCircle(context, posX, posY, radius);
             }
         }]);
 

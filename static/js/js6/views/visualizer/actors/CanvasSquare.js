@@ -12,8 +12,8 @@ define([
 
         renderFrame(context, width, height){
             context.fillStyle = this._getUnprocessedParameter("color");
-            var sizeX = this._getParameter("sizeX", width);
-            var sizeY = this._getParameter("sizeY", height);
+            var sizeX = this._getParameter("sizeX", {canvasDimension: width});
+            var sizeY = this._getParameter("sizeY", {canvasDimension: height});
             var {posX, posY} = this._getPositionCoords(width, height);
             context.fillRect(posX, posY, sizeX, sizeY);
         }

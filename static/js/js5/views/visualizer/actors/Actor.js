@@ -8,7 +8,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
 
-define(["views/visualizer/Synesthesia", "views/visualizer/InputChannel"], function (Synesthesia, InputChannel) {
+define(["views/visualizer/Synesthesia", "views/visualizer/InputChannel", "views/visualizer/ChordInputChannel"], function (Synesthesia, InputChannel, ChordInputChannel) {
     var Actor = (function (_Synesthesia) {
         _inherits(Actor, _Synesthesia);
 
@@ -21,12 +21,13 @@ define(["views/visualizer/Synesthesia", "views/visualizer/InputChannel"], functi
             }
         }]);
 
-        function Actor(actorData, inputBuffer) {
+        function Actor(actorData, inputBuffer, options, inputChannelsType) {
             _classCallCheck(this, Actor);
 
             _get(Object.getPrototypeOf(Actor.prototype), "constructor", this).call(this);
             this._actorData = actorData;
             this._inputBuffer = inputBuffer;
+            this._inputChannelType = inputChannelsType;
             this._inputChannels = {};
             this._initializeInputs();
         }
@@ -38,10 +39,21 @@ define(["views/visualizer/Synesthesia", "views/visualizer/InputChannel"], functi
 
                 var inputChannelsData = this._actorData.inputChannels;
                 inputChannelsData.forEach(function (inputData) {
-                    var inputChannel = new InputChannel(inputData, _this._inputBuffer);
-                    var targetParameter = inputChannel.getTargetParameter();
-                    if (targetParameter) _this._inputChannels[targetParameter] = inputChannel;
+                    var inputChannel = _this._initializeInputChannel(inputData);
+                    var targetParameter = inputData.targetParameter;
+
+                    _this._inputChannels[targetParameter] = inputChannel;
                 });
+            }
+        }, {
+            key: "_initializeInputChannel",
+            value: function _initializeInputChannel(inputData) {
+                switch (this._inputChannelType) {
+                    case "chord":
+                        return new ChordInputChannel(inputData, this._inputBuffer);
+                    default:
+                        return new InputChannel(inputData, this._inputBuffer);
+                }
             }
         }, {
             key: "_getUnprocessedParameter",
@@ -50,14 +62,39 @@ define(["views/visualizer/Synesthesia", "views/visualizer/InputChannel"], functi
             }
         }, {
             key: "_getParameter",
-            value: function _getParameter(parameterName) {
-                return parseFloat(this._actorData[parameterName + "Parameter"]) * (parseFloat(this._getSignalForParameter(parameterName)) || 0);
+            value: function _getParameter(parameterName, note) {
+                var actorParameter = parseFloat(this._actorData[parameterName + "Parameter"]);
+                var originalSignalValue;
+                switch (this._inputChannelType) {
+                    case "chord":
+                        note = note || 0;
+                        originalSignalValue = this._getSignalForParameterAndNote(parameterName, note);
+                        break;
+                    default:
+                        originalSignalValue = this._getSignalForParameter(parameterName);
+                        break;
+                }
+                var signalValue = parseFloat(originalSignalValue) || 0;
+                return actorParameter * signalValue;
+            }
+        }, {
+            key: "_getSignalForParameterAndNote",
+            value: function _getSignalForParameterAndNote(parameterName, note) {
+                var inputChannel = this._inputChannels[parameterName];
+                return inputChannel ? inputChannel.getCurrentFrameAndNoteValue(note) : 1;
             }
         }, {
             key: "_getSignalForParameter",
             value: function _getSignalForParameter(parameterName) {
                 var inputChannel = this._inputChannels[parameterName];
                 return inputChannel ? inputChannel.getCurrentFrameValue() : 1;
+            }
+        }, {
+            key: "_getActiveNotes",
+            value: function _getActiveNotes() {
+                var anyInputChannel = Object.values(this._inputChannels)[0];
+                var activeNotes = anyInputChannel.getActivatedNotes();
+                return activeNotes;
             }
         }]);
 

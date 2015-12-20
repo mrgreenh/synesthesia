@@ -19,7 +19,7 @@ define(["views/visualizer/actors/Actor", "views/visualizer/layers/Layer"], funct
                 //It will ask the server to check what classes are in the actors folder
                 //Because adding actors will be part of creative processes that should not require code change to the main app
                 var dfd = $.Deferred();
-                dfd.resolve(["CanvasCircle", "CanvasSquare"]);
+                dfd.resolve(["CanvasCircle", "CanvasSquare", "CanvasCircleChord"]);
                 return dfd;
             }
         }]);
