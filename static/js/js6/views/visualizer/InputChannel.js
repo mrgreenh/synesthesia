@@ -23,6 +23,10 @@ define([
 
                 this._signalProcessor = new Signal(this._inputData.signalsList);
             }
+
+            getSnapshot(){
+                return this._signal;
+            }
         }
 
         return InputChannel;

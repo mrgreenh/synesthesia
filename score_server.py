@@ -31,7 +31,13 @@ def direct(track_id):
 @app.route('/stage/<track_id>')
 def stage(track_id=None):
     if track_id is not None: set_current_track(track_id)
-    return render_template('stage.html')
+    return render_template('stage.html', is_offline="false")
+
+@app.route('/offline_stage/')
+@app.route('/offline_stage/<track_id>')
+def offline_stage(track_id=None):
+    if track_id is not None: set_current_track(track_id)
+    return render_template('stage.html', is_offline="true")
 
 @app.route('/editor/<track_id>')
 @app.route('/editor')

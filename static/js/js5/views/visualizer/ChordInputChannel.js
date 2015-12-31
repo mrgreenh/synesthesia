@@ -47,6 +47,11 @@ define(["views/visualizer/Synesthesia", "vendor/signaljs/dist/signal", "views/vi
                 return result;
             }
         }, {
+            key: "getSnapshot",
+            value: function getSnapshot() {
+                return _.clone(this._signals);
+            }
+        }, {
             key: "_onNoteEvent",
             value: function _onNoteEvent(noteData) {
                 var currentNote = noteData.note;

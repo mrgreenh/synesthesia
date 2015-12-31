@@ -25,6 +25,10 @@ define([
                     this._onNoteEvent(noteData);
             }
 
+            getSnapshot(){
+                throw "To be overridden in subclasses";
+            }
+
             _onNoteEvent(noteData){
                 switch(this._getSourceParameter()){
                     case "value":

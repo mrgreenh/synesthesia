@@ -8,17 +8,23 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
 
-define(["utils/constants", "views/visualizer/Synesthesia", "views/visualizer/actors/Actor", "views/visualizer/layers/Three3DLayer", "views/visualizer/InputBuffer", "views/visualizer/TimeKeeper"], function (constants, Synesthesia, Actor, Three3DLayer, InputBuffer, TimeKeeper) {
+define(["utils/constants", "views/visualizer/Synesthesia", "views/visualizer/actors/Actor", "views/visualizer/layers/Three3DLayer", "views/visualizer/InputBuffer", "views/visualizer/TimeKeeper", "react", "views/visualizer/OfflineRenderingControls"], function (constants, Synesthesia, Actor, Three3DLayer, InputBuffer, TimeKeeper, React, OfflineRenderingControls) {
     var Director = (function (_Synesthesia) {
         _inherits(Director, _Synesthesia);
 
-        function Director() {
+        function Director(isOffline) {
             var _this = this;
 
             _classCallCheck(this, Director);
 
             _get(Object.getPrototypeOf(Director.prototype), "constructor", this).call(this);
             this.$el = $("#stage-container");
+            this._isOffline = isOffline;
+            if (isOffline) {
+                this._inputSnapshots = [];
+                this._isRecording = true;
+                this._recordingUIContainer = this.$el.append($("<div></div>").addClass("recording-ui-container"));
+            }
             this.layers = [];
             this._config;
             this._trackData;
@@ -29,9 +35,10 @@ define(["utils/constants", "views/visualizer/Synesthesia", "views/visualizer/act
                 _this._config = configData[0];
                 _this._trackData = trackData[0];
                 _this._inputBuffer = new InputBuffer(_this._trackData);
-                _this._timeKeeper = new TimeKeeper();
+                _this._timeKeeper = new TimeKeeper(_this._isOffline, _this._config.offlineRenderingSettings);
 
                 _this.observe(_this._timeKeeper, constants.EVENTS.TIME.INCREMENT);
+                _this.observe(_this._timeKeeper, constants.EVENTS.TIME.INCREMENT_OFFLINE);
                 _this._startTrack();
             });
         }
@@ -43,7 +50,16 @@ define(["utils/constants", "views/visualizer/Synesthesia", "views/visualizer/act
                     case constants.EVENTS.TIME.INCREMENT:
                         this._renderFrame();
                         break;
+                    case constants.EVENTS.TIME.INCREMENT_OFFLINE:
+                        if (this._isRecording) this._recordFrame();else this._renderFrameToFile();
+                        break;
                 }
+            }
+        }, {
+            key: "_recordFrame",
+            value: function _recordFrame() {
+                var inputSnapshots = this._inputBuffer.getSnapshot();
+                this._inputSnapshots.push(inputSnapshots);
             }
         }, {
             key: "_startTrack",
@@ -113,6 +129,24 @@ define(["utils/constants", "views/visualizer/Synesthesia", "views/visualizer/act
                 this.layers.forEach(function (layer) {
                     layer.render(_this4.$el);
                 });
+                if (this._isOffline) this._renderOfflineControls();
+            }
+        }, {
+            key: "_onStartRenderingClick",
+            value: function _onStartRenderingClick() {
+                this._isRecording = false;
+                console.log(this._inputSnapshots);
+                this._renderOfflineControls();
+            }
+        }, {
+            key: "_renderFrameToFile",
+            value: function _renderFrameToFile() {
+                console.log("Rendering to file");
+            }
+        }, {
+            key: "_renderOfflineControls",
+            value: function _renderOfflineControls() {
+                React.render(React.createElement(OfflineRenderingControls, { isRecording: this._isRecording, onStartRenderingClick: _.bind(this._onStartRenderingClick, this) }), this._recordingUIContainer[0]);
             }
         }]);
 

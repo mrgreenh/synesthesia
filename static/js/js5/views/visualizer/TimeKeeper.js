@@ -12,17 +12,20 @@ define(["views/visualizer/Synesthesia", "utils/constants"], function (Synesthesi
     var TimeKeeper = (function (_Synesthesia) {
         _inherits(TimeKeeper, _Synesthesia);
 
-        function TimeKeeper() {
+        function TimeKeeper(isOffline, offlineRenderingSettings) {
             _classCallCheck(this, TimeKeeper);
 
             _get(Object.getPrototypeOf(TimeKeeper.prototype), "constructor", this).call(this);
+
+            this._offlineRenderingSettings = offlineRenderingSettings;
+            this._isOffline = isOffline;
         }
 
         _createClass(TimeKeeper, [{
             key: "ignite",
             value: function ignite() {
                 this._frame = 0;
-                this._incrementFrame();
+                if (this._isOffline) this._incrementFrameOffline();else this._incrementFrame();
             }
         }, {
             key: "_incrementFrame",
@@ -30,6 +33,14 @@ define(["views/visualizer/Synesthesia", "utils/constants"], function (Synesthesi
                 this.triggerEvent(constants.EVENTS.TIME.INCREMENT);
                 this._frame++;
                 window.requestAnimationFrame(_.bind(this._incrementFrame, this));
+            }
+        }, {
+            key: "_incrementFrameOffline",
+            value: function _incrementFrameOffline() {
+                this.triggerEvent(constants.EVENTS.TIME.INCREMENT_OFFLINE);
+                this._frame++;
+                //TODO this might introduce a delay because 1000/60 gives decimal crap
+                setTimeout(_.bind(this._incrementFrameOffline, this), 17);
             }
         }]);
 

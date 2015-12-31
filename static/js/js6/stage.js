@@ -4,7 +4,9 @@ require.config({
         jquery: "vendor/jquery",
         views: "js5/views",
         utils: "js5/utils",
-        underscore: "vendor/underscore"
+        underscore: "vendor/underscore",
+        jsx_transformer: "/static/js/vendor/jsx_transformer",
+        react: "/static/js/vendor/react_with_addons"
     },
     shim: {
         'underscore': {
@@ -19,5 +21,5 @@ require([
 "underscore",
 "views/visualizer/Director"
 ], function($, _, Director){
-    var director = new Director();
+    var director = new Director(renderingMode);
 });

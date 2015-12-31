@@ -6,5 +6,8 @@
 {% endblock %}
 {% block additional_js %}
     <script src="/static/js/vendor/browser-polyfill.js"></script>
+    <script>
+        var renderingMode = {{is_offline}};
+    </script>
     <script data-main="/static/js/js5/stage" src="/static/js/vendor/require_2.1.16.js"></script>
 {% endblock %}

@@ -4,13 +4,21 @@ define([
             "views/visualizer/actors/Actor",
             "views/visualizer/layers/Three3DLayer",
             "views/visualizer/InputBuffer",
-            "views/visualizer/TimeKeeper"
+            "views/visualizer/TimeKeeper",
+            "react",
+            "views/visualizer/OfflineRenderingControls"
 ],
-function(constants, Synesthesia, Actor, Three3DLayer, InputBuffer, TimeKeeper){
+function(constants, Synesthesia, Actor, Three3DLayer, InputBuffer, TimeKeeper, React, OfflineRenderingControls){
     class Director extends Synesthesia{
-        constructor(){
+        constructor(isOffline){
             super();
             this.$el = $("#stage-container");
+            this._isOffline = isOffline;
+            if(isOffline){
+                this._inputSnapshots = [];
+                this._isRecording = true;
+                this._recordingUIContainer = this.$el.append($("<div></div>").addClass("recording-ui-container"));
+            }
             this.layers = [];
             this._config;
             this._trackData;
@@ -21,9 +29,10 @@ function(constants, Synesthesia, Actor, Three3DLayer, InputBuffer, TimeKeeper){
                 this._config = configData[0];
                 this._trackData = trackData[0];
                 this._inputBuffer = new InputBuffer(this._trackData);
-                this._timeKeeper = new TimeKeeper();
+                this._timeKeeper = new TimeKeeper(this._isOffline, this._config.offlineRenderingSettings);
 
                 this.observe(this._timeKeeper, constants.EVENTS.TIME.INCREMENT);
+                this.observe(this._timeKeeper, constants.EVENTS.TIME.INCREMENT_OFFLINE);
                 this._startTrack();
             });
         }
@@ -33,7 +42,18 @@ function(constants, Synesthesia, Actor, Three3DLayer, InputBuffer, TimeKeeper){
                 case constants.EVENTS.TIME.INCREMENT:
                     this._renderFrame();
                     break;
+                case constants.EVENTS.TIME.INCREMENT_OFFLINE:
+                    if(this._isRecording)
+                        this._recordFrame();
+                    else
+                        this._renderFrameToFile();
+                    break;
             }
+        }
+
+        _recordFrame(){
+            var inputSnapshots = this._inputBuffer.getSnapshot();
+            this._inputSnapshots.push(inputSnapshots);
         }
 
         _startTrack(){
@@ -90,6 +110,25 @@ function(constants, Synesthesia, Actor, Three3DLayer, InputBuffer, TimeKeeper){
             this.layers.forEach(layer => {
                 layer.render(this.$el);
             });
+            if(this._isOffline)
+                this._renderOfflineControls();
+        }
+
+        _onStartRenderingClick(){
+            this._isRecording = false;
+            console.log(this._inputSnapshots);
+            this._renderOfflineControls();
+        }
+
+        _renderFrameToFile(){
+            console.log("Rendering to file");
+        }
+
+        _renderOfflineControls(){
+            React.render(
+                    <OfflineRenderingControls isRecording={this._isRecording} onStartRenderingClick={_.bind(this._onStartRenderingClick, this)}/>,
+                    this._recordingUIContainer[0]
+                );
         }
     }
 

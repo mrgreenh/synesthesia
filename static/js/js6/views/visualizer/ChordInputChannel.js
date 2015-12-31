@@ -47,6 +47,10 @@
                 return result;
             }
 
+            getSnapshot(){
+                return _.clone(this._signals);
+            }
+
             _onNoteEvent(noteData){
                 var currentNote = noteData.note;
                 if(!this._signalProcessors[currentNote]){

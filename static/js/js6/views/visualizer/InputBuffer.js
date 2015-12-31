@@ -27,6 +27,18 @@ define([
 
             }
 
+            getSnapshot(){
+                var snapshot = {};
+                _.forEach(this._inputInstances, function(inputsGroup, key){
+                    let inputGroupSnapshots = inputsGroup.map((inputInstance) => {
+                        return inputInstance.getSnapshot();
+                    });
+                    snapshot[key] = inputGroupSnapshots;
+                }, this);
+
+                return snapshot;
+            }
+
             _onNoteReceived(noteData){
                 var eventType = noteData.type != "control" ? "note" : "control";
                 constants.INPUTS.SOURCE_PARAMETERS.forEach(sourceParameter => {
