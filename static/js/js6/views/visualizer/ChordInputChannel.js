@@ -51,6 +51,10 @@
                 return _.clone(this._signals);
             }
 
+            setSnapshot(snapshot){
+                this._signals = snapshot;
+            }
+
             _onNoteEvent(noteData){
                 var currentNote = noteData.note;
                 if(!this._signalProcessors[currentNote]){

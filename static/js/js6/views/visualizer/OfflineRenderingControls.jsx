@@ -10,6 +10,7 @@ define([
                     <div className="offline-rendering-controls">
                         <p>{recordingStatus}</p>
                         <a onClick={this.props.onStartRenderingClick}>Start Rendering</a>
+                        <p>{this.props.additionalMessage}</p>
                     </div>);
             }
         });

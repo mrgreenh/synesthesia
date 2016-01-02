@@ -19,6 +19,11 @@ define(["react"], function (React) {
                     "a",
                     { onClick: this.props.onStartRenderingClick },
                     "Start Rendering"
+                ),
+                React.createElement(
+                    "p",
+                    null,
+                    this.props.additionalMessage
                 )
             );
         }

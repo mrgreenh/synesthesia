@@ -28,6 +28,11 @@ define(["views/visualizer/BaseInputChannel", "vendor/signaljs/dist/signal"], fun
         }
 
         _createClass(InputChannel, [{
+            key: "setSnapshot",
+            value: function setSnapshot(snapshot) {
+                this._signal = snapshot;
+            }
+        }, {
             key: "getSnapshot",
             value: function getSnapshot() {
                 return this._signal;

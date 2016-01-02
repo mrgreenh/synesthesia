@@ -27,6 +27,15 @@ define([
 
             }
 
+            setSnapshot(snapshotData){
+                _.forEach(snapshotData, function(inputsGroupData, key){
+                    _.forEach(inputsGroupData, function(inputData, index){
+                        let inputDistance = this._inputInstances[key][index];
+                        inputDistance.setSnapshot(inputData)
+                    }, this);
+                }, this);            
+            }
+
             getSnapshot(){
                 var snapshot = {};
                 _.forEach(this._inputInstances, function(inputsGroup, key){

@@ -39,6 +39,16 @@ define(["utils/BaseObject", "utils/constants", "views/visualizer/MidiManager"], 
                 }
             }
         }, {
+            key: "setSnapshot",
+            value: function setSnapshot(snapshotData) {
+                _.forEach(snapshotData, function (inputsGroupData, key) {
+                    _.forEach(inputsGroupData, function (inputData, index) {
+                        var inputDistance = this._inputInstances[key][index];
+                        inputDistance.setSnapshot(inputData);
+                    }, this);
+                }, this);
+            }
+        }, {
             key: "getSnapshot",
             value: function getSnapshot() {
                 var snapshot = {};

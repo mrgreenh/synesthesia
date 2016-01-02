@@ -17,7 +17,8 @@ function(constants, Synesthesia, Actor, Three3DLayer, InputBuffer, TimeKeeper, R
             if(isOffline){
                 this._inputSnapshots = [];
                 this._isRecording = true;
-                this._recordingUIContainer = this.$el.append($("<div></div>").addClass("recording-ui-container"));
+                this.$el.append($("<div></div>").addClass("recording-ui-container"));
+                this._recordingUIContainer = this.$el.find(".recording-ui-container");
             }
             this.layers = [];
             this._config;
@@ -121,12 +122,27 @@ function(constants, Synesthesia, Actor, Three3DLayer, InputBuffer, TimeKeeper, R
         }
 
         _renderFrameToFile(){
-            console.log("Rendering to file");
+            if(this._inputSnapshots.length){
+                var currentInputSnapshot = this._inputSnapshots.splice(0,1)[0];
+                this._inputBuffer.setSnapshot(currentInputSnapshot);
+                this._renderFrame();
+                this._saveFrameToFiles();                
+            }
+
+            this._renderOfflineControls();
+        }
+
+        _saveFrameToFiles(){
+            console.log("Take the snapshot of each layer and send it to the server");
         }
 
         _renderOfflineControls(){
+            var additionalMessage = this._inputSnapshots.length ? "" : "Nothing to render";
             React.render(
-                    <OfflineRenderingControls isRecording={this._isRecording} onStartRenderingClick={_.bind(this._onStartRenderingClick, this)}/>,
+                    <OfflineRenderingControls
+                    isRecording={this._isRecording}
+                    onStartRenderingClick={_.bind(this._onStartRenderingClick, this)}
+                    additionalMessage={additionalMessage}/>,
                     this._recordingUIContainer[0]
                 );
         }

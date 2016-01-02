@@ -24,6 +24,10 @@ define([
                 this._signalProcessor = new Signal(this._inputData.signalsList);
             }
 
+            setSnapshot(snapshot){
+                this._signal = snapshot;
+            }
+
             getSnapshot(){
                 return this._signal;
             }

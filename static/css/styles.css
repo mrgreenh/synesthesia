@@ -15,3 +15,4 @@
 
 /* Stage */
 #stage-container { position: absolute; top:0px; bottom: 0px; right:0px; left:0px; width:100%; box-sizing: border-box;}
+.recording-ui-container { position: absolute; top:0px; color: white; background-color: rgba(0,0,0,.7); }

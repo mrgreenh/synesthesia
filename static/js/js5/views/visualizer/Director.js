@@ -23,7 +23,8 @@ define(["utils/constants", "views/visualizer/Synesthesia", "views/visualizer/act
             if (isOffline) {
                 this._inputSnapshots = [];
                 this._isRecording = true;
-                this._recordingUIContainer = this.$el.append($("<div></div>").addClass("recording-ui-container"));
+                this.$el.append($("<div></div>").addClass("recording-ui-container"));
+                this._recordingUIContainer = this.$el.find(".recording-ui-container");
             }
             this.layers = [];
             this._config;
@@ -141,12 +142,28 @@ define(["utils/constants", "views/visualizer/Synesthesia", "views/visualizer/act
         }, {
             key: "_renderFrameToFile",
             value: function _renderFrameToFile() {
-                console.log("Rendering to file");
+                if (this._inputSnapshots.length) {
+                    var currentInputSnapshot = this._inputSnapshots.splice(0, 1)[0];
+                    this._inputBuffer.setSnapshot(currentInputSnapshot);
+                    this._renderFrame();
+                    this._saveFrameToFiles();
+                }
+
+                this._renderOfflineControls();
+            }
+        }, {
+            key: "_saveFrameToFiles",
+            value: function _saveFrameToFiles() {
+                console.log("Take the snapshot of each layer and send it to the server");
             }
         }, {
             key: "_renderOfflineControls",
             value: function _renderOfflineControls() {
-                React.render(React.createElement(OfflineRenderingControls, { isRecording: this._isRecording, onStartRenderingClick: _.bind(this._onStartRenderingClick, this) }), this._recordingUIContainer[0]);
+                var additionalMessage = this._inputSnapshots.length ? "" : "Nothing to render";
+                React.render(React.createElement(OfflineRenderingControls, {
+                    isRecording: this._isRecording,
+                    onStartRenderingClick: _.bind(this._onStartRenderingClick, this),
+                    additionalMessage: additionalMessage }), this._recordingUIContainer[0]);
             }
         }]);
 

@@ -25,6 +25,10 @@ define([
                     this._onNoteEvent(noteData);
             }
 
+            setSnapshot(){
+                throw "To be overridden in subclasses";
+            }
+
             getSnapshot(){
                 throw "To be overridden in subclasses";
             }
