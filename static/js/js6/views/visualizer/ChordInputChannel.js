@@ -27,13 +27,15 @@
             }
 
             getActivatedNotes(){
-                return Object.keys(this._signalProcessors);
+                return _.filter(Object.keys(this._signalProcessors), _.bind(function(key){
+                    return this._signalProcessors[key] !== undefined && this._signals[key] !== undefined;
+                }, this));
             }
 
             getCurrentFrameAndNoteValue(currentNote){
                 /*TODO there is a bug here! If multiple actors represent the same instrument,
                 This function is going to be called more than once per frame.*/
-                let currentSignal = this._signalProcessors[currentNote];
+                var currentSignal = this._signalProcessors[currentNote];
                 if(!currentSignal) return undefined;
                 var result = currentSignal.push(this._signals[currentNote]);
                 if(result==0){

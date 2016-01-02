@@ -19,12 +19,17 @@ define([
             }
 
             events(eventName){
+                console.log("REcording MIDI event")
                 switch(eventName){
                     case constants.EVENTS.MIDI.NOTE:
                         this._onNoteReceived(arguments[1]);
                         break;
                 }
 
+            }
+
+            stopMidiListening(){
+                this._midiManager.removeObserver(this);
             }
 
             setSnapshot(snapshotData){

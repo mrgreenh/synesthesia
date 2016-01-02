@@ -31,7 +31,9 @@ define(["views/visualizer/Synesthesia", "vendor/signaljs/dist/signal", "views/vi
         _createClass(ChordInputChannel, [{
             key: "getActivatedNotes",
             value: function getActivatedNotes() {
-                return Object.keys(this._signalProcessors);
+                return _.filter(Object.keys(this._signalProcessors), _.bind(function (key) {
+                    return this._signalProcessors[key] !== undefined && this._signals[key] !== undefined;
+                }, this));
             }
         }, {
             key: "getCurrentFrameAndNoteValue",

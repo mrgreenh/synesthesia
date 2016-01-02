@@ -32,11 +32,17 @@ define(["utils/BaseObject", "utils/constants", "views/visualizer/MidiManager"], 
         }, {
             key: "events",
             value: function events(eventName) {
+                console.log("REcording MIDI event");
                 switch (eventName) {
                     case constants.EVENTS.MIDI.NOTE:
                         this._onNoteReceived(arguments[1]);
                         break;
                 }
+            }
+        }, {
+            key: "stopMidiListening",
+            value: function stopMidiListening() {
+                this._midiManager.removeObserver(this);
             }
         }, {
             key: "setSnapshot",

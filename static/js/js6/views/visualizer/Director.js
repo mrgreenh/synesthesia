@@ -119,6 +119,7 @@ function(constants, Synesthesia, Actor, Three3DLayer, InputBuffer, TimeKeeper, R
             this._isRecording = false;
             console.log(this._inputSnapshots);
             this._renderOfflineControls();
+            this._inputBuffer.stopMidiListening();
         }
 
         _renderFrameToFile(){

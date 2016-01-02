@@ -138,6 +138,7 @@ define(["utils/constants", "views/visualizer/Synesthesia", "views/visualizer/act
                 this._isRecording = false;
                 console.log(this._inputSnapshots);
                 this._renderOfflineControls();
+                this._inputBuffer.stopMidiListening();
             }
         }, {
             key: "_renderFrameToFile",
