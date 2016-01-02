@@ -16,7 +16,6 @@ define(["utils/BaseObject", "utils/constants", "views/visualizer/MidiManager"], 
             _classCallCheck(this, InputBuffer);
 
             _get(Object.getPrototypeOf(InputBuffer.prototype), "constructor", this).call(this);
-            this._ioNamespace = "/stage";
             this._inputInstances = {};
 
             this._midiManager = new MidiManager(trackData);
@@ -24,12 +23,6 @@ define(["utils/BaseObject", "utils/constants", "views/visualizer/MidiManager"], 
         }
 
         _createClass(InputBuffer, [{
-            key: "connect",
-            value: function connect() {
-                this._socket = io.connect("http://" + document.domain + ":" + location.port + this._ioNamespace);
-                this._setupSocketEvents();
-            }
-        }, {
             key: "events",
             value: function events(eventName) {
                 console.log("REcording MIDI event");

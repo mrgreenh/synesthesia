@@ -6,16 +6,10 @@ define([
         class InputBuffer extends BaseObject{
             constructor(trackData){
                 super()
-                this._ioNamespace = '/stage';
                 this._inputInstances = {};
 
                 this._midiManager = new MidiManager(trackData);
                 this._midiManager.addObserver(this, constants.EVENTS.MIDI.NOTE);
-            }
-
-            connect(){
-                this._socket = io.connect('http://' + document.domain + ':' + location.port + this._ioNamespace);
-                this._setupSocketEvents();
             }
 
             events(eventName){

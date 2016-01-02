@@ -6,15 +6,18 @@ define([
             "views/visualizer/InputBuffer",
             "views/visualizer/TimeKeeper",
             "react",
-            "views/visualizer/OfflineRenderingControls"
+            "views/visualizer/OfflineRenderingControls",
+            "vendor/socket.io.min"
 ],
-function(constants, Synesthesia, Actor, Three3DLayer, InputBuffer, TimeKeeper, React, OfflineRenderingControls){
+function(constants, Synesthesia, Actor, Three3DLayer, InputBuffer, TimeKeeper, React, OfflineRenderingControls, io){
     class Director extends Synesthesia{
         constructor(isOffline){
             super();
             this.$el = $("#stage-container");
             this._isOffline = isOffline;
             if(isOffline){
+                this._ioNamespace = '/stage';
+                this.connect();
                 this._inputSnapshots = [];
                 this._isRecording = true;
                 this.$el.append($("<div></div>").addClass("recording-ui-container"));
@@ -35,6 +38,17 @@ function(constants, Synesthesia, Actor, Three3DLayer, InputBuffer, TimeKeeper, R
                 this.observe(this._timeKeeper, constants.EVENTS.TIME.INCREMENT);
                 this.observe(this._timeKeeper, constants.EVENTS.TIME.INCREMENT_OFFLINE);
                 this._startTrack();
+            });
+        }
+
+        connect(){
+            this._socket = io.connect('http://' + document.domain + ':' + location.port + this._ioNamespace);
+            this._setupSocketEvents();
+        }
+
+        _setupSocketEvents(){
+            this._socket.on('message', (data) => {
+                console.log(data.message)
             });
         }
 
@@ -135,6 +149,12 @@ function(constants, Synesthesia, Actor, Three3DLayer, InputBuffer, TimeKeeper, R
 
         _saveFrameToFiles(){
             console.log("Take the snapshot of each layer and send it to the server");
+            this.layers.forEach((layer) => {
+                var frameData = layer.getFrameData();
+                this._socket.emit("renderToFile", {
+                    frameData: frameData
+                });
+            });
         }
 
         _renderOfflineControls(){

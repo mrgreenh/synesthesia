@@ -75,7 +75,11 @@ define([
                 this._initializeActors();
                 this.width = $stageElement.width();
                 this.height = $stageElement.height();
-            }            
+            }
+
+            getFrameData(){
+                //To be overridden
+            }
         }
 
         return Layer;

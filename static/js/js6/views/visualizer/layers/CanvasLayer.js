@@ -41,6 +41,10 @@ define([
                 actorInstance.renderFrame(this._context, this._width, this._height);
             });
         }
+
+        getFrameData(){
+            return this._canvasElement.toDataURL();
+        }
     }
 
     return CanvasLayer;

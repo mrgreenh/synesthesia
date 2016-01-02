@@ -55,6 +55,11 @@ define(["views/visualizer/actors/Actor", "views/visualizer/layers/Layer"], funct
                     actorInstance.renderFrame(_this._context, _this._width, _this._height);
                 });
             }
+        }, {
+            key: "getFrameData",
+            value: function getFrameData() {
+                return this._canvasElement.toDataURL();
+            }
         }]);
 
         return CanvasLayer;

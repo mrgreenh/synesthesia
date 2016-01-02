@@ -1,19 +1,18 @@
 from flask import Flask, render_template, session, request, jsonify
+from flask.ext.socketio import SocketIO, emit, disconnect
 from synesthesia.data_managing import Bookshelf
 import synesthesia.config as config
 import logging
 import json
+import os
+import base64
 
 app = Flask(__name__)
 app.debug = True
 app.config['SECRET_KEY'] = 'gonna_work_on_my_machine_only'
+socketio = SocketIO(app)
 
 CURRENT_TRACK_ID = ""
-
-def on_midi_note(note):
-    print str(note)
-    socketio.emit('midi_note', note, namespace = '/stage')
-    print str("note sent")
 
 @app.route('/')
 @app.route('/index')
@@ -64,6 +63,33 @@ def update_current_track():
 def get_stage_config():
     return jsonify(**config.STAGE_CONFIG)
 
+@socketio.on('connect', namespace='/stage')
+def connect():
+    logging.info( "Stage connecting")
+
+    emit('message', {'message': 'Connected'})
+
+@socketio.on('renderToFile', namespace="/stage")
+def renderToFile(payload):
+    logging.info( "Rendering to file")
+    directory, filename = _getRenderingPath()
+    ensure_dir(directory)
+    path = directory + filename
+    base64ImageData = payload["frameData"].split(",")[1]
+    imageData = base64.urlsafe_b64decode(base64ImageData.encode('UTF-8'))
+    with open(path, 'wb') as file:
+        file.write(imageData)
+    emit('message', {'message': 'Rendered frame to '+path})
+
+def _getRenderingPath():
+    global CURRENT_TRACK_ID
+    return (config.FILES_CONFIG.get("tracks_path", "") + 'render/', CURRENT_TRACK_ID +'.png')
+
+def ensure_dir(f):
+    d = os.path.dirname(f)
+    if not os.path.exists(d):
+        os.makedirs(d)
+
 def set_current_track(track_id):
     global CURRENT_TRACK_ID
     CURRENT_TRACK_ID = track_id
@@ -73,4 +99,4 @@ def set_current_track(track_id):
 
 if __name__ == '__main__':
     logging.basicConfig(level=logging.INFO)
-    app.run()
+    socketio.run(app)

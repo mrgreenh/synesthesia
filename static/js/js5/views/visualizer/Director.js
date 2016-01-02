@@ -8,7 +8,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
 
-define(["utils/constants", "views/visualizer/Synesthesia", "views/visualizer/actors/Actor", "views/visualizer/layers/Three3DLayer", "views/visualizer/InputBuffer", "views/visualizer/TimeKeeper", "react", "views/visualizer/OfflineRenderingControls"], function (constants, Synesthesia, Actor, Three3DLayer, InputBuffer, TimeKeeper, React, OfflineRenderingControls) {
+define(["utils/constants", "views/visualizer/Synesthesia", "views/visualizer/actors/Actor", "views/visualizer/layers/Three3DLayer", "views/visualizer/InputBuffer", "views/visualizer/TimeKeeper", "react", "views/visualizer/OfflineRenderingControls", "vendor/socket.io.min"], function (constants, Synesthesia, Actor, Three3DLayer, InputBuffer, TimeKeeper, React, OfflineRenderingControls, io) {
     var Director = (function (_Synesthesia) {
         _inherits(Director, _Synesthesia);
 
@@ -21,6 +21,8 @@ define(["utils/constants", "views/visualizer/Synesthesia", "views/visualizer/act
             this.$el = $("#stage-container");
             this._isOffline = isOffline;
             if (isOffline) {
+                this._ioNamespace = "/stage";
+                this.connect();
                 this._inputSnapshots = [];
                 this._isRecording = true;
                 this.$el.append($("<div></div>").addClass("recording-ui-container"));
@@ -45,6 +47,19 @@ define(["utils/constants", "views/visualizer/Synesthesia", "views/visualizer/act
         }
 
         _createClass(Director, [{
+            key: "connect",
+            value: function connect() {
+                this._socket = io.connect("http://" + document.domain + ":" + location.port + this._ioNamespace);
+                this._setupSocketEvents();
+            }
+        }, {
+            key: "_setupSocketEvents",
+            value: function _setupSocketEvents() {
+                this._socket.on("message", function (data) {
+                    console.log(data.message);
+                });
+            }
+        }, {
             key: "events",
             value: function events(eventName) {
                 switch (eventName) {
@@ -155,7 +170,15 @@ define(["utils/constants", "views/visualizer/Synesthesia", "views/visualizer/act
         }, {
             key: "_saveFrameToFiles",
             value: function _saveFrameToFiles() {
+                var _this5 = this;
+
                 console.log("Take the snapshot of each layer and send it to the server");
+                this.layers.forEach(function (layer) {
+                    var frameData = layer.getFrameData();
+                    _this5._socket.emit("renderToFile", {
+                        frameData: frameData
+                    });
+                });
             }
         }, {
             key: "_renderOfflineControls",

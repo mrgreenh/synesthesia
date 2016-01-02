@@ -88,6 +88,9 @@ define(["views/visualizer/Synesthesia", "views/visualizer/actors/Actor"], functi
                 this.width = $stageElement.width();
                 this.height = $stageElement.height();
             }
+        }, {
+            key: "getFrameData",
+            value: function getFrameData() {}
         }]);
 
         return Layer;
@@ -97,3 +100,5 @@ define(["views/visualizer/Synesthesia", "views/visualizer/actors/Actor"], functi
 });
 
 //Override if necessary
+
+//To be overridden
