@@ -1,11 +1,11 @@
 from flask import Flask, render_template, session, request, jsonify
 from flask.ext.socketio import SocketIO, emit, disconnect
 from synesthesia.data_managing import Bookshelf
+from synesthesia.offline_renderer import OfflineRenderer
 import synesthesia.config as config
 import logging
 import json
 import os
-import base64
 
 app = Flask(__name__)
 app.debug = True
@@ -71,24 +71,7 @@ def connect():
 
 @socketio.on('renderToFile', namespace="/stage")
 def renderToFile(payload):
-    logging.info( "Rendering to file")
-    directory, filename = _getRenderingPath()
-    ensure_dir(directory)
-    path = directory + filename
-    base64ImageData = payload["frameData"].split(",")[1]
-    imageData = base64.urlsafe_b64decode(base64ImageData.encode('UTF-8'))
-    with open(path, 'wb') as file:
-        file.write(imageData)
-    emit('message', {'message': 'Rendered frame to '+path})
-
-def _getRenderingPath():
-    global CURRENT_TRACK_ID
-    return (config.FILES_CONFIG.get("tracks_path", "") + 'render/', CURRENT_TRACK_ID +'.png')
-
-def ensure_dir(f):
-    d = os.path.dirname(f)
-    if not os.path.exists(d):
-        os.makedirs(d)
+    OfflineRenderer.renderToFile(payload)
 
 def set_current_track(track_id):
     global CURRENT_TRACK_ID

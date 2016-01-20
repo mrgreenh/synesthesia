@@ -25,7 +25,6 @@ define(["utils/BaseObject", "utils/constants", "views/visualizer/MidiManager"], 
         _createClass(InputBuffer, [{
             key: "events",
             value: function events(eventName) {
-                console.log("REcording MIDI event");
                 switch (eventName) {
                     case constants.EVENTS.MIDI.NOTE:
                         this._onNoteReceived(arguments[1]);

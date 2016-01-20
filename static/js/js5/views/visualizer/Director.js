@@ -67,7 +67,7 @@ define(["utils/constants", "views/visualizer/Synesthesia", "views/visualizer/act
                         this._renderFrame();
                         break;
                     case constants.EVENTS.TIME.INCREMENT_OFFLINE:
-                        if (this._isRecording) this._recordFrame();else this._renderFrameToFile();
+                        if (this._isRecording) this._recordFrame();
                         break;
                 }
             }
@@ -154,31 +154,32 @@ define(["utils/constants", "views/visualizer/Synesthesia", "views/visualizer/act
                 console.log(this._inputSnapshots);
                 this._renderOfflineControls();
                 this._inputBuffer.stopMidiListening();
+                this._saveFramesToFiles(0);
             }
         }, {
-            key: "_renderFrameToFile",
-            value: function _renderFrameToFile() {
-                if (this._inputSnapshots.length) {
+            key: "_saveFramesToFiles",
+            value: function _saveFramesToFiles(i) {
+                var _this5 = this;
+
+                var framesCount = this._inputSnapshots.length;
+                if (framesCount > 0) {
                     var currentInputSnapshot = this._inputSnapshots.splice(0, 1)[0];
                     this._inputBuffer.setSnapshot(currentInputSnapshot);
                     this._renderFrame();
-                    this._saveFrameToFiles();
-                }
-
-                this._renderOfflineControls();
-            }
-        }, {
-            key: "_saveFrameToFiles",
-            value: function _saveFrameToFiles() {
-                var _this5 = this;
-
-                console.log("Take the snapshot of each layer and send it to the server");
-                this.layers.forEach(function (layer) {
-                    var frameData = layer.getFrameData();
-                    _this5._socket.emit("renderToFile", {
-                        frameData: frameData
+                    this.layers.forEach(function (layer, index) {
+                        var frameData = layer.getFrameData();
+                        console.log("rendering frame " + i + "/" + framesCount);
+                        _this5._socket.emit("renderToFile", {
+                            frameData: frameData,
+                            layerName: _this5._trackData.layersData[index].name,
+                            frameNumber: i,
+                            trackId: _this5._trackData.title
+                        });
                     });
-                });
+                    i++;
+                    setTimeout(_.bind(this._saveFramesToFiles, this, i), 45);
+                }
+                this._renderOfflineControls();
             }
         }, {
             key: "_renderOfflineControls",
